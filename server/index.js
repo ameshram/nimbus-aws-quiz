@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 
 import { buildQuestionGenerationPrompt } from './prompts/questionGeneration.js';
 import { buildValidationPrompt } from './prompts/questionValidation.js';
-import { buildFlashcardGenerationPrompt } from './prompts/flashcardGeneration.js';
+import { buildFlashcardGenerationPrompt, buildTopicFlashcardPrompt } from './prompts/flashcardGeneration.js';
 import {
   readQuestionBank,
   writeQuestionBank,
@@ -71,6 +71,16 @@ if (process.env.NODE_ENV === 'production') {
   const distPath = path.join(__dirname, '../dist');
   app.use(express.static(distPath));
 }
+
+// Serve question bank from public (always up-to-date)
+app.get('/api/question-bank', async (req, res) => {
+  try {
+    const questionBank = await readQuestionBank(QUESTION_BANK_PATH);
+    res.json(questionBank);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // Helper: Small delay to avoid rate limiting
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -419,6 +429,185 @@ app.post('/api/auto-generate-flashcards', async (req, res) => {
   } catch (error) {
     console.error('Error in auto-generate-flashcards:', error);
     res.status(500).json({ error: 'Auto-generate flashcards failed', details: error.message });
+  }
+});
+
+// ============================================
+// GENERATE FOR SPECIFIC TOPIC: Generate questions for a specific topic/subtopic
+// ============================================
+app.post('/api/generate-for-topic', async (req, res) => {
+  const { domainId, topicId, subtopicId, topicName, subtopicName, count = 3 } = req.body;
+
+  if (!domainId || !topicId || !subtopicId) {
+    return res.status(400).json({ error: 'Missing required fields: domainId, topicId, subtopicId' });
+  }
+
+  try {
+    const questionBank = await readQuestionBank(QUESTION_BANK_PATH);
+
+    // Find or create domain
+    let domain = questionBank.domains.find(d => d.domain_id === domainId);
+    if (!domain) {
+      const domainNames = {
+        'domain-1-development': 'Development with AWS Services',
+        'domain-2-security': 'Security',
+        'domain-3-deployment': 'Deployment',
+        'domain-4-troubleshooting': 'Troubleshooting and Optimization'
+      };
+      domain = { domain_id: domainId, name: domainNames[domainId] || domainId, topics: [] };
+      questionBank.domains.push(domain);
+    }
+
+    // Find or create topic
+    let topic = domain.topics.find(t => t.topic_id === topicId);
+    if (!topic) {
+      topic = { topic_id: topicId, name: topicName || topicId, subtopics: [] };
+      domain.topics.push(topic);
+    }
+
+    // Find or create subtopic
+    let subtopic = topic.subtopics.find(s => s.subtopic_id === subtopicId);
+    if (!subtopic) {
+      subtopic = { subtopic_id: subtopicId, name: subtopicName || subtopicId, num_questions_generated: 0, questions: [] };
+      topic.subtopics.push(subtopic);
+    }
+
+    // Get existing questions to avoid duplicates
+    const existingQuestions = subtopic.questions.map(q => q.stem.substring(0, 100));
+
+    console.log(`Generating ${count} questions for ${topicId}/${subtopicId}`);
+
+    const prompt = buildQuestionGenerationPrompt({
+      examName: questionBank.exam,
+      domainName: domain.name,
+      topicName: topic.name,
+      subtopicName: subtopic.name,
+      topicId: topicId,
+      subtopicId: subtopicId,
+      domainId: domainId,
+      difficulty: 'medium',
+      count: count,
+      existingQuestions
+    });
+
+    const message = await anthropic.messages.create({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 8192,
+      messages: [{ role: 'user', content: prompt }]
+    });
+
+    const responseText = message.content[0].text;
+    const jsonMatch = responseText.match(/\[[\s\S]*\]/);
+
+    if (jsonMatch) {
+      const generatedQuestions = JSON.parse(jsonMatch[0]);
+      const timestamp = Date.now();
+
+      const processedQuestions = generatedQuestions.map((q, idx) => ({
+        id: `${topicId}-${subtopicId}-${timestamp}-${idx}`,
+        ...q,
+        topic: topicId,
+        subtopic: subtopicId,
+        domain: domainId,
+        created_at: new Date().toISOString()
+      }));
+
+      subtopic.questions.push(...processedQuestions);
+      subtopic.num_questions_generated = subtopic.questions.length;
+
+      questionBank.generated_at = new Date().toISOString();
+      await writeQuestionBank(QUESTION_BANK_PATH, questionBank);
+
+      res.json({
+        success: true,
+        generated: processedQuestions.length,
+        topicId,
+        subtopicId,
+        totalInSubtopic: subtopic.questions.length
+      });
+    } else {
+      res.status(500).json({ error: 'Failed to parse generated questions' });
+    }
+  } catch (error) {
+    console.error(`Error generating for ${topicId}/${subtopicId}:`, error.message);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ============================================
+// GENERATE FLASHCARDS FOR TOPIC: Generate flashcards for a specific topic/subtopic
+// ============================================
+app.post('/api/generate-flashcards-for-topic', async (req, res) => {
+  const { categoryId, categoryName, subtopicId, subtopicName, count = 5 } = req.body;
+
+  if (!categoryId || !subtopicId) {
+    return res.status(400).json({ error: 'Missing required fields: categoryId, subtopicId' });
+  }
+
+  try {
+    const flashcardBank = await readFlashcardBank(FLASHCARD_BANK_PATH);
+
+    // Find or create category
+    let category = flashcardBank.categories.find(c => c.category_id === categoryId);
+    if (!category) {
+      category = { category_id: categoryId, name: categoryName || categoryId, flashcards: [] };
+      flashcardBank.categories.push(category);
+    }
+
+    console.log(`Generating ${count} flashcards for ${categoryId}/${subtopicId}`);
+
+    const prompt = buildTopicFlashcardPrompt({
+      examName: flashcardBank.exam || 'AWS Certified Developer – Associate (DVA-C02)',
+      categoryName: category.name,
+      categoryId: categoryId,
+      subtopicName: subtopicName || subtopicId,
+      subtopicId: subtopicId,
+      count: count
+    });
+
+    const message = await anthropic.messages.create({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 4096,
+      messages: [{ role: 'user', content: prompt }]
+    });
+
+    const responseText = message.content[0].text;
+    const jsonMatch = responseText.match(/\[[\s\S]*\]/);
+
+    if (jsonMatch) {
+      const generatedFlashcards = JSON.parse(jsonMatch[0]);
+      const timestamp = Date.now();
+
+      const processedFlashcards = generatedFlashcards.map((fc, idx) => ({
+        id: `fc-${categoryId}-${subtopicId}-${timestamp}-${idx}`,
+        front: fc.front,
+        back: fc.back,
+        category: categoryId,
+        subtopic: subtopicId,
+        tags: fc.tags || [categoryId, subtopicId],
+        difficulty: fc.difficulty || 'medium',
+        created_at: new Date().toISOString()
+      }));
+
+      category.flashcards.push(...processedFlashcards);
+
+      flashcardBank.generated_at = new Date().toISOString();
+      flashcardBank.total_flashcards = flashcardBank.categories.reduce((sum, c) => sum + c.flashcards.length, 0);
+      await writeFlashcardBank(FLASHCARD_BANK_PATH, flashcardBank);
+
+      res.json({
+        success: true,
+        generated: processedFlashcards.length,
+        categoryId,
+        subtopicId,
+        totalInCategory: category.flashcards.length
+      });
+    } else {
+      res.status(500).json({ error: 'Failed to parse generated flashcards' });
+    }
+  } catch (error) {
+    console.error(`Error generating flashcards for ${categoryId}/${subtopicId}:`, error.message);
+    res.status(500).json({ error: error.message });
   }
 });
 

@@ -145,3 +145,50 @@ Generate ${count} unique, technically accurate flashcards that:
 
 Generate the flashcards now:`;
 }
+
+export function buildTopicFlashcardPrompt({
+  examName,
+  categoryName,
+  categoryId,
+  subtopicName,
+  subtopicId,
+  count
+}) {
+  return `You are an expert AWS instructor and certification coach.
+
+Using the full exam guide for the **${examName}**, generate ${count} flashcards for the following topic:
+
+**Category**: ${categoryName}
+**Subtopic**: ${subtopicName}
+
+Flashcards must be **exam-focused**, with the core objective of helping candidates **learn, remember, and efficiently recall** information for the certification.
+
+## Requirements:
+- Identify the highest-yield concepts, patterns, trade-offs, and common pitfalls for this subtopic
+- Each flashcard should focus on exactly ONE key idea
+- Phrased in clear, exam-style language
+- Front: a short, recall-focused prompt (question, scenario, "what/why/how", or fill-in-the-blank)
+- Back: a concise, technically accurate answer aligned with current AWS documentation and best practices
+- Prioritize understanding and recall of core concepts over obscure trivia
+- Only use in-scope AWS services and features for DVA-C02
+
+## Difficulty Levels
+- **easy**: Basic facts, common limits, definitions, acronyms
+- **medium**: Service integrations, best practices, comparisons, when to use what
+- **hard**: Edge cases, architectural trade-offs, complex scenarios
+
+## Output Format
+
+Return ONLY a valid JSON array with NO markdown formatting:
+
+[
+  {
+    "front": "Question or fill-in-the-blank here",
+    "back": "Concise, accurate answer here",
+    "difficulty": "easy|medium|hard",
+    "tags": ["${categoryId}", "${subtopicId}"]
+  }
+]
+
+Generate ${count} flashcards for "${subtopicName}" now:`;
+}
