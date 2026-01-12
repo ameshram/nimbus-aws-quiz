@@ -1,7 +1,7 @@
 {
   "exam": "AWS Certified Developer – Associate (DVA-C02)",
   "flashcard_bank_version": "v1.0",
-  "generated_at": "2026-01-12T01:25:25.157Z",
+  "generated_at": "2026-01-12T02:37:54.530Z",
   "categories": [
     {
       "category_id": "api-gateway",
@@ -125,6 +125,31 @@
           ],
           "difficulty": "medium",
           "created_at": "2026-01-12T01:25:25.156Z"
+        },
+        {
+          "id": "fc-api-gateway-1768185374503-0",
+          "front": "What is the maximum payload size that AWS API Gateway can handle for both REST and HTTP APIs?",
+          "back": "10 MB maximum. This applies to both request and response payloads for REST APIs and HTTP APIs.",
+          "category": "api-gateway",
+          "tags": [
+            "api-gateway",
+            "limits"
+          ],
+          "difficulty": "easy",
+          "created_at": "2026-01-12T02:36:14.503Z"
+        },
+        {
+          "id": "fc-api-gateway-1768185374503-1",
+          "front": "What happens when you enable API Gateway caching and how long can cached responses be stored?",
+          "back": "API Gateway caches responses at the stage level, reducing calls to your backend. Cache TTL can be set from 0 seconds to 3600 seconds (1 hour).",
+          "category": "api-gateway",
+          "tags": [
+            "api-gateway",
+            "caching",
+            "performance"
+          ],
+          "difficulty": "medium",
+          "created_at": "2026-01-12T02:36:14.503Z"
         }
       ]
     },
@@ -231,6 +256,30 @@
           ],
           "difficulty": "medium",
           "created_at": "2026-01-12T01:25:25.155Z"
+        },
+        {
+          "id": "fc-codepipeline-1768185379865-0",
+          "front": "What is the maximum execution time for a single pipeline execution in AWS CodePipeline?",
+          "back": "1 hour (3600 seconds). If a pipeline execution exceeds this limit, it will time out and fail.",
+          "category": "codepipeline",
+          "tags": [
+            "codepipeline",
+            "limits"
+          ],
+          "difficulty": "medium",
+          "created_at": "2026-01-12T02:36:19.865Z"
+        },
+        {
+          "id": "fc-codepipeline-1768185379865-1",
+          "front": "What deployment configuration in CodeDeploy replaces 50% of instances at a time?",
+          "back": "CodeDeployDefault.EC2AllAtOnceHalfAtATime. This configuration deploys to half the instances simultaneously, then the remaining half.",
+          "category": "codepipeline",
+          "tags": [
+            "codepipeline",
+            "deployment-strategies"
+          ],
+          "difficulty": "medium",
+          "created_at": "2026-01-12T02:36:19.865Z"
         }
       ]
     },
@@ -347,6 +396,30 @@
           ],
           "difficulty": "medium",
           "created_at": "2026-01-12T01:25:25.155Z"
+        },
+        {
+          "id": "fc-ec2-1768185385078-0",
+          "front": "What is the maximum number of ENIs (Elastic Network Interfaces) that can be attached to an EC2 instance?",
+          "back": "Varies by instance type. For example, t3.micro supports 2 ENIs, while c5n.18xlarge supports 15 ENIs. Each ENI can have multiple private IP addresses.",
+          "category": "ec2",
+          "tags": [
+            "ec2",
+            "limits"
+          ],
+          "difficulty": "medium",
+          "created_at": "2026-01-12T02:36:25.078Z"
+        },
+        {
+          "id": "fc-ec2-1768185385078-1",
+          "front": "What happens to EC2 instance store data when an instance is stopped or terminated?",
+          "back": "Instance store data is permanently lost. Data persists only through reboots. For persistent storage, use EBS volumes instead.",
+          "category": "ec2",
+          "tags": [
+            "ec2",
+            "concepts"
+          ],
+          "difficulty": "easy",
+          "created_at": "2026-01-12T02:36:25.078Z"
         }
       ]
     },
@@ -450,6 +523,30 @@
           ],
           "difficulty": "medium",
           "created_at": "2026-01-12T01:25:25.157Z"
+        },
+        {
+          "id": "fc-iam-1768185389994-0",
+          "front": "What is the maximum number of IAM policies that can be attached to a single IAM user?",
+          "back": "10 managed policies (AWS managed + customer managed combined). Additionally, one inline policy per user is allowed, but managed policies are recommended.",
+          "category": "iam",
+          "tags": [
+            "iam",
+            "limits"
+          ],
+          "difficulty": "medium",
+          "created_at": "2026-01-12T02:36:29.994Z"
+        },
+        {
+          "id": "fc-iam-1768185389994-1",
+          "front": "What is the difference between IAM roles and IAM users?",
+          "back": "IAM users have permanent credentials and represent people or services. IAM roles have temporary credentials and are assumed by trusted entities (users, services, or applications).",
+          "category": "iam",
+          "tags": [
+            "iam",
+            "concepts"
+          ],
+          "difficulty": "easy",
+          "created_at": "2026-01-12T02:36:29.994Z"
         }
       ]
     },
@@ -517,6 +614,30 @@
           ],
           "difficulty": "medium",
           "created_at": "2026-01-12T01:25:25.156Z"
+        },
+        {
+          "id": "fc-lambda-1768185395166-0",
+          "front": "What is the maximum size of an AWS Lambda deployment package when uploaded directly to Lambda?",
+          "back": "50 MB zipped or 250 MB unzipped. For larger packages, use S3 with a maximum of 250 MB unzipped.",
+          "category": "lambda",
+          "tags": [
+            "lambda",
+            "limits"
+          ],
+          "difficulty": "easy",
+          "created_at": "2026-01-12T02:36:35.166Z"
+        },
+        {
+          "id": "fc-lambda-1768185395166-1",
+          "front": "What is the range for AWS Lambda ephemeral storage (/tmp directory) configuration?",
+          "back": "512 MB to 10,240 MB (10 GB) in 1 MB increments. This temporary storage is available during function execution and persists across invocations in the same execution environment.",
+          "category": "lambda",
+          "tags": [
+            "lambda",
+            "limits"
+          ],
+          "difficulty": "medium",
+          "created_at": "2026-01-12T02:36:35.166Z"
         }
       ]
     },
@@ -583,6 +704,30 @@
           ],
           "difficulty": "easy",
           "created_at": "2026-01-12T01:25:25.156Z"
+        },
+        {
+          "id": "fc-s3-1768185400219-0",
+          "front": "What is the maximum number of S3 buckets you can create per AWS account by default?",
+          "back": "100 buckets per AWS account by default. This is a soft limit that can be increased by submitting a service limit increase request to AWS Support.",
+          "category": "s3",
+          "tags": [
+            "s3",
+            "limits"
+          ],
+          "difficulty": "easy",
+          "created_at": "2026-01-12T02:36:40.219Z"
+        },
+        {
+          "id": "fc-s3-1768185400219-1",
+          "front": "Which S3 storage class automatically moves objects between access tiers based on changing access patterns?",
+          "back": "S3 Intelligent-Tiering. It automatically moves objects between frequent and infrequent access tiers without performance impact or operational overhead.",
+          "category": "s3",
+          "tags": [
+            "s3",
+            "storage-classes"
+          ],
+          "difficulty": "medium",
+          "created_at": "2026-01-12T02:36:40.219Z"
         }
       ]
     },
@@ -639,6 +784,30 @@
           ],
           "difficulty": "medium",
           "created_at": "2026-01-12T01:25:25.155Z"
+        },
+        {
+          "id": "fc-cognito-1768185405641-0",
+          "front": "What is the maximum number of user attributes that can be stored in a Cognito User Pool?",
+          "back": "50 attributes per user (25 standard + 25 custom attributes). Custom attributes must be prefixed with 'custom:' and are case-sensitive.",
+          "category": "cognito",
+          "tags": [
+            "cognito",
+            "limits"
+          ],
+          "difficulty": "medium",
+          "created_at": "2026-01-12T02:36:45.641Z"
+        },
+        {
+          "id": "fc-cognito-1768185405641-1",
+          "front": "In Cognito Identity Pools, what happens when both authenticated and unauthenticated roles are defined but a user is not authenticated?",
+          "back": "The user receives temporary AWS credentials with permissions from the unauthenticated role. This allows guest access to AWS resources with limited permissions.",
+          "category": "cognito",
+          "tags": [
+            "cognito",
+            "best-practices"
+          ],
+          "difficulty": "hard",
+          "created_at": "2026-01-12T02:36:45.641Z"
         }
       ]
     },
@@ -693,6 +862,30 @@
           ],
           "difficulty": "easy",
           "created_at": "2026-01-12T01:25:25.156Z"
+        },
+        {
+          "id": "fc-sqs-sns-1768185410465-0",
+          "front": "What is the maximum message size for both SQS and SNS?",
+          "back": "256 KB maximum. For larger payloads, use the Extended Client Library pattern with S3 storage references.",
+          "category": "sqs-sns",
+          "tags": [
+            "sqs-sns",
+            "limits"
+          ],
+          "difficulty": "easy",
+          "created_at": "2026-01-12T02:36:50.465Z"
+        },
+        {
+          "id": "fc-sqs-sns-1768185410465-1",
+          "front": "What happens to messages in a FIFO queue when the MessageGroupId is the same?",
+          "back": "Messages with the same MessageGroupId are processed in strict order within that group, but different groups can be processed in parallel.",
+          "category": "sqs-sns",
+          "tags": [
+            "sqs-sns",
+            "concepts"
+          ],
+          "difficulty": "medium",
+          "created_at": "2026-01-12T02:36:50.465Z"
         }
       ]
     },
@@ -734,6 +927,30 @@
           ],
           "difficulty": "medium",
           "created_at": "2026-01-12T01:25:25.155Z"
+        },
+        {
+          "id": "fc-elb-asg-1768185415965-0",
+          "front": "What is the default health check grace period for EC2 instances in an Auto Scaling Group?",
+          "back": "300 seconds (5 minutes). This allows time for instances to boot up and become ready before health checks begin failing them.",
+          "category": "elb-asg",
+          "tags": [
+            "elb-asg",
+            "limits"
+          ],
+          "difficulty": "easy",
+          "created_at": "2026-01-12T02:36:55.965Z"
+        },
+        {
+          "id": "fc-elb-asg-1768185415965-1",
+          "front": "What happens when an Auto Scaling Group is associated with an ELB and an instance fails the ELB health check?",
+          "back": "The ELB stops sending traffic to the unhealthy instance. If the ASG is configured to use ELB health checks, it will also terminate and replace the instance.",
+          "category": "elb-asg",
+          "tags": [
+            "elb-asg",
+            "best-practices"
+          ],
+          "difficulty": "medium",
+          "created_at": "2026-01-12T02:36:55.965Z"
         }
       ]
     },
@@ -773,6 +990,30 @@
           ],
           "difficulty": "medium",
           "created_at": "2026-01-12T01:25:25.157Z"
+        },
+        {
+          "id": "fc-sdk-general-1768185420684-0",
+          "front": "What is the maximum size of an AWS Lambda deployment package when uploaded directly?",
+          "back": "50 MB when zipped (compressed). The unzipped deployment package can be up to 250 MB, including layers.",
+          "category": "sdk-general",
+          "tags": [
+            "sdk-general",
+            "limits"
+          ],
+          "difficulty": "medium",
+          "created_at": "2026-01-12T02:37:00.684Z"
+        },
+        {
+          "id": "fc-sdk-general-1768185420684-1",
+          "front": "What is the difference between AWS SDK synchronous and asynchronous operations?",
+          "back": "Synchronous operations block execution until completion and return results directly. Asynchronous operations return immediately with promises/callbacks, allowing non-blocking execution.",
+          "category": "sdk-general",
+          "tags": [
+            "sdk-general",
+            "concepts"
+          ],
+          "difficulty": "medium",
+          "created_at": "2026-01-12T02:37:00.684Z"
         }
       ]
     },
@@ -815,6 +1056,31 @@
           ],
           "difficulty": "easy",
           "created_at": "2026-01-12T01:25:25.156Z"
+        },
+        {
+          "id": "fc-dynamodb-1768185425817-0",
+          "front": "What is the maximum size of a single item in DynamoDB?",
+          "back": "400 KB. This includes both attribute names and values. Items exceeding this limit must be stored differently, such as in S3 with references in DynamoDB.",
+          "category": "dynamodb",
+          "tags": [
+            "dynamodb",
+            "limits"
+          ],
+          "difficulty": "easy",
+          "created_at": "2026-01-12T02:37:05.817Z"
+        },
+        {
+          "id": "fc-dynamodb-1768185425817-1",
+          "front": "How many Local Secondary Indexes (LSIs) can you create per DynamoDB table and when must they be created?",
+          "back": "5 LSIs per table maximum. LSIs must be created at table creation time and cannot be added, removed, or modified after the table is created.",
+          "category": "dynamodb",
+          "tags": [
+            "dynamodb",
+            "limits",
+            "indexing"
+          ],
+          "difficulty": "medium",
+          "created_at": "2026-01-12T02:37:05.817Z"
         }
       ]
     },
@@ -845,6 +1111,30 @@
           ],
           "difficulty": "hard",
           "created_at": "2026-01-12T01:25:25.155Z"
+        },
+        {
+          "id": "fc-rds-aurora-1768185430926-0",
+          "front": "What is the maximum storage capacity for an Amazon Aurora cluster?",
+          "back": "128 TiB (tebibytes). Aurora automatically scales storage in 10 GiB increments up to this limit without downtime.",
+          "category": "rds-aurora",
+          "tags": [
+            "rds-aurora",
+            "limits"
+          ],
+          "difficulty": "easy",
+          "created_at": "2026-01-12T02:37:10.926Z"
+        },
+        {
+          "id": "fc-rds-aurora-1768185430926-1",
+          "front": "What is the difference between Aurora Reader endpoints and Cluster endpoints?",
+          "back": "Cluster endpoint connects to the primary instance for read/write operations. Reader endpoint load-balances across read replicas for read-only operations.",
+          "category": "rds-aurora",
+          "tags": [
+            "rds-aurora",
+            "concepts"
+          ],
+          "difficulty": "medium",
+          "created_at": "2026-01-12T02:37:10.926Z"
         }
       ]
     },
@@ -875,6 +1165,31 @@
           ],
           "difficulty": "easy",
           "created_at": "2026-01-12T01:25:25.156Z"
+        },
+        {
+          "id": "fc-elasticache-1768185436409-0",
+          "front": "What are the two caching engines supported by Amazon ElastiCache?",
+          "back": "Redis and Memcached. Redis supports advanced data structures, persistence, and Multi-AZ. Memcached is simpler with multi-threading support.",
+          "category": "elasticache",
+          "tags": [
+            "elasticache",
+            "engines"
+          ],
+          "difficulty": "easy",
+          "created_at": "2026-01-12T02:37:16.409Z"
+        },
+        {
+          "id": "fc-elasticache-1768185436409-1",
+          "front": "What is the maximum number of nodes per Redis cluster in ElastiCache?",
+          "back": "500 nodes per Redis cluster (1 primary + up to 499 replicas across up to 5 node groups). Each node group can have 1 primary and up to 5 replicas.",
+          "category": "elasticache",
+          "tags": [
+            "elasticache",
+            "limits",
+            "redis"
+          ],
+          "difficulty": "medium",
+          "created_at": "2026-01-12T02:37:16.409Z"
         }
       ]
     },
@@ -905,6 +1220,30 @@
           ],
           "difficulty": "easy",
           "created_at": "2026-01-12T01:25:25.157Z"
+        },
+        {
+          "id": "fc-cloudformation-1768185442102-0",
+          "front": "What is the maximum template body size for a CloudFormation template?",
+          "back": "51,200 bytes when passed directly as a parameter, or 460,800 bytes when stored in an S3 bucket. Templates larger than 51,200 bytes must be uploaded to S3.",
+          "category": "cloudformation",
+          "tags": [
+            "cloudformation",
+            "limits"
+          ],
+          "difficulty": "easy",
+          "created_at": "2026-01-12T02:37:22.102Z"
+        },
+        {
+          "id": "fc-cloudformation-1768185442102-1",
+          "front": "What happens during a CloudFormation stack rollback and how can you prevent resource deletion?",
+          "back": "During rollback, CloudFormation attempts to return resources to their previous state. Use DeletionPolicy: Retain or Snapshot to prevent critical resources from being deleted during failed stack operations.",
+          "category": "cloudformation",
+          "tags": [
+            "cloudformation",
+            "best-practices"
+          ],
+          "difficulty": "medium",
+          "created_at": "2026-01-12T02:37:22.102Z"
         }
       ]
     },
@@ -923,6 +1262,30 @@
           ],
           "difficulty": "easy",
           "created_at": "2026-01-12T01:25:25.155Z"
+        },
+        {
+          "id": "fc-ebs-1768185447083-0",
+          "front": "What is the maximum size of a single EBS volume?",
+          "back": "64 TiB (tebibytes) for all EBS volume types. This applies to gp2, gp3, io1, io2, st1, and sc1 volumes.",
+          "category": "ebs",
+          "tags": [
+            "ebs",
+            "limits"
+          ],
+          "difficulty": "easy",
+          "created_at": "2026-01-12T02:37:27.083Z"
+        },
+        {
+          "id": "fc-ebs-1768185447083-1",
+          "front": "What happens to data on an instance store volume when you stop an EC2 instance?",
+          "back": "Data is permanently lost. Instance store volumes are ephemeral storage that only persists during the lifetime of the instance, unlike EBS volumes which persist independently.",
+          "category": "ebs",
+          "tags": [
+            "ebs",
+            "concepts"
+          ],
+          "difficulty": "medium",
+          "created_at": "2026-01-12T02:37:27.083Z"
         }
       ]
     },
@@ -940,6 +1303,30 @@
           ],
           "difficulty": "medium",
           "created_at": "2026-01-12T01:25:25.155Z"
+        },
+        {
+          "id": "fc-elastic-beanstalk-1768185452167-0",
+          "front": "What is the maximum number of application versions you can have in Elastic Beanstalk?",
+          "back": "1,000 application versions per application. AWS automatically deletes older versions when this limit is reached unless you configure lifecycle policies.",
+          "category": "elastic-beanstalk",
+          "tags": [
+            "elastic-beanstalk",
+            "limits"
+          ],
+          "difficulty": "medium",
+          "created_at": "2026-01-12T02:37:32.167Z"
+        },
+        {
+          "id": "fc-elastic-beanstalk-1768185452167-1",
+          "front": "What deployment method provides zero-downtime deployments in Elastic Beanstalk?",
+          "back": "Blue/Green deployment (also called Immutable deployment). It launches new instances with the new version before terminating old instances, ensuring no downtime.",
+          "category": "elastic-beanstalk",
+          "tags": [
+            "elastic-beanstalk",
+            "best-practices"
+          ],
+          "difficulty": "medium",
+          "created_at": "2026-01-12T02:37:32.167Z"
         }
       ]
     },
@@ -958,6 +1345,32 @@
           ],
           "difficulty": "easy",
           "created_at": "2026-01-12T01:25:25.155Z"
+        },
+        {
+          "id": "fc-route53-1768185457961-0",
+          "front": "What is the default TTL (Time To Live) for Route 53 DNS records?",
+          "back": "300 seconds (5 minutes). TTL determines how long DNS resolvers cache the record before querying Route 53 again.",
+          "category": "route53",
+          "tags": [
+            "route53",
+            "dns",
+            "ttl"
+          ],
+          "difficulty": "easy",
+          "created_at": "2026-01-12T02:37:37.961Z"
+        },
+        {
+          "id": "fc-route53-1768185457961-1",
+          "front": "Which Route 53 routing policy should you use to route traffic to multiple resources in proportions you specify?",
+          "back": "Weighted routing policy. It allows you to associate multiple resources with a single DNS name and specify a weight (0-255) for each resource to control traffic distribution.",
+          "category": "route53",
+          "tags": [
+            "route53",
+            "routing-policies",
+            "traffic-distribution"
+          ],
+          "difficulty": "medium",
+          "created_at": "2026-01-12T02:37:37.961Z"
         }
       ]
     },
@@ -976,6 +1389,30 @@
           ],
           "difficulty": "medium",
           "created_at": "2026-01-12T01:25:25.156Z"
+        },
+        {
+          "id": "fc-cloudfront-1768185463408-0",
+          "front": "What is the maximum object size that CloudFront can cache from an origin?",
+          "back": "20 GB per object. Objects larger than 20 GB cannot be cached and will be served directly from the origin for each request.",
+          "category": "cloudfront",
+          "tags": [
+            "cloudfront",
+            "limits"
+          ],
+          "difficulty": "medium",
+          "created_at": "2026-01-12T02:37:43.409Z"
+        },
+        {
+          "id": "fc-cloudfront-1768185463409-1",
+          "front": "What is the difference between CloudFront's Price Class All vs Price Class 100?",
+          "back": "Price Class All uses all CloudFront edge locations globally for best performance. Price Class 100 uses only North America and Europe edge locations for lower cost but potentially higher latency in other regions.",
+          "category": "cloudfront",
+          "tags": [
+            "cloudfront",
+            "comparisons"
+          ],
+          "difficulty": "medium",
+          "created_at": "2026-01-12T02:37:43.409Z"
         }
       ]
     },
@@ -993,6 +1430,30 @@
           ],
           "difficulty": "easy",
           "created_at": "2026-01-12T01:25:25.156Z"
+        },
+        {
+          "id": "fc-xray-1768185469076-0",
+          "front": "What is the default sampling rate for AWS X-Ray tracing?",
+          "back": "One request per second (the first request each second), plus 5% of additional requests. This is called the reservoir and rate sampling strategy.",
+          "category": "xray",
+          "tags": [
+            "xray",
+            "sampling"
+          ],
+          "difficulty": "medium",
+          "created_at": "2026-01-12T02:37:49.076Z"
+        },
+        {
+          "id": "fc-xray-1768185469076-1",
+          "front": "What are the two types of AWS X-Ray segments?",
+          "back": "Segments (data about work done by your application) and Subsegments (data about downstream calls made by your application to other services or external APIs).",
+          "category": "xray",
+          "tags": [
+            "xray",
+            "concepts"
+          ],
+          "difficulty": "easy",
+          "created_at": "2026-01-12T02:37:49.076Z"
         }
       ]
     },
@@ -1010,9 +1471,33 @@
           ],
           "difficulty": "easy",
           "created_at": "2026-01-12T01:25:25.156Z"
+        },
+        {
+          "id": "fc-codecommit-1768185474530-0",
+          "front": "What is the maximum file size that can be stored in a single CodeCommit repository?",
+          "back": "2 GB per file. CodeCommit repositories have no limit on total size, but individual files cannot exceed 2 GB.",
+          "category": "codecommit",
+          "tags": [
+            "codecommit",
+            "limits"
+          ],
+          "difficulty": "easy",
+          "created_at": "2026-01-12T02:37:54.530Z"
+        },
+        {
+          "id": "fc-codecommit-1768185474530-1",
+          "front": "What are the three main ways to authenticate with AWS CodeCommit?",
+          "back": "Git credentials (HTTPS), SSH keys, and AWS CLI credential helper. Git credentials are username/password for HTTPS, SSH uses public/private key pairs, and credential helper uses AWS CLI configuration.",
+          "category": "codecommit",
+          "tags": [
+            "codecommit",
+            "authentication"
+          ],
+          "difficulty": "medium",
+          "created_at": "2026-01-12T02:37:54.530Z"
         }
       ]
     }
   ],
-  "total_flashcards": 75
+  "total_flashcards": 115
 }
