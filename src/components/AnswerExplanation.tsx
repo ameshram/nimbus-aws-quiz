@@ -54,7 +54,7 @@ export function AnswerExplanation({ question, userAnswers, isCorrect }: AnswerEx
             <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Why This Matters
+            🧠 Exam Signal
           </h4>
           <p className="text-blue-900 text-sm leading-relaxed">{question.why_this_matters}</p>
         </div>
@@ -64,7 +64,7 @@ export function AnswerExplanation({ question, userAnswers, isCorrect }: AnswerEx
             <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
             </svg>
-            Key Takeaway
+            🎯 Decision Rule
           </h4>
           <p className="text-purple-900 text-sm leading-relaxed">{question.key_takeaway}</p>
         </div>
