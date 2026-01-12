@@ -1,0 +1,836 @@
+{
+  "exam": "AWS Certified Developer – Associate (DVA-C02)",
+  "question_bank_version": "v1.0",
+  "domain": "Domain 1: Development with AWS Services (32%)",
+  "generated_at": "2026-01-11T00:00:00Z",
+  "topics_covered": [
+    "API Gateway - Authorization and Authentication",
+    "API Gateway - Stages and Deployment",
+    "API Gateway - Caching and Performance",
+    "S3 - Storage Classes and Lifecycle",
+    "S3 - Security and Access Control",
+    "S3 - Performance and Optimization",
+    "SQS - Queue Types and Configuration",
+    "SQS - Message Processing and Visibility",
+    "SNS - Topics and Subscriptions",
+    "EventBridge - Event Patterns and Rules",
+    "Step Functions - State Machines and Workflows",
+    "Kinesis - Data Streams and Processing",
+    "ElastiCache - Caching Strategies",
+    "RDS and Aurora - Database Operations"
+  ],
+  "questions": [
+    {
+      "id": "apigw-auth-001",
+      "concept_id": "lambda-authorizer",
+      "variant_index": 0,
+      "topic": "api-gateway",
+      "subtopic": "api-gateway-authorization",
+      "domain": "domain-1-development",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "An API Gateway REST API needs to validate custom JWT tokens issued by a third-party identity provider. The validation logic requires calling the provider's API to verify token signatures. What authorization mechanism should the developer implement?",
+      "options": [
+        {"label": "A", "text": "Use API Gateway's built-in JWT authorizer"},
+        {"label": "B", "text": "Implement a Lambda authorizer (custom authorizer) to validate tokens"},
+        {"label": "C", "text": "Use IAM authorization with STS to validate tokens"},
+        {"label": "D", "text": "Configure Amazon Cognito User Pools as the authorizer"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "Lambda authorizers (custom authorizers) enable custom authentication logic including calling external APIs for token validation. They receive the token, execute validation logic, and return an IAM policy. API Gateway's JWT authorizer works with OIDC/OAuth2 providers but requires standard JWKS endpoints, which may not be available for custom third-party solutions. IAM authorization is for AWS credentials, not custom tokens. Cognito User Pools would require migrating users to Cognito.",
+      "why_this_matters": "Many enterprise applications integrate with existing identity providers or use custom authentication schemes. Lambda authorizers provide the flexibility to implement any authentication logic, including calling external validation services, checking custom claims, or integrating with legacy systems. This extensibility is essential for real-world API security requirements that don't fit standard OAuth2/OIDC patterns.",
+      "key_takeaway": "Use Lambda authorizers when you need custom authentication logic, external validation calls, or integration with non-standard identity providers that don't fit built-in authorizer types.",
+      "option_explanations": {
+        "A": "Built-in JWT authorizers require standard OIDC providers with JWKS endpoints, not custom validation logic.",
+        "B": "Lambda authorizers enable custom token validation logic including external API calls for verification.",
+        "C": "IAM authorization is for AWS credentials (access keys, STS tokens), not custom third-party tokens.",
+        "D": "Cognito User Pools require migrating users and don't support arbitrary third-party token validation."
+      },
+      "tags": ["topic:api-gateway", "subtopic:api-gateway-authorization", "domain:1", "service:api-gateway", "service:lambda", "lambda-authorizer", "authentication"]
+    },
+    {
+      "id": "apigw-auth-002",
+      "concept_id": "authorizer-caching",
+      "variant_index": 0,
+      "topic": "api-gateway",
+      "subtopic": "api-gateway-authorization",
+      "domain": "domain-1-development",
+      "difficulty_inferred": "hard",
+      "question_type": "single",
+      "stem": "A Lambda authorizer is configured with a TTL of 300 seconds. After a user's permissions are revoked in the identity system, they can still access the API for up to 5 minutes. What is causing this behavior and how should it be addressed?",
+      "options": [
+        {"label": "A", "text": "The Lambda function is caching the authorization decision internally"},
+        {"label": "B", "text": "API Gateway is caching the authorization response based on the authorization token"},
+        {"label": "C", "text": "The IAM policy returned by the authorizer has a 5-minute validity period"},
+        {"label": "D", "text": "CloudFront is caching the API responses"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "API Gateway caches Lambda authorizer responses based on the authorization token for the configured TTL period. During this time, the authorizer Lambda isn't invoked for the same token, so permission changes aren't detected until the cache expires. To reduce this window, decrease the TTL (minimum 0 seconds for no caching) or include elements in the cache key that change when permissions change. Lambda internal caching doesn't affect this. IAM policies don't have TTLs. CloudFront caching wouldn't be token-specific.",
+      "why_this_matters": "Understanding authorizer caching is critical for balancing performance and security. Caching reduces Lambda invocations and latency but delays permission revocation detection. For high-security applications requiring immediate revocation, use low or zero TTL. For performance-critical applications where slight delays are acceptable, use longer TTLs. This tradeoff is fundamental to API authorization design.",
+      "key_takeaway": "API Gateway caches Lambda authorizer responses for the configured TTL—reduce TTL for faster permission revocation detection or increase it for better performance at the cost of delayed revocation.",
+      "option_explanations": {
+        "A": "Lambda internal caching doesn't persist across invocations; API Gateway-level caching is the cause.",
+        "B": "API Gateway caches authorizer responses by token for the TTL period, preventing immediate revocation detection.",
+        "C": "IAM policies returned by authorizers don't have their own TTL; caching is at the API Gateway level.",
+        "D": "CloudFront caching wouldn't be authorization-token-specific or cause this authorization-specific behavior."
+      },
+      "tags": ["topic:api-gateway", "subtopic:api-gateway-authorization", "domain:1", "service:api-gateway", "lambda-authorizer", "caching", "security"]
+    },
+    {
+      "id": "apigw-auth-003",
+      "concept_id": "cognito-authorizer",
+      "variant_index": 0,
+      "topic": "api-gateway",
+      "subtopic": "api-gateway-authorization",
+      "domain": "domain-1-development",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "An application uses Amazon Cognito User Pools for user authentication. API Gateway needs to authorize requests using tokens from Cognito. What is the MOST efficient authorization approach?",
+      "options": [
+        {"label": "A", "text": "Use a Lambda authorizer to validate Cognito tokens"},
+        {"label": "B", "text": "Configure a Cognito User Pool authorizer in API Gateway"},
+        {"label": "C", "text": "Use IAM authorization with Cognito Identity Pools"},
+        {"label": "D", "text": "Validate tokens in the backend Lambda function"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "API Gateway has native integration with Cognito User Pools through Cognito authorizers. This is the most efficient approach—API Gateway automatically validates JWT tokens from Cognito without requiring custom code. Lambda authorizers would work but add unnecessary complexity and latency. Cognito Identity Pools provide AWS credentials (option C) but are for federated access to AWS services, not API authorization. Backend validation adds latency and duplicates authorization logic.",
+      "why_this_matters": "Cognito User Pool authorizers provide seamless integration between Cognito authentication and API Gateway authorization without custom code. This native integration reduces development time, eliminates potential security bugs in custom token validation, and provides better performance than Lambda authorizers. Understanding when to use built-in authorizers versus custom Lambda authorizers is essential for efficient API security implementation.",
+      "key_takeaway": "Use Cognito User Pool authorizers for native, efficient integration when using Cognito for authentication—avoid custom Lambda authorizers or backend validation for standard Cognito token validation.",
+      "option_explanations": {
+        "A": "Lambda authorizers work but add complexity and latency when native Cognito integration is available.",
+        "B": "Cognito User Pool authorizers provide native, efficient Cognito token validation without custom code.",
+        "C": "Cognito Identity Pools provide AWS credentials for AWS service access, not API Gateway authorization for User Pool tokens.",
+        "D": "Backend validation adds latency, duplicates authorization logic, and couples security to business logic."
+      },
+      "tags": ["topic:api-gateway", "subtopic:api-gateway-authorization", "domain:1", "service:api-gateway", "service:cognito", "cognito-authorizer"]
+    },
+    {
+      "id": "apigw-auth-004",
+      "concept_id": "iam-authorization",
+      "variant_index": 0,
+      "topic": "api-gateway",
+      "subtopic": "api-gateway-authorization",
+      "domain": "domain-1-development",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "A microservices application has multiple Lambda functions that need to call each other through API Gateway. The functions should not be publicly accessible. What authorization method should be used?",
+      "options": [
+        {"label": "A", "text": "Use API keys for authentication"},
+        {"label": "B", "text": "Use IAM authorization with SigV4 signing"},
+        {"label": "C", "text": "Use a Lambda authorizer that checks source IP"},
+        {"label": "D", "text": "Deploy API Gateway in a private VPC"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "IAM authorization with SigV4 signing is the proper way to secure API Gateway endpoints for AWS service-to-service communication. Lambda functions use their execution roles to sign requests, and API Gateway validates the signatures. This provides strong authentication and authorization without managing secrets. API keys are not secure for authorization (only for throttling). IP-based authorization is brittle in cloud environments. API Gateway REST APIs cannot be deployed in VPCs (though private endpoints exist for restricting access).",
+      "why_this_matters": "Service-to-service communication security is fundamental to microservices architectures. IAM authorization leverages AWS's identity and credential management, eliminating the need to manage and rotate secrets between services. This approach provides strong security through cryptographic signatures while integrating seamlessly with AWS IAM policies for fine-grained access control.",
+      "key_takeaway": "Use IAM authorization with SigV4 signing for secure service-to-service API calls—it leverages AWS credentials without requiring secret management and provides strong authentication.",
+      "option_explanations": {
+        "A": "API keys are for throttling and usage tracking, not secure authentication or authorization.",
+        "B": "IAM authorization with SigV4 signing provides secure service-to-service authentication using AWS credentials.",
+        "C": "IP-based authorization is unreliable in cloud environments where IPs change dynamically.",
+        "D": "API Gateway REST APIs don't deploy in VPCs; private endpoints exist but IAM authorization is the proper solution."
+      },
+      "tags": ["topic:api-gateway", "subtopic:api-gateway-authorization", "domain:1", "service:api-gateway", "service:iam", "iam-authorization", "sigv4"]
+    },
+    {
+      "id": "apigw-auth-005",
+      "concept_id": "api-key-usage-plans",
+      "variant_index": 0,
+      "topic": "api-gateway",
+      "subtopic": "api-gateway-authorization",
+      "domain": "domain-1-development",
+      "difficulty_inferred": "easy",
+      "question_type": "single",
+      "stem": "A developer creates API keys in API Gateway and associates them with methods. API calls with valid API keys are not being throttled according to the rate limits. What is missing?",
+      "options": [
+        {"label": "A", "text": "API keys need to be encrypted with KMS"},
+        {"label": "B", "text": "API keys must be associated with a usage plan that defines rate limits"},
+        {"label": "C", "text": "Throttling must be enabled in the stage settings"},
+        {"label": "D", "text": "API keys require a Lambda authorizer to enforce limits"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "API keys by themselves don't enforce throttling. They must be associated with a usage plan that defines rate limits and quotas. The usage plan specifies throttle rates (requests per second) and quotas (requests per day/week/month). Without a usage plan, API keys only serve as identifiers. Encryption, stage settings, and Lambda authorizers are not required for API key throttling.",
+      "why_this_matters": "API keys and usage plans together enable monetization, rate limiting, and customer tier management for APIs. Understanding that API keys alone don't enforce limits prevents incorrect implementations. Usage plans are essential for SaaS APIs offering different service tiers or metered billing based on usage.",
+      "key_takeaway": "API keys must be associated with usage plans to enforce rate limits and quotas—API keys alone are just identifiers without throttling capabilities.",
+      "option_explanations": {
+        "A": "API keys don't require KMS encryption for throttling functionality.",
+        "B": "Usage plans define rate limits and quotas; API keys must be associated with them for throttling.",
+        "C": "Stage-level throttling settings are separate from API key-based throttling via usage plans.",
+        "D": "Lambda authorizers handle custom authorization logic, not API key throttling enforcement."
+      },
+      "tags": ["topic:api-gateway", "subtopic:api-gateway-authorization", "domain:1", "service:api-gateway", "api-keys", "usage-plans", "throttling"]
+    },
+    {
+      "id": "apigw-stage-001",
+      "concept_id": "stage-variables",
+      "variant_index": 0,
+      "topic": "api-gateway",
+      "subtopic": "api-gateway-stages",
+      "domain": "domain-1-development",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "An API Gateway REST API has separate dev, test, and prod stages that should invoke different Lambda function versions. How can this be configured without creating separate APIs?",
+      "options": [
+        {"label": "A", "text": "Use separate API Gateway APIs for each environment"},
+        {"label": "B", "text": "Use stage variables to reference different Lambda function ARNs or aliases per stage"},
+        {"label": "C", "text": "Configure environment-specific integration endpoints in each method"},
+        {"label": "D", "text": "Use Lambda layers to separate environment logic"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "Stage variables allow parameterizing API configurations per stage. You can use a stage variable (e.g., ${stageVariables.lambdaAlias}) in the Lambda integration ARN and set it to 'dev', 'test', or 'prod' in respective stages. This enables one API configuration to route to different Lambda versions/aliases based on stage. Creating separate APIs duplicates configuration. Hard-coding endpoints per method eliminates reusability. Lambda layers don't address routing to different function versions.",
+      "why_this_matters": "Stage variables enable environment promotion strategies with a single API definition, reducing configuration drift and management overhead. This pattern is fundamental to CI/CD pipelines where the same API configuration progresses through environments with only variable substitutions changing. Understanding stage variables is essential for managing multi-environment deployments efficiently.",
+      "key_takeaway": "Use stage variables to parameterize environment-specific configurations like Lambda aliases, allowing a single API definition to serve multiple environments with different backends.",
+      "option_explanations": {
+        "A": "Separate APIs create configuration drift and management overhead; stage variables solve this within one API.",
+        "B": "Stage variables enable parameterizing Lambda ARNs/aliases per stage, supporting multiple environments with one API definition.",
+        "C": "Hard-coding per method eliminates the benefits of reusable configuration and deployment promotion.",
+        "D": "Lambda layers share code across functions but don't address routing to different function versions per environment."
+      },
+      "tags": ["topic:api-gateway", "subtopic:api-gateway-stages", "domain:1", "domain:3", "service:api-gateway", "stage-variables", "environments"]
+    },
+    {
+      "id": "apigw-stage-002",
+      "concept_id": "canary-deployment",
+      "variant_index": 0,
+      "topic": "api-gateway",
+      "subtopic": "api-gateway-stages",
+      "domain": "domain-1-development",
+      "difficulty_inferred": "hard",
+      "question_type": "single",
+      "stem": "A development team wants to gradually roll out API changes to production by routing 10% of traffic to the new version while 90% continues using the current version. What API Gateway feature supports this?",
+      "options": [
+        {"label": "A", "text": "Create two separate stages and use weighted routing in Route 53"},
+        {"label": "B", "text": "Enable canary deployment on the production stage"},
+        {"label": "C", "text": "Use Lambda aliases with weighted routing"},
+        {"label": "D", "text": "Deploy two separate APIs and use an ALB for traffic splitting"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "API Gateway stages support canary deployments where you can specify a percentage of traffic to route to a canary release. You configure the canary percentage (e.g., 10%) and the canary points to a new deployment while the baseline continues serving the majority of traffic. This is built into API Gateway stages. Route 53 weighted routing would require separate stage URLs. Lambda aliases could enable backend traffic splitting but not at the API Gateway layer. Separate APIs with ALB adds unnecessary complexity.",
+      "why_this_matters": "Canary deployments enable safe, gradual rollouts of API changes with automatic traffic splitting. This reduces risk by exposing new versions to a small percentage of users first, allowing monitoring for errors before full rollout. Built-in canary support in API Gateway stages simplifies implementation compared to external traffic splitting mechanisms.",
+      "key_takeaway": "Use API Gateway stage canary deployments to gradually roll out API changes by routing a percentage of traffic to new versions while monitoring for issues before full deployment.",
+      "option_explanations": {
+        "A": "Route 53 weighted routing requires separate endpoints and adds complexity; API Gateway has built-in canary support.",
+        "B": "API Gateway stage canary deployments natively support percentage-based traffic splitting for gradual rollouts.",
+        "C": "Lambda alias weighted routing splits traffic at the function level, not the API Gateway layer where API changes occur.",
+        "D": "Separate APIs with ALB adds unnecessary infrastructure when API Gateway provides canary functionality natively."
+      },
+      "tags": ["topic:api-gateway", "subtopic:api-gateway-stages", "domain:1", "domain:3", "service:api-gateway", "canary-deployment", "deployment-strategies"]
+    },
+    {
+      "id": "apigw-stage-003",
+      "concept_id": "stage-settings-throttling",
+      "variant_index": 0,
+      "topic": "api-gateway",
+      "subtopic": "api-gateway-stages",
+      "domain": "domain-1-development",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "An API Gateway stage is configured with a throttle limit of 1000 requests per second. A single method within the API needs a higher limit of 2000 requests per second. How should this be configured?",
+      "options": [
+        {"label": "A", "text": "Increase the stage-level throttle limit to 2000 requests per second"},
+        {"label": "B", "text": "Configure method-level throttle settings to override the stage setting for that specific method"},
+        {"label": "C", "text": "Create a separate stage for the high-traffic method"},
+        {"label": "D", "text": "Stage throttle limits cannot be overridden per method"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "API Gateway allows configuring throttle settings at multiple levels: account, stage, and method. Method-level settings override stage-level settings for specific methods. This enables fine-grained throttling control where most methods use the stage default but specific high-traffic or low-traffic methods have custom limits. Increasing the stage limit would affect all methods unnecessarily. Separate stages add complexity. Per-method overrides are supported and designed for this use case.",
+      "why_this_matters": "Different API methods often have different capacity requirements. Method-level throttle overrides enable fine-grained capacity management, protecting low-capacity endpoints while allowing high-capacity endpoints to scale. This granular control is essential for APIs with mixed workload characteristics and prevents one-size-fits-all throttling that either over-provisions or under-serves specific endpoints.",
+      "key_takeaway": "Configure method-level throttle settings to override stage defaults for specific endpoints requiring different rate limits, enabling fine-grained capacity management.",
+      "option_explanations": {
+        "A": "Increasing stage limit affects all methods; method-level overrides provide targeted limit increases.",
+        "B": "Method-level throttle settings override stage defaults, allowing specific methods to have different limits.",
+        "C": "Separate stages add configuration complexity when method-level settings solve the problem within one stage.",
+        "D": "Method-level throttle overrides are fully supported and designed for this exact use case."
+      },
+      "tags": ["topic:api-gateway", "subtopic:api-gateway-stages", "domain:1", "service:api-gateway", "throttling", "method-settings"]
+    },
+    {
+      "id": "apigw-cache-001",
+      "concept_id": "cache-configuration",
+      "variant_index": 0,
+      "topic": "api-gateway",
+      "subtopic": "api-gateway-caching",
+      "domain": "domain-1-development",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "An API Gateway REST API returns product catalog data that changes infrequently. To reduce backend load and improve response times, the developer enables caching with a TTL of 300 seconds. Where is this cache configured?",
+      "options": [
+        {"label": "A", "text": "Cache is configured globally for the API Gateway account"},
+        {"label": "B", "text": "Cache is configured per stage"},
+        {"label": "C", "text": "Cache is configured per method"},
+        {"label": "D", "text": "Cache is configured in the Lambda function"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "API Gateway caching is configured and provisioned per stage. You enable caching at the stage level, set the cache size (0.5 GB to 237 GB), and configure TTL. Method-level settings can then override stage defaults or disable caching for specific methods. The cache is not account-wide or configured in Lambda. Stage-level configuration aligns with API Gateway's stage-based deployment model.",
+      "why_this_matters": "Understanding that caching is stage-specific is important for cost management and environment separation. Each stage with caching enabled incurs charges based on cache size. Development stages typically don't need caching while production does. This stage-level granularity allows appropriate caching strategies per environment without affecting other stages.",
+      "key_takeaway": "API Gateway caching is configured per stage with global TTL and size settings, then optionally customized per method—enable caching in production stages while keeping development stages cache-free for cost savings.",
+      "option_explanations": {
+        "A": "Caching is not account-wide; it's configured and provisioned per stage.",
+        "B": "Caching is enabled and configured at the stage level with cache size and default TTL settings.",
+        "C": "Methods can override stage cache settings, but the cache itself is provisioned at the stage level.",
+        "D": "API Gateway caching is separate from any Lambda-level caching; it caches at the API layer."
+      },
+      "tags": ["topic:api-gateway", "subtopic:api-gateway-caching", "domain:1", "domain:4", "service:api-gateway", "caching", "performance"]
+    },
+    {
+      "id": "apigw-cache-002",
+      "concept_id": "cache-keys",
+      "variant_index": 0,
+      "topic": "api-gateway",
+      "subtopic": "api-gateway-caching",
+      "domain": "domain-1-development",
+      "difficulty_inferred": "hard",
+      "question_type": "single",
+      "stem": "An API Gateway method GET /products?category={category}&region={region} has caching enabled. The developer wants to cache responses separately for each category and region combination. What must be configured?",
+      "options": [
+        {"label": "A", "text": "Enable caching and API Gateway automatically uses all query parameters as cache keys"},
+        {"label": "B", "text": "Configure the category and region query parameters as cache key parameters in method settings"},
+        {"label": "C", "text": "Use stage variables to define cache key components"},
+        {"label": "D", "text": "Implement cache key logic in the Lambda function"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "By default, API Gateway uses only the resource path and method as the cache key. To cache responses separately based on query parameters, headers, or path parameters, you must explicitly configure them as cache key parameters in the method's cache settings. Without this configuration, all requests to the same path would share the same cache entry regardless of parameter values. Stage variables and Lambda logic don't affect API Gateway cache keys.",
+      "why_this_matters": "Incorrect cache key configuration causes serving cached responses to wrong requests, a serious bug. If query parameters aren't included in cache keys, all users get the same cached response regardless of their specific query. Understanding cache key configuration prevents cache collision issues and ensures proper cache partitioning based on request characteristics.",
+      "key_takeaway": "Explicitly configure query parameters, headers, or path parameters as cache key parameters when their values should create separate cache entries—default cache keys only include resource path and method.",
+      "option_explanations": {
+        "A": "API Gateway does not automatically use query parameters as cache keys; they must be explicitly configured.",
+        "B": "Cache key parameters must be explicitly configured in method settings to partition cache by parameter values.",
+        "C": "Stage variables configure environment-specific settings, not cache key composition.",
+        "D": "Cache keys are configured in API Gateway method settings, not in Lambda function logic."
+      },
+      "tags": ["topic:api-gateway", "subtopic:api-gateway-caching", "domain:1", "domain:4", "service:api-gateway", "caching", "cache-keys"]
+    },
+    {
+      "id": "apigw-cache-003",
+      "concept_id": "cache-invalidation",
+      "variant_index": 0,
+      "topic": "api-gateway",
+      "subtopic": "api-gateway-caching",
+      "domain": "domain-1-development",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "An API updates product prices and needs to immediately invalidate cached product data. How can this be accomplished?",
+      "options": [
+        {"label": "A", "text": "Send a request with Cache-Control: max-age=0 header to invalidate specific cache entries"},
+        {"label": "B", "text": "Use the API Gateway console or API to flush the entire stage cache"},
+        {"label": "C", "text": "Wait for the cache TTL to expire naturally"},
+        {"label": "D", "text": "Disable and re-enable caching on the stage"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "API Gateway provides cache invalidation through the console or InvalidateCache API operation, which flushes the entire stage cache. Individual cache entry invalidation is not supported—it's all or nothing. The Cache-Control header can instruct API Gateway to bypass cache for a request (if enabled in settings) but doesn't invalidate existing entries. Waiting for TTL expiry means serving stale data. Disabling/re-enabling caching is disruptive and unnecessary when flush operations exist.",
+      "why_this_matters": "Understanding cache invalidation capabilities is important for applications where data updates must be reflected immediately. The all-or-nothing invalidation model means cache invalidation is coarse-grained. For applications requiring fine-grained invalidation, alternative caching strategies (Lambda-level caching, ElastiCache) may be more appropriate. This limitation influences caching strategy decisions.",
+      "key_takeaway": "API Gateway cache invalidation flushes the entire stage cache—there's no selective entry invalidation, so consider TTL settings and whether full cache flushes are acceptable for your use case.",
+      "option_explanations": {
+        "A": "Cache-Control headers can bypass cache for requests but don't invalidate existing cached entries.",
+        "B": "Cache flush operations invalidate the entire stage cache via console or API.",
+        "C": "Waiting for TTL serves stale data in the meantime; flush operations provide immediate invalidation.",
+        "D": "Disabling/enabling caching disrupts service; flush operations provide targeted cache clearing."
+      },
+      "tags": ["topic:api-gateway", "subtopic:api-gateway-caching", "domain:1", "domain:4", "service:api-gateway", "caching", "cache-invalidation"]
+    },
+    {
+      "id": "s3-storage-001",
+      "concept_id": "storage-classes",
+      "variant_index": 0,
+      "topic": "s3",
+      "subtopic": "s3-storage-classes",
+      "domain": "domain-1-development",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "An application stores log files in S3 that are frequently accessed for the first 30 days, then accessed once or twice per month for the next year, and rarely accessed afterward. What is the MOST cost-effective storage strategy?",
+      "options": [
+        {"label": "A", "text": "Use S3 Standard for all log files"},
+        {"label": "B", "text": "Use S3 Intelligent-Tiering for automatic optimization"},
+        {"label": "C", "text": "Use lifecycle policies to transition to S3 Standard-IA after 30 days, then to S3 Glacier after 1 year"},
+        {"label": "D", "text": "Use S3 One Zone-IA for all log files from the start"}
+      ],
+      "correct_options": ["C"],
+      "answer_explanation": "Lifecycle policies automate cost optimization by transitioning objects between storage classes based on age. S3 Standard for the first 30 days handles frequent access efficiently. Transitioning to Standard-IA after 30 days reduces costs for infrequent access (1-2 times/month). After 1 year, Glacier provides archival storage for rarely accessed data at the lowest cost. Intelligent-Tiering works but has monitoring costs and doesn't optimize as aggressively. One Zone-IA lacks resilience and doesn't address the access pattern changes.",
+      "why_this_matters": "Storage costs in S3 vary dramatically by class—Glacier is 80% cheaper than Standard. Understanding lifecycle policies and storage class transitions enables automatic cost optimization without application changes. For applications with predictable access patterns changing over time (logs, backups, archives), lifecycle policies provide significant cost savings with minimal configuration.",
+      "key_takeaway": "Use S3 lifecycle policies to automatically transition objects between storage classes based on age and access patterns, optimizing costs for data that becomes less frequently accessed over time.",
+      "option_explanations": {
+        "A": "S3 Standard for all data wastes money on infrequently and rarely accessed files.",
+        "B": "Intelligent-Tiering works but has monitoring fees and doesn't transition to Glacier for rarely accessed data.",
+        "C": "Lifecycle transitions optimize costs by matching storage class to access patterns as they change over time.",
+        "D": "One Zone-IA reduces resilience and doesn't address the changing access patterns or archival needs."
+      },
+      "tags": ["topic:s3", "subtopic:s3-storage-classes", "domain:1", "service:s3", "lifecycle-policies", "cost-optimization"]
+    },
+    {
+      "id": "s3-storage-002",
+      "concept_id": "intelligent-tiering",
+      "variant_index": 0,
+      "topic": "s3",
+      "subtopic": "s3-storage-classes",
+      "domain": "domain-1-development",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "An application has unpredictable access patterns for uploaded images—some are accessed frequently while others are rarely accessed, and the pattern changes over time. What S3 storage class is MOST appropriate?",
+      "options": [
+        {"label": "A", "text": "S3 Standard"},
+        {"label": "B", "text": "S3 Standard-IA"},
+        {"label": "C", "text": "S3 Intelligent-Tiering"},
+        {"label": "D", "text": "S3 Glacier"}
+      ],
+      "correct_options": ["C"],
+      "answer_explanation": "S3 Intelligent-Tiering automatically moves objects between access tiers based on changing access patterns without performance impact or retrieval fees. It's designed for unpredictable access patterns. Objects not accessed for 30 days move to infrequent access tier, and optionally to archive tiers after longer periods. Standard would overpay for infrequently accessed objects. Standard-IA has retrieval fees and minimum storage duration. Glacier requires explicit retrieval and has retrieval latency.",
+      "why_this_matters": "Many modern applications have unpredictable access patterns where some data is hot and other data is cold, and these patterns change over time. Intelligent-Tiering eliminates manual lifecycle policy management and access pattern analysis by automatically optimizing storage costs. While it has small monitoring fees, it prevents overpaying for storage when access patterns are uncertain or dynamic.",
+      "key_takeaway": "Use S3 Intelligent-Tiering for data with unknown or changing access patterns—it automatically optimizes storage costs without retrieval fees or manual lifecycle management.",
+      "option_explanations": {
+        "A": "S3 Standard overpays for infrequently accessed data when access patterns are mixed or unpredictable.",
+        "B": "Standard-IA requires knowing which objects are infrequently accessed and has retrieval fees.",
+        "C": "Intelligent-Tiering automatically optimizes costs for unpredictable access patterns without performance impact.",
+        "D": "Glacier requires explicit retrieval with latency and is for archival data, not mixed access patterns."
+      },
+      "tags": ["topic:s3", "subtopic:s3-storage-classes", "domain:1", "service:s3", "intelligent-tiering", "cost-optimization"]
+    },
+    {
+      "id": "s3-sec-001",
+      "concept_id": "bucket-policies",
+      "variant_index": 0,
+      "topic": "s3",
+      "subtopic": "s3-security",
+      "domain": "domain-2-security",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "A developer needs to grant a Lambda function access to read objects from an S3 bucket. What is the MOST secure approach?",
+      "options": [
+        {"label": "A", "text": "Make the S3 bucket public and allow anyone to read objects"},
+        {"label": "B", "text": "Add a bucket policy that allows the Lambda execution role to read objects"},
+        {"label": "C", "text": "Generate access keys and store them in Lambda environment variables"},
+        {"label": "D", "text": "Enable S3 bucket logging to track Lambda access"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "The secure approach is granting the Lambda execution role permission to read from S3 via either a bucket policy or IAM role policy. Bucket policies attached to the S3 bucket can grant specific IAM principals (like Lambda execution roles) access. Public buckets violate security best practices. Embedding access keys in environment variables is an anti-pattern—Lambda uses execution roles. Logging tracks access but doesn't grant it.",
+      "why_this_matters": "Proper S3 access control is fundamental to cloud security. Using IAM roles instead of access keys eliminates credential management and rotation burdens while providing automatic credential rotation via STS temporary credentials. Public buckets are a common source of data breaches. Understanding resource-based policies (bucket policies) versus identity-based policies (IAM role policies) is essential for secure AWS architectures.",
+      "key_takeaway": "Grant Lambda (and other AWS services) access to S3 using IAM roles and bucket policies—never use public buckets or embedded access keys for service-to-service access.",
+      "option_explanations": {
+        "A": "Public buckets expose data to anyone and are a major security risk.",
+        "B": "Bucket policies granting access to the Lambda execution role provide secure, credential-free access.",
+        "C": "Embedding access keys violates security best practices; Lambda uses execution roles automatically.",
+        "D": "Logging audits access but doesn't grant permissions to access the bucket."
+      },
+      "tags": ["topic:s3", "subtopic:s3-security", "domain:2", "service:s3", "service:iam", "bucket-policies", "security"]
+    },
+    {
+      "id": "s3-sec-002",
+      "concept_id": "presigned-urls",
+      "variant_index": 0,
+      "topic": "s3",
+      "subtopic": "s3-security",
+      "domain": "domain-2-security",
+      "difficulty_inferred": "hard",
+      "question_type": "single",
+      "stem": "A web application needs to allow users to upload files directly to S3 without exposing AWS credentials in the client-side code. What approach should the developer implement?",
+      "options": [
+        {"label": "A", "text": "Make the S3 bucket public for write access"},
+        {"label": "B", "text": "Generate presigned URLs in the backend and return them to the client for upload"},
+        {"label": "C", "text": "Embed IAM access keys in the JavaScript code"},
+        {"label": "D", "text": "Use Cognito Identity Pools to provide temporary AWS credentials to authenticated users"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "Presigned URLs allow temporary, limited access to S3 operations without exposing credentials. The backend generates a presigned URL using its credentials/role, specifying the operation (PUT), bucket, key, and expiration. The client uses this URL to upload directly to S3. Public write access is a security risk. Embedding credentials in client code exposes them. While Cognito Identity Pools can work, presigned URLs are simpler for this specific use case and don't require managing identity pool permissions.",
+      "why_this_matters": "Direct-to-S3 uploads reduce backend load and costs by eliminating the need to proxy files through application servers. Presigned URLs enable this pattern securely without exposing credentials or requiring complex federated identity setups. This pattern is fundamental to modern web applications handling user file uploads at scale.",
+      "key_takeaway": "Use presigned URLs to grant temporary, limited access to S3 operations without exposing credentials—ideal for direct client uploads or downloads with controlled expiration.",
+      "option_explanations": {
+        "A": "Public write access allows anyone to upload any content, a severe security vulnerability.",
+        "B": "Presigned URLs provide secure, temporary, limited access for specific operations without exposing credentials.",
+        "C": "Embedding credentials in client code exposes them to all users and is a critical security flaw.",
+        "D": "Cognito Identity Pools work but add complexity when presigned URLs solve this use case more simply."
+      },
+      "tags": ["topic:s3", "subtopic:s3-security", "domain:2", "service:s3", "presigned-urls", "security", "uploads"]
+    },
+    {
+      "id": "s3-perf-001",
+      "concept_id": "multipart-upload",
+      "variant_index": 0,
+      "topic": "s3",
+      "subtopic": "s3-performance",
+      "domain": "domain-4-troubleshooting-optimization",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "An application uploads 5 GB video files to S3. Uploads frequently fail or take excessively long. What optimization should the developer implement?",
+      "options": [
+        {"label": "A", "text": "Compress the files before uploading"},
+        {"label": "B", "text": "Use multipart upload to upload the file in parallel chunks"},
+        {"label": "C", "text": "Increase the Lambda function timeout"},
+        {"label": "D", "text": "Use S3 Transfer Acceleration"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "Multipart upload splits large files into parts that upload in parallel, improving speed and reliability. If any part fails, only that part needs retry, not the entire file. AWS recommends multipart upload for files over 100 MB. Compression may help but doesn't address upload reliability or parallelization. Lambda timeout increases don't solve upload performance issues. Transfer Acceleration helps with geographic distance but multipart upload is the primary solution for large files.",
+      "why_this_matters": "Large file uploads are common in media applications, data pipelines, and backup systems. Multipart upload provides both performance (via parallelization) and reliability (via partial retry) benefits. Understanding when and how to use multipart upload is essential for applications handling large files, preventing timeouts and improving user experience.",
+      "key_takeaway": "Use multipart upload for files over 100 MB to enable parallel uploads, improve performance, and allow partial retry on failure instead of re-uploading entire files.",
+      "option_explanations": {
+        "A": "Compression may reduce size but doesn't address upload parallelization or reliability for large files.",
+        "B": "Multipart upload splits files into parallel chunks, improving speed and reliability for large files.",
+        "C": "Lambda timeout doesn't solve upload performance; multipart upload addresses the root cause.",
+        "D": "Transfer Acceleration helps with geographic distance but multipart upload is the primary large file optimization."
+      },
+      "tags": ["topic:s3", "subtopic:s3-performance", "domain:4", "service:s3", "multipart-upload", "performance", "optimization"]
+    },
+    {
+      "id": "s3-perf-002",
+      "concept_id": "request-rate-performance",
+      "variant_index": 0,
+      "topic": "s3",
+      "subtopic": "s3-performance",
+      "domain": "domain-4-troubleshooting-optimization",
+      "difficulty_inferred": "hard",
+      "question_type": "single",
+      "stem": "An application writes thousands of objects per second to S3 with sequential key names like 'log-0001.txt', 'log-0002.txt', etc. The application experiences throttling. What is the MOST likely cause and solution?",
+      "options": [
+        {"label": "A", "text": "S3 bucket has reached its object count limit; create multiple buckets"},
+        {"label": "B", "text": "Sequential key names create hot partitions; add random prefixes or reverse key order"},
+        {"label": "C", "text": "S3 Standard storage class doesn't support high write rates; use S3 Intelligent-Tiering"},
+        {"label": "D", "text": "Enable versioning to distribute writes across versions"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "S3 partitions objects by key prefix for performance. Sequential keys (log-0001, log-0002) all go to the same partition, creating a hot partition that limits request rates. Adding random prefixes (like a hash) or reversing timestamp order distributes objects across partitions, enabling higher request rates. S3 has no practical object count limit. Storage class doesn't affect write rate limits. Versioning doesn't distribute writes across partitions.",
+      "why_this_matters": "Understanding S3's partition-based architecture is critical for high-throughput applications. Sequential key names are a common performance anti-pattern that creates bottlenecks. Prefix randomization (using UUID, hash, or reversed timestamps) enables S3 to scale to thousands of requests per second per prefix. This knowledge is essential for data-intensive applications like logging, IoT data ingestion, or high-volume uploads.",
+      "key_takeaway": "Avoid sequential S3 key names for high-throughput workloads—use random prefixes or reverse chronological ordering to distribute objects across partitions and prevent hot partition throttling.",
+      "option_explanations": {
+        "A": "S3 has no practical object count limit per bucket; partitioning by key prefix is the issue.",
+        "B": "Sequential keys create hot partitions; random prefixes distribute objects for higher throughput.",
+        "C": "Storage class doesn't affect request rate limits; partitioning based on key prefix is the bottleneck.",
+        "D": "Versioning creates multiple versions of the same object but doesn't change partition distribution."
+      },
+      "tags": ["topic:s3", "subtopic:s3-performance", "domain:4", "service:s3", "performance", "key-naming", "partitioning"]
+    },
+    {
+      "id": "sqs-type-001",
+      "concept_id": "standard-vs-fifo",
+      "variant_index": 0,
+      "topic": "sqs",
+      "subtopic": "sqs-queue-types",
+      "domain": "domain-1-development",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "An order processing system requires that orders are processed exactly once and in the order they are received. Which SQS queue type should the developer use?",
+      "options": [
+        {"label": "A", "text": "Standard queue with deduplication logic in the consumer"},
+        {"label": "B", "text": "FIFO queue with content-based deduplication"},
+        {"label": "C", "text": "Standard queue with message groups"},
+        {"label": "D", "text": "Multiple standard queues with priority routing"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "FIFO queues guarantee exactly-once processing and preserve message order. Content-based deduplication uses message body to detect duplicates, ensuring each unique order is processed once. Standard queues can deliver messages more than once (at-least-once delivery) and don't guarantee order. Deduplication in the consumer adds complexity and doesn't prevent duplicate processing. Message groups are a FIFO queue feature. Priority routing doesn't address deduplication or ordering.",
+      "why_this_matters": "Order processing, financial transactions, and inventory systems require exactly-once processing to prevent duplicate charges, overselling, or data corruption. Understanding the difference between standard (at-least-once, best-effort ordering) and FIFO (exactly-once, strict ordering) queues is fundamental to choosing the right queue type. FIFO queues have lower throughput limits but provide critical guarantees for these use cases.",
+      "key_takeaway": "Use FIFO queues when you need exactly-once processing and strict message ordering—standard queues provide higher throughput but only at-least-once delivery with best-effort ordering.",
+      "option_explanations": {
+        "A": "Standard queues don't guarantee deduplication; consumer logic can't prevent SQS from delivering duplicates.",
+        "B": "FIFO queues provide exactly-once processing and message order guarantees with content-based deduplication.",
+        "C": "Message groups are a FIFO feature; standard queues don't support them or provide ordering guarantees.",
+        "D": "Multiple queues don't solve deduplication or ordering; FIFO queues are designed for these requirements."
+      },
+      "tags": ["topic:sqs", "subtopic:sqs-queue-types", "domain:1", "service:sqs", "fifo", "exactly-once", "ordering"]
+    },
+    {
+      "id": "sqs-type-002",
+      "concept_id": "fifo-throughput",
+      "variant_index": 0,
+      "topic": "sqs",
+      "subtopic": "sqs-queue-types",
+      "domain": "domain-1-development",
+      "difficulty_inferred": "hard",
+      "question_type": "single",
+      "stem": "A FIFO queue needs to support 5,000 messages per second. The queue uses message groups for parallel processing. What configuration enables this throughput?",
+      "options": [
+        {"label": "A", "text": "FIFO queues cannot support 5,000 messages per second"},
+        {"label": "B", "text": "Enable high throughput mode for FIFO queues and use multiple message groups"},
+        {"label": "C", "text": "Convert to a standard queue to achieve the required throughput"},
+        {"label": "D", "text": "Use multiple FIFO queues and distribute messages across them"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "FIFO queues normally support 300 transactions/second (or 3000 with batching). High throughput mode increases this to 3,000 transactions/second (30,000 with batching). Using message groups enables parallel processing—messages within a group are ordered, but different groups can be processed concurrently. With enough message groups, 5,000 messages/second is achievable. Without high throughput mode, FIFO queues are limited. Converting to standard loses ordering guarantees. Multiple queues add complexity.",
+      "why_this_matters": "FIFO queue throughput limits are a critical constraint. High throughput mode significantly increases capacity while maintaining FIFO guarantees. Message groups enable parallelization within these constraints. Understanding these capabilities prevents incorrectly concluding FIFO queues can't support high-throughput use cases or unnecessarily using standard queues when FIFO guarantees are needed.",
+      "key_takeaway": "Enable high throughput mode on FIFO queues and use message groups for parallel processing to achieve thousands of messages per second while maintaining exactly-once and ordering guarantees.",
+      "option_explanations": {
+        "A": "FIFO queues with high throughput mode and message groups can support 5,000+ messages/second.",
+        "B": "High throughput mode and message groups enable high throughput while maintaining FIFO guarantees.",
+        "C": "Standard queues sacrifice exactly-once and ordering guarantees; FIFO with high throughput is the correct solution.",
+        "D": "Multiple queues add complexity when high throughput mode solves the problem with a single queue."
+      },
+      "tags": ["topic:sqs", "subtopic:sqs-queue-types", "domain:1", "service:sqs", "fifo", "high-throughput", "message-groups"]
+    },
+    {
+      "id": "sqs-vis-001",
+      "concept_id": "visibility-timeout",
+      "variant_index": 0,
+      "topic": "sqs",
+      "subtopic": "sqs-visibility-timeout",
+      "domain": "domain-1-development",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "A Lambda function processes SQS messages but occasionally times out after 5 minutes. The queue's visibility timeout is set to 30 seconds. What problem will occur?",
+      "options": [
+        {"label": "A", "text": "Messages will be deleted before processing completes"},
+        {"label": "B", "text": "Messages will become visible again while still being processed, causing duplicate processing"},
+        {"label": "C", "text": "The Lambda function will fail to receive messages"},
+        {"label": "D", "text": "SQS will throttle the Lambda function"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "Visibility timeout determines how long a message remains invisible after being received. If set to 30 seconds but processing takes 5 minutes, the message becomes visible again while still processing. Another consumer can receive and process it, causing duplicates. Visibility timeout should exceed maximum processing time. Messages aren't auto-deleted during visibility timeout. Short timeout doesn't prevent receives. SQS doesn't throttle based on visibility timeout.",
+      "why_this_matters": "Visibility timeout misconfiguration is a common cause of duplicate message processing. Setting it too short causes in-flight messages to become visible again, leading to concurrent processing of the same message. For Lambda consumers, visibility timeout should be at least 6x the function timeout. Understanding this relationship prevents duplicate processing bugs in queue-based architectures.",
+      "key_takeaway": "Set SQS visibility timeout longer than the maximum expected processing time to prevent messages from becoming visible again while still being processed, which causes duplicates.",
+      "option_explanations": {
+        "A": "Messages aren't auto-deleted during visibility timeout; deletion requires explicit DeleteMessage call.",
+        "B": "Short visibility timeout causes messages to become visible again mid-processing, enabling duplicate receives.",
+        "C": "Visibility timeout doesn't prevent receiving messages; it controls how long they're invisible after receipt.",
+        "D": "SQS doesn't throttle based on visibility timeout; it controls message visibility behavior."
+      },
+      "tags": ["topic:sqs", "subtopic:sqs-visibility-timeout", "domain:1", "service:sqs", "visibility-timeout", "duplicate-processing"]
+    },
+    {
+      "id": "sqs-vis-002",
+      "concept_id": "visibility-timeout-extension",
+      "variant_index": 0,
+      "topic": "sqs",
+      "subtopic": "sqs-visibility-timeout",
+      "domain": "domain-1-development",
+      "difficulty_inferred": "hard",
+      "question_type": "single",
+      "stem": "A worker processes SQS messages that sometimes take 2 minutes and sometimes 10 minutes depending on message content. Setting visibility timeout to 10 minutes wastes time on failures. What is the BEST approach?",
+      "options": [
+        {"label": "A", "text": "Set visibility timeout to 2 minutes and accept duplicate processing for long messages"},
+        {"label": "B", "text": "Use ChangeMessageVisibility API to dynamically extend timeout as processing continues"},
+        {"label": "C", "text": "Split long-running tasks into smaller chunks"},
+        {"label": "D", "text": "Use a dead-letter queue to handle long-running messages"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "ChangeMessageVisibility allows extending a message's visibility timeout during processing. Workers can call this periodically as they make progress, accommodating variable processing times. Start with a moderate timeout, then extend if needed. This prevents wasting time on failures (long timeout) while preventing duplicate processing (short timeout). Accepting duplicates violates processing guarantees. Splitting tasks may not be possible. DLQs handle failed messages, not variable processing times.",
+      "why_this_matters": "Variable processing times are common in real-world applications processing different message types or sizes. Dynamic visibility timeout extension enables workers to communicate continued progress without committing to worst-case timeouts upfront. This pattern optimizes both failure recovery speed and duplicate prevention, essential for efficient queue processing.",
+      "key_takeaway": "Use ChangeMessageVisibility API to dynamically extend visibility timeout during processing for variable-duration tasks, balancing quick failure recovery with duplicate prevention.",
+      "option_explanations": {
+        "A": "Accepting duplicate processing defeats SQS's exactly-once semantics and causes data integrity issues.",
+        "B": "ChangeMessageVisibility enables dynamic timeout extension, accommodating variable processing times efficiently.",
+        "C": "Task splitting may not be feasible and doesn't address the fundamental variable processing time issue.",
+        "D": "DLQs capture repeatedly failed messages, not messages requiring variable processing time."
+      },
+      "tags": ["topic:sqs", "subtopic:sqs-visibility-timeout", "domain:1", "service:sqs", "visibility-timeout", "changemessagevisibility"]
+    },
+    {
+      "id": "sqs-dlq-001",
+      "concept_id": "dead-letter-queues",
+      "variant_index": 0,
+      "topic": "sqs",
+      "subtopic": "sqs-dead-letter-queues",
+      "domain": "domain-1-development",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "An SQS queue processes payment transactions. Occasionally, malformed messages cause processing failures. After 3 failed attempts, messages should be moved aside for manual review. What should the developer configure?",
+      "options": [
+        {"label": "A", "text": "Set message retention period to 3 days"},
+        {"label": "B", "text": "Configure a dead-letter queue with maxReceiveCount set to 3"},
+        {"label": "C", "text": "Use a Lambda function to check receive count and manually move messages"},
+        {"label": "D", "text": "Enable SQS message filtering to detect malformed messages"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "Dead-letter queues (DLQs) automatically capture messages that exceed maxReceiveCount (number of receives without deletion). Setting maxReceiveCount to 3 moves messages to the DLQ after 3 failed processing attempts, enabling manual inspection. Message retention controls how long messages stay in queue, not failure handling. Manual Lambda-based moving adds complexity when DLQ is designed for this. SQS doesn't have message filtering for malformed content.",
+      "why_this_matters": "Poison messages (malformed or problematic messages) can block queue processing if not handled. DLQs provide automatic isolation of problematic messages after retry thresholds, preventing them from infinitely re-queuing and blocking other messages. This pattern is essential for robust queue-based architectures, enabling investigation of failures without losing messages or blocking processing.",
+      "key_takeaway": "Configure dead-letter queues with appropriate maxReceiveCount to automatically isolate messages that repeatedly fail processing, enabling investigation without blocking the main queue.",
+      "option_explanations": {
+        "A": "Retention period controls message lifetime, not failure handling or automatic isolation.",
+        "B": "DLQ with maxReceiveCount automatically moves repeatedly failed messages for manual review.",
+        "C": "Manual message movement adds complexity when DLQ provides this functionality natively.",
+        "D": "SQS doesn't filter messages by content; DLQ handles messages based on receive count."
+      },
+      "tags": ["topic:sqs", "subtopic:sqs-dead-letter-queues", "domain:1", "service:sqs", "dlq", "error-handling"]
+    },
+    {
+      "id": "sns-topic-001",
+      "concept_id": "sns-fanout",
+      "variant_index": 0,
+      "topic": "sns",
+      "subtopic": "sns-topics-subscriptions",
+      "domain": "domain-1-development",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "An e-commerce application needs to send order confirmation events to three independent systems: email service, inventory management, and analytics. Each system processes orders independently. What AWS service pattern should the developer use?",
+      "options": [
+        {"label": "A", "text": "Lambda function that calls all three services sequentially"},
+        {"label": "B", "text": "SNS topic with three subscriptions, one for each service"},
+        {"label": "C", "text": "Three separate SQS queues with the application sending to all three"},
+        {"label": "D", "text": "Step Functions workflow coordinating all three services"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "SNS topic with multiple subscriptions (fanout pattern) is ideal for broadcasting events to multiple independent consumers. Publish once to SNS, and it delivers to all subscribers (email, inventory, analytics) in parallel. Lambda sequential calls create coupling and delay. Sending to multiple SQS queues couples the publisher to all consumers. Step Functions is overkill for simple fanout and adds cost.",
+      "why_this_matters": "The fanout pattern is fundamental to event-driven architectures, enabling loose coupling between event producers and consumers. SNS excels at broadcasting events to multiple subscribers, allowing systems to evolve independently. Understanding when to use SNS for fanout versus direct integration or orchestration is essential for building scalable, decoupled microservices.",
+      "key_takeaway": "Use SNS topics for fanout patterns where one event needs to trigger multiple independent consumers in parallel—SNS handles delivery to all subscribers automatically.",
+      "option_explanations": {
+        "A": "Sequential Lambda calls create tight coupling and delay parallel processing; SNS enables independent parallel consumers.",
+        "B": "SNS fanout pattern broadcasts events to multiple subscribers in parallel with loose coupling.",
+        "C": "Publishing to multiple queues directly couples publisher to all consumers; SNS decouples via subscriptions.",
+        "D": "Step Functions orchestrates workflows but adds complexity and cost for simple event broadcasting."
+      },
+      "tags": ["topic:sns", "subtopic:sns-topics-subscriptions", "domain:1", "service:sns", "fanout", "event-driven"]
+    },
+    {
+      "id": "sns-topic-002",
+      "concept_id": "sns-sqs-integration",
+      "variant_index": 0,
+      "topic": "sns",
+      "subtopic": "sns-topics-subscriptions",
+      "domain": "domain-1-development",
+      "difficulty_inferred": "hard",
+      "question_type": "multi",
+      "stem": "An SNS topic publishes events to multiple SQS queue subscribers. Which TWO statements about this pattern are correct? (Select TWO)",
+      "options": [
+        {"label": "A", "text": "SQS queues provide durable buffering if subscribers can't keep up with SNS publish rate"},
+        {"label": "B", "text": "SNS guarantees exactly-once delivery to SQS queues"},
+        {"label": "C", "text": "Failed deliveries to one SQS queue don't affect deliveries to other queues"},
+        {"label": "D", "text": "All SQS queues must be in the same region as the SNS topic"}
+      ],
+      "correct_options": ["A", "C"],
+      "answer_explanation": "SQS provides durable buffering, allowing consumers to process messages at their own pace even if SNS publishes faster than they can consume. SNS delivers to each subscriber independently—failures to one SQS queue don't affect others. SNS provides at-least-once delivery, not exactly-once (SQS handles deduplication if needed). SNS can deliver to SQS queues in different regions (cross-region subscriptions are supported).",
+      "why_this_matters": "The SNS-to-SQS pattern combines SNS's fanout capabilities with SQS's durability and buffering. This is a fundamental pattern in AWS architectures for reliable event distribution at scale. Understanding that deliveries are independent and at-least-once guides proper implementation including deduplication handling and failure isolation.",
+      "key_takeaway": "SNS-to-SQS pattern combines fanout and buffering—each queue buffers independently, failures don't propagate, but implement deduplication as SNS provides at-least-once delivery.",
+      "option_explanations": {
+        "A": "SQS queues buffer messages, allowing consumers to process at their pace regardless of SNS publish rate.",
+        "B": "SNS provides at-least-once delivery; SQS FIFO queues can deduplicate if exactly-once is needed.",
+        "C": "SNS delivers to each subscriber independently; one subscription failure doesn't affect others.",
+        "D": "SNS supports cross-region SQS subscriptions; queues can be in different regions."
+      },
+      "tags": ["topic:sns", "subtopic:sns-topics-subscriptions", "domain:1", "service:sns", "service:sqs", "fanout", "integration"]
+    },
+    {
+      "id": "sns-filter-001",
+      "concept_id": "message-filtering",
+      "variant_index": 0,
+      "topic": "sns",
+      "subtopic": "sns-message-filtering",
+      "domain": "domain-1-development",
+      "difficulty_inferred": "hard",
+      "question_type": "single",
+      "stem": "An SNS topic receives order events with different order types (RETAIL, WHOLESALE, INTERNATIONAL). Different SQS queues should receive only relevant order types. How can this be implemented efficiently?",
+      "options": [
+        {"label": "A", "text": "Create separate SNS topics for each order type"},
+        {"label": "B", "text": "Use SNS message filtering policies on subscriptions to filter by order type attribute"},
+        {"label": "C", "text": "Have all queues receive all messages and filter in the consumer Lambda functions"},
+        {"label": "D", "text": "Use EventBridge instead of SNS for content-based routing"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "SNS subscription filter policies allow subscribers to receive only messages matching specified attributes. Set the order type as message attribute, then create filter policies on each SQS subscription (e.g., RETAIL queue filters for orderType=RETAIL). This prevents unwanted messages from being delivered, reducing queue volume and processing costs. Separate topics create management overhead. Receiving all messages and filtering in consumers wastes processing and queue storage. EventBridge could work but SNS filtering is simpler for this use case.",
+      "why_this_matters": "Message filtering reduces unnecessary message deliveries, lowering costs and processing overhead. Instead of every subscriber receiving every message and filtering in code, SNS filters at the subscription level. This is more efficient and reduces SQS costs, Lambda invocations, and processing time. Understanding message filtering enables cost-effective event routing in fanout patterns.",
+      "key_takeaway": "Use SNS subscription filter policies to route messages to specific subscribers based on message attributes, reducing unnecessary deliveries and processing costs in fanout patterns.",
+      "option_explanations": {
+        "A": "Separate topics create management overhead and couple publishers to topic naming; filtering is more flexible.",
+        "B": "Subscription filter policies enable efficient message routing based on attributes without multiple topics.",
+        "C": "Filtering in consumers wastes SQS storage, Lambda invocations, and processing time on unwanted messages.",
+        "D": "EventBridge works but SNS filtering is simpler and more cost-effective for this straightforward routing."
+      },
+      "tags": ["topic:sns", "subtopic:sns-message-filtering", "domain:1", "service:sns", "filtering", "message-attributes"]
+    },
+    {
+      "id": "eb-rule-001",
+      "concept_id": "event-patterns",
+      "variant_index": 0,
+      "topic": "eventbridge",
+      "subtopic": "eventbridge-patterns",
+      "domain": "domain-1-development",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "An application needs to trigger a Lambda function whenever an object is created in a specific S3 bucket prefix (uploads/images/). What is the MOST appropriate solution?",
+      "options": [
+        {"label": "A", "text": "Configure S3 event notifications to directly invoke the Lambda function with prefix filtering"},
+        {"label": "B", "text": "Create an EventBridge rule matching S3 Object Created events with pattern matching on the object key prefix"},
+        {"label": "C", "text": "Use S3 event notifications to send to SQS, then Lambda polls SQS"},
+        {"label": "D", "text": "Enable S3 inventory and process the inventory reports"}
+      ],
+      "correct_options": ["A"],
+      "answer_explanation": "S3 event notifications support prefix and suffix filtering and can directly invoke Lambda. This is simpler and lower latency than EventBridge for basic S3-to-Lambda integration. EventBridge is valuable for more complex event routing, enrichment, or cross-account scenarios, but adds latency for simple cases. SQS middle layer adds complexity unnecessarily. S3 inventory is for bulk listing, not real-time event triggers.",
+      "why_this_matters": "Understanding when to use S3 event notifications versus EventBridge prevents over-engineering. S3 notifications provide simple, fast, direct integration for basic scenarios. EventBridge adds value for complex routing, cross-service orchestration, or when building event-driven architectures requiring centralized event buses. Choosing the simpler pattern reduces latency and costs for straightforward use cases.",
+      "key_takeaway": "Use S3 event notifications for simple, direct integration with Lambda/SQS/SNS with prefix filtering—reserve EventBridge for complex event routing or cross-service orchestration needs.",
+      "option_explanations": {
+        "A": "S3 event notifications with prefix filtering directly invoke Lambda, the simplest solution for this use case.",
+        "B": "EventBridge works but adds latency and complexity when S3 notifications handle this scenario natively.",
+        "C": "SQS middle layer adds unnecessary complexity when S3 can directly invoke Lambda.",
+        "D": "S3 inventory provides batch lists, not real-time event triggers for object creation."
+      },
+      "tags": ["topic:eventbridge", "subtopic:eventbridge-patterns", "domain:1", "service:eventbridge", "service:s3", "service:lambda", "event-patterns"]
+    },
+    {
+      "id": "eb-rule-002",
+      "concept_id": "custom-events",
+      "variant_index": 0,
+      "topic": "eventbridge",
+      "subtopic": "eventbridge-patterns",
+      "domain": "domain-1-development",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "A microservices application needs to publish custom business events (OrderPlaced, PaymentReceived) that multiple services consume. What pattern should the developer use?",
+      "options": [
+        {"label": "A", "text": "Use SQS queues with each service polling for events"},
+        {"label": "B", "text": "Use SNS topics for each event type"},
+        {"label": "C", "text": "Use EventBridge custom event bus with services publishing custom events and rules routing to targets"},
+        {"label": "D", "text": "Use Lambda function URLs with each service exposing HTTP endpoints"}
+      ],
+      "correct_options": ["C"],
+      "answer_explanation": "EventBridge custom event buses are designed for custom application events in event-driven architectures. Services publish events to the bus, and rules with pattern matching route events to appropriate targets. This provides centralized event routing, schema validation, event replay, and cross-account delivery. SQS requires point-to-point setup. SNS works but lacks EventBridge's advanced features like schema registry, archive/replay, and fine-grained pattern matching. HTTP endpoints create tight coupling.",
+      "why_this_matters": "EventBridge is purpose-built for event-driven microservices, providing capabilities beyond simple pub/sub including event schema management, filtering, transformation, and archive/replay. For applications evolving toward event-driven architecture, EventBridge provides a scalable foundation. Understanding when EventBridge's advanced features justify its use versus simpler SNS/SQS patterns is important for architecture decisions.",
+      "key_takeaway": "Use EventBridge custom event buses for event-driven microservices requiring advanced routing, schema management, filtering, and archive/replay capabilities beyond basic pub/sub.",
+      "option_explanations": {
+        "A": "SQS requires point-to-point queue setup and lacks centralized routing and schema management.",
+        "B": "SNS works for fanout but lacks EventBridge's schema registry, filtering, transformation, and archive features.",
+        "C": "EventBridge custom event buses provide centralized routing, schema management, filtering, and archive for event-driven architectures.",
+        "D": "HTTP endpoints create tight coupling and require manual service discovery and routing logic."
+      },
+      "tags": ["topic:eventbridge", "subtopic:eventbridge-patterns", "domain:1", "service:eventbridge", "custom-events", "event-driven"]
+    },
+    {
+      "id": "sf-state-001",
+      "concept_id": "step-functions-choice",
+      "variant_index": 0,
+      "topic": "step-functions",
+      "subtopic": "step-functions-states",
+      "domain": "domain-1-development",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "A Step Functions workflow needs to execute different Lambda functions based on an order's total amount (orders under $100 use standard shipping, orders over $100 use express shipping). What state type implements this logic?",
+      "options": [
+        {"label": "A", "text": "Task state with conditional logic in the Lambda function"},
+        {"label": "B", "text": "Choice state with branching based on the order amount"},
+        {"label": "C", "text": "Parallel state executing both shipping options"},
+        {"label": "D", "text": "Map state iterating over order amounts"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "Choice states implement branching logic in Step Functions workflows. They evaluate input against conditions (e.g., orderAmount >= 100) and transition to different states based on results. This keeps routing logic declarative in the workflow definition. Implementing logic in Lambda couples workflow structure to code. Parallel states execute branches concurrently, not conditionally. Map states iterate over arrays, not branch on conditions.",
+      "why_this_matters": "Step Functions workflows express business logic declaratively through state machines. Choice states enable branching without code, making workflows self-documenting and easier to visualize. Understanding state types and their purposes is fundamental to designing effective Step Functions workflows that separate orchestration logic from task implementation.",
+      "key_takeaway": "Use Choice states in Step Functions for conditional branching based on input values—this keeps routing logic declarative and visible in the workflow definition.",
+      "option_explanations": {
+        "A": "Conditional logic in Lambda couples workflow structure to code; Choice states keep it declarative.",
+        "B": "Choice states provide declarative conditional branching based on input data in the workflow definition.",
+        "C": "Parallel states execute multiple branches concurrently, not conditionally based on data values.",
+        "D": "Map states iterate over arrays; Choice states branch based on conditional logic."
+      },
+      "tags": ["topic:step-functions", "subtopic:step-functions-states", "domain:1", "service:step-functions", "choice-state", "workflow"]
+    },
+    {
+      "id": "sf-state-002",
+      "concept_id": "step-functions-error-handling",
+      "variant_index": 0,
+      "topic": "step-functions",
+      "subtopic": "step-functions-states",
+      "domain": "domain-1-development",
+      "difficulty_inferred": "hard",
+      "question_type": "single",
+      "stem": "A Step Functions workflow invokes a Lambda function that occasionally throws transient errors due to downstream API rate limiting. The workflow should retry these errors with exponential backoff but fail permanently on validation errors. How should this be configured?",
+      "options": [
+        {"label": "A", "text": "Implement retry logic with exponential backoff in the Lambda function code"},
+        {"label": "B", "text": "Configure Retry and Catch blocks in the Task state with different error matching"},
+        {"label": "C", "text": "Use a Choice state to check for errors and loop back to retry"},
+        {"label": "D", "text": "Enable automatic retry in the Lambda function configuration"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "Step Functions Task states support Retry and Catch blocks for declarative error handling. Retry blocks specify error types to retry, retry attempts, backoff rates, and max delay. Catch blocks handle non-retryable errors. For this scenario, configure a Retry for rate limit errors (e.g., States.TaskFailed with exponential backoff) and a Catch for validation errors to transition to a failure state. Lambda-level retry doesn't provide workflow visibility. Choice state loops are less elegant than built-in retry. Lambda doesn't have automatic retry configuration.",
+      "why_this_matters": "Error handling is critical in distributed workflows. Step Functions' declarative retry and catch mechanism provides exponential backoff, jitter, and error-specific handling without code. This makes error handling visible in workflow definitions, enables better monitoring, and separates retry logic from business logic. Understanding these patterns is essential for building resilient workflows.",
+      "key_takeaway": "Use Step Functions Retry and Catch blocks for declarative, error-specific handling with exponential backoff—this separates error handling from business logic and provides workflow visibility.",
+      "option_explanations": {
+        "A": "Lambda retry code couples error handling to business logic; Step Functions Retry blocks provide declarative handling.",
+        "B": "Retry and Catch blocks enable declarative, error-specific handling with exponential backoff in the workflow definition.",
+        "C": "Choice-based retry loops are less elegant and harder to maintain than built-in Retry blocks.",
+        "D": "Lambda doesn't have automatic retry configuration; Step Functions provides workflow-level retry control."
+      },
+      "tags": ["topic:step-functions", "subtopic:step-functions-states", "domain:1", "service:step-functions", "error-handling", "retry"]
+    }
+  ]
+}

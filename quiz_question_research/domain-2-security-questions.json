@@ -1,0 +1,496 @@
+{
+  "exam": "AWS Certified Developer – Associate (DVA-C02)",
+  "question_bank_version": "v1.0",
+  "domain": "Domain 2: Security (26%)",
+  "generated_at": "2026-01-11T00:00:00Z",
+  "topics_covered": [
+    "IAM - Roles and Policies",
+    "IAM - Cross-Account Access",
+    "Cognito - User Pools and Identity Pools",
+    "Cognito - Authentication Flows",
+    "KMS - Key Management and Encryption",
+    "KMS - Envelope Encryption",
+    "Secrets Manager - Secret Management",
+    "Systems Manager Parameter Store",
+    "STS - Temporary Credentials",
+    "Certificate Manager - SSL/TLS"
+  ],
+  "questions": [
+    {
+      "id": "iam-role-001",
+      "concept_id": "iam-roles-vs-users",
+      "variant_index": 0,
+      "topic": "iam",
+      "subtopic": "iam-roles",
+      "domain": "domain-2-security",
+      "difficulty_inferred": "easy",
+      "question_type": "single",
+      "stem": "A Lambda function needs permission to write to a DynamoDB table. What is the MOST secure way to grant these permissions?",
+      "options": [
+        {"label": "A", "text": "Create an IAM user with DynamoDB permissions and store access keys in environment variables"},
+        {"label": "B", "text": "Attach an IAM role with DynamoDB permissions to the Lambda function"},
+        {"label": "C", "text": "Use the AWS account root credentials"},
+        {"label": "D", "text": "Make the DynamoDB table public"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "IAM roles should be used for AWS service-to-service access. Lambda automatically assumes its execution role and uses temporary credentials from STS. This eliminates credential management and rotation burdens. Storing access keys in environment variables is an anti-pattern that exposes long-term credentials. Root credentials should never be used for application access. Public DynamoDB tables don't exist and would violate security principles.",
+      "why_this_matters": "Using IAM roles instead of IAM users for service access is a fundamental AWS security best practice. Roles provide automatic credential rotation via temporary credentials, eliminate the risk of hardcoded credentials, and provide fine-grained access control through policies. This pattern is essential for secure cloud applications and prevents credential exposure incidents.",
+      "key_takeaway": "Always use IAM roles for AWS service-to-service access—never store or embed IAM user access keys in application code or configuration.",
+      "option_explanations": {
+        "A": "Storing access keys in environment variables exposes long-term credentials and violates security best practices.",
+        "B": "IAM roles provide secure, automatic credential management for Lambda with temporary credentials from STS.",
+        "C": "Root credentials have unlimited permissions and should never be used for applications or services.",
+        "D": "DynamoDB tables cannot be made public and this would violate the principle of least privilege."
+      },
+      "tags": ["topic:iam", "subtopic:iam-roles", "domain:2", "service:iam", "service:lambda", "security", "best-practices"]
+    },
+    {
+      "id": "iam-role-002",
+      "concept_id": "assume-role",
+      "variant_index": 0,
+      "topic": "iam",
+      "subtopic": "iam-roles",
+      "domain": "domain-2-security",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "An application running on EC2 needs to access an S3 bucket in a different AWS account. What is the correct approach?",
+      "options": [
+        {"label": "A", "text": "Share IAM user credentials between accounts"},
+        {"label": "B", "text": "Configure the EC2 instance to assume a role in the other account using STS"},
+        {"label": "C", "text": "Make the S3 bucket public"},
+        {"label": "D", "text": "Use VPC peering to access the bucket"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "Cross-account access should use IAM role assumption via STS. The target account creates a role with S3 permissions and a trust policy allowing the source account to assume it. The EC2 instance (via its instance profile) calls STS AssumeRole to get temporary credentials for the target account's role. Sharing user credentials violates security boundaries. Public buckets expose data. VPC peering handles network connectivity, not IAM permissions.",
+      "why_this_matters": "Cross-account access is common in multi-account AWS organizations for centralized logging, shared services, or organizational boundaries. Role assumption provides secure, auditable cross-account access without sharing credentials. Understanding STS AssumeRole and trust policies is essential for implementing secure multi-account architectures.",
+      "key_takeaway": "Use STS AssumeRole for cross-account access—create roles with trust policies in target accounts and have source account principals assume them for temporary cross-account credentials.",
+      "option_explanations": {
+        "A": "Sharing credentials between accounts violates security boundaries and makes auditing and revocation difficult.",
+        "B": "STS AssumeRole provides secure, temporary cross-account access through role assumption with trust policies.",
+        "C": "Public buckets expose data to the internet and don't provide controlled cross-account access.",
+        "D": "VPC peering provides network connectivity but doesn't address IAM permissions for S3 access."
+      },
+      "tags": ["topic:iam", "subtopic:iam-roles", "domain:2", "service:iam", "service:sts", "cross-account", "assume-role"]
+    },
+    {
+      "id": "iam-policy-001",
+      "concept_id": "least-privilege",
+      "variant_index": 0,
+      "topic": "iam",
+      "subtopic": "iam-policies",
+      "domain": "domain-2-security",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "A Lambda function only needs to read specific objects from an S3 bucket with prefix 'data/processed/'. What IAM policy follows the principle of least privilege?",
+      "options": [
+        {"label": "A", "text": "Grant s3:* permissions on all S3 resources"},
+        {"label": "B", "text": "Grant s3:GetObject permission on the entire bucket"},
+        {"label": "C", "text": "Grant s3:GetObject permission only on objects with prefix 'data/processed/*'"},
+        {"label": "D", "text": "Grant read-only access to all AWS services"}
+      ],
+      "correct_options": ["C"],
+      "answer_explanation": "Least privilege means granting only the minimum permissions necessary. The policy should allow s3:GetObject only on the specific prefix (arn:aws:s3:::bucket-name/data/processed/*). Granting s3:* allows all S3 operations unnecessarily. Entire bucket access exceeds requirements. Read-only across all services violates least privilege by providing unnecessary broad access.",
+      "why_this_matters": "Least privilege is a fundamental security principle that limits damage from compromised credentials, bugs, or insider threats. Overly broad permissions increase blast radius when security issues occur. Understanding how to scope IAM policies tightly using resource ARNs, conditions, and specific actions is essential for security-conscious AWS development.",
+      "key_takeaway": "Always scope IAM policies to the minimum required actions and resources using specific ARNs and prefixes—avoid wildcards and broad permissions that violate least privilege.",
+      "option_explanations": {
+        "A": "Wildcard permissions grant all S3 operations on all resources, vastly exceeding requirements.",
+        "B": "Bucket-wide access grants more permissions than needed when only a prefix is required.",
+        "C": "Scoping to specific actions and prefix follows least privilege by granting only necessary permissions.",
+        "D": "Broad cross-service permissions dramatically violate least privilege for an S3-specific need."
+      },
+      "tags": ["topic:iam", "subtopic:iam-policies", "domain:2", "service:iam", "least-privilege", "security"]
+    },
+    {
+      "id": "iam-policy-002",
+      "concept_id": "resource-vs-identity-policies",
+      "variant_index": 0,
+      "topic": "iam",
+      "subtopic": "iam-policies",
+      "domain": "domain-2-security",
+      "difficulty_inferred": "hard",
+      "question_type": "single",
+      "stem": "A developer attaches a policy to a Lambda execution role allowing s3:PutObject. However, the S3 bucket has a bucket policy explicitly denying s3:PutObject from all principals. What will happen when Lambda tries to write to the bucket?",
+      "options": [
+        {"label": "A", "text": "The write succeeds because the identity policy allows it"},
+        {"label": "B", "text": "The write succeeds because identity policies override resource policies"},
+        {"label": "C", "text": "The write fails because explicit denies in resource policies override allows"},
+        {"label": "D", "text": "The write behavior depends on which policy was created first"}
+      ],
+      "correct_options": ["C"],
+      "answer_explanation": "In AWS IAM, explicit denies always override allows, regardless of whether they're in identity policies or resource policies. The evaluation logic checks for explicit denies first. Even though the Lambda role has allow permissions, the bucket policy's explicit deny takes precedence and blocks the operation. Policy order and creation time don't affect evaluation—denies always win.",
+      "why_this_matters": "Understanding IAM policy evaluation logic is critical for debugging permission issues and implementing defense-in-depth security. Explicit denies provide a way to enforce security boundaries that can't be overridden by allows elsewhere. This pattern is used for organizational policies, compliance requirements, and preventing privilege escalation.",
+      "key_takeaway": "Explicit denies in IAM policies always override allows, regardless of policy type or location—use explicit denies to enforce security boundaries that cannot be bypassed.",
+      "option_explanations": {
+        "A": "Explicit denies override allows; the identity policy allow doesn't overcome the bucket policy deny.",
+        "B": "No policy type overrides others; explicit denies always take precedence over allows anywhere.",
+        "C": "Explicit denies in any policy (identity or resource) always override allows, blocking the operation.",
+        "D": "Policy evaluation is deterministic based on allow/deny logic, not creation order or time."
+      },
+      "tags": ["topic:iam", "subtopic:iam-policies", "domain:2", "service:iam", "policy-evaluation", "explicit-deny"]
+    },
+    {
+      "id": "cognito-up-001",
+      "concept_id": "user-pools-authentication",
+      "variant_index": 0,
+      "topic": "cognito",
+      "subtopic": "cognito-user-pools",
+      "domain": "domain-2-security",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "A mobile application needs user authentication with sign-up, sign-in, password reset, and multi-factor authentication. What AWS service provides these features?",
+      "options": [
+        {"label": "A", "text": "Amazon Cognito Identity Pools"},
+        {"label": "B", "text": "Amazon Cognito User Pools"},
+        {"label": "C", "text": "AWS IAM with username/password"},
+        {"label": "D", "text": "AWS STS with temporary credentials"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "Cognito User Pools provide user directory services with built-in authentication features including sign-up, sign-in, password policies, MFA, password reset, and account verification. They issue JWT tokens for authenticated users. Identity Pools provide AWS credentials for accessing AWS services, not user authentication. IAM is for AWS resource access, not application user management. STS provides temporary AWS credentials, not user authentication.",
+      "why_this_matters": "User authentication is a fundamental requirement for most applications. Cognito User Pools provide managed, scalable authentication infrastructure, eliminating the need to build and maintain custom user management systems. Understanding the distinction between User Pools (authentication) and Identity Pools (AWS access) is essential for architecting secure applications with Cognito.",
+      "key_takeaway": "Use Cognito User Pools for application user authentication (sign-up, sign-in, MFA, password management)—they provide managed user directory services with JWT token issuance.",
+      "option_explanations": {
+        "A": "Identity Pools provide AWS credentials for accessing AWS services, not user authentication features.",
+        "B": "User Pools provide comprehensive user authentication including sign-up, sign-in, MFA, and password management.",
+        "C": "IAM is for AWS resource access control, not application user authentication and directory services.",
+        "D": "STS provides temporary AWS credentials for AWS service access, not user authentication features."
+      },
+      "tags": ["topic:cognito", "subtopic:cognito-user-pools", "domain:2", "service:cognito", "authentication", "user-management"]
+    },
+    {
+      "id": "cognito-up-002",
+      "concept_id": "jwt-tokens",
+      "variant_index": 0,
+      "topic": "cognito",
+      "subtopic": "cognito-user-pools",
+      "domain": "domain-2-security",
+      "difficulty_inferred": "hard",
+      "question_type": "multi",
+      "stem": "After successful authentication, Cognito User Pools issue JWT tokens to the client. Which TWO token types are included? (Select TWO)",
+      "options": [
+        {"label": "A", "text": "ID token containing user identity claims"},
+        {"label": "B", "text": "Access token for calling APIs"},
+        {"label": "C", "text": "AWS access key for calling AWS services"},
+        {"label": "D", "text": "Session token for DynamoDB access"}
+      ],
+      "correct_options": ["A", "B"],
+      "answer_explanation": "Cognito User Pools issue three JWT tokens: ID token (contains user identity claims like email, name for the application), Access token (used to authorize API calls and contains groups/scopes), and Refresh token (used to obtain new ID and Access tokens). AWS access keys and session tokens are from Identity Pools or STS, not User Pools. User Pools don't provide DynamoDB-specific tokens.",
+      "why_this_matters": "Understanding Cognito token types and their purposes is essential for implementing proper authentication and authorization. ID tokens contain user information for the application. Access tokens authorize API calls (including API Gateway with Cognito authorizers). Refresh tokens enable obtaining new tokens without re-authentication. Confusing User Pool JWT tokens with AWS credentials leads to architectural errors.",
+      "key_takeaway": "Cognito User Pools issue JWT tokens (ID, Access, Refresh) for application authentication—these are different from AWS credentials for service access.",
+      "option_explanations": {
+        "A": "ID tokens contain user identity claims (email, name, custom attributes) for the application to use.",
+        "B": "Access tokens authorize API calls and contain user groups/scopes for authorization decisions.",
+        "C": "AWS access keys come from IAM users, not Cognito User Pools which issue JWT tokens.",
+        "D": "User Pools issue JWTs for application auth; AWS service credentials come from Identity Pools or IAM."
+      },
+      "tags": ["topic:cognito", "subtopic:cognito-user-pools", "domain:2", "service:cognito", "jwt", "tokens"]
+    },
+    {
+      "id": "cognito-ip-001",
+      "concept_id": "identity-pools-aws-access",
+      "variant_index": 0,
+      "topic": "cognito",
+      "subtopic": "cognito-identity-pools",
+      "domain": "domain-2-security",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "A mobile app authenticates users with Cognito User Pools. Users need to upload photos directly to S3 from the mobile app. What additional Cognito component is required?",
+      "options": [
+        {"label": "A", "text": "Cognito Sync to synchronize data"},
+        {"label": "B", "text": "Cognito Identity Pools to exchange User Pool tokens for temporary AWS credentials"},
+        {"label": "C", "text": "User Pools already provide S3 access"},
+        {"label": "D", "text": "API Gateway to proxy uploads to S3"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "Cognito Identity Pools (Federated Identities) exchange authentication tokens (from User Pools, social providers, or SAML) for temporary AWS credentials via STS. These credentials grant access to AWS services like S3 based on IAM roles assigned to the identity pool. User Pools provide authentication but don't grant AWS service access. Cognito Sync is for cross-device data sync. API Gateway proxying adds unnecessary complexity when direct S3 access is possible.",
+      "why_this_matters": "The combination of User Pools (authentication) and Identity Pools (AWS access) is a fundamental pattern for mobile and web applications. Identity Pools enable secure, direct access to AWS services without proxying through backend servers, reducing latency and costs. Understanding this integration is essential for building scalable, secure applications with Cognito.",
+      "key_takeaway": "Use Cognito Identity Pools to exchange User Pool tokens for temporary AWS credentials, enabling authenticated users to access AWS services like S3 directly from client applications.",
+      "option_explanations": {
+        "A": "Cognito Sync handles cross-device data synchronization, not AWS service access permissions.",
+        "B": "Identity Pools exchange authentication tokens for temporary AWS credentials for accessing services like S3.",
+        "C": "User Pools provide authentication tokens, not AWS service credentials; Identity Pools are needed for AWS access.",
+        "D": "Direct S3 access via Identity Pool credentials is more efficient than proxying through API Gateway."
+      },
+      "tags": ["topic:cognito", "subtopic:cognito-identity-pools", "domain:2", "service:cognito", "service:sts", "aws-access"]
+    },
+    {
+      "id": "cognito-ip-002",
+      "concept_id": "authenticated-vs-unauthenticated",
+      "variant_index": 0,
+      "topic": "cognito",
+      "subtopic": "cognito-identity-pools",
+      "domain": "domain-2-security",
+      "difficulty_inferred": "hard",
+      "question_type": "single",
+      "stem": "A gaming app wants to allow users to play without signing in (guest mode) but also support authenticated users with saved progress. Both modes need to write scores to DynamoDB. How should this be configured with Cognito Identity Pools?",
+      "options": [
+        {"label": "A", "text": "Create two separate identity pools for authenticated and unauthenticated users"},
+        {"label": "B", "text": "Configure the identity pool with both authenticated and unauthenticated IAM roles with appropriate permissions"},
+        {"label": "C", "text": "Only allow authenticated users to access DynamoDB"},
+        {"label": "D", "text": "Use API Gateway to proxy all DynamoDB access"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "Identity Pools support both authenticated and unauthenticated access by assigning different IAM roles. Unauthenticated role might allow writing scores with limited retention, while authenticated role allows saving progress long-term. Enable \"Allow unauthenticated identities\" and configure both roles with appropriate permissions. Separate identity pools create management overhead. Blocking unauthenticated users eliminates guest mode. API Gateway proxying adds complexity when Identity Pools handle this scenario directly.",
+      "why_this_matters": "Many mobile apps and games need guest/anonymous access alongside authenticated users. Identity Pools' authenticated and unauthenticated role support enables this pattern securely with different permission levels. Understanding this capability allows building flexible user experiences while maintaining security through least-privilege role assignment.",
+      "key_takeaway": "Cognito Identity Pools support both authenticated and unauthenticated access with separate IAM roles—use this to enable guest mode with limited permissions alongside full-featured authenticated access.",
+      "option_explanations": {
+        "A": "Single identity pool with both role types is simpler and correct; separate pools add management overhead.",
+        "B": "Identity pools support both authenticated and unauthenticated roles for flexible access patterns with different permissions.",
+        "C": "Blocking unauthenticated users eliminates guest mode when Identity Pools support it with limited permissions.",
+        "D": "Identity Pools with role-based permissions handle this directly without needing API Gateway proxying."
+      },
+      "tags": ["topic:cognito", "subtopic:cognito-identity-pools", "domain:2", "service:cognito", "authenticated-unauthenticated", "guest-access"]
+    },
+    {
+      "id": "kms-key-001",
+      "concept_id": "kms-key-types",
+      "variant_index": 0,
+      "topic": "kms",
+      "subtopic": "kms-keys",
+      "domain": "domain-2-security",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "An application encrypts sensitive data in DynamoDB using KMS. The security team requires the ability to rotate encryption keys annually and audit all key usage. What type of KMS key should be used?",
+      "options": [
+        {"label": "A", "text": "AWS managed key"},
+        {"label": "B", "text": "Customer managed key"},
+        {"label": "C", "text": "AWS owned key"},
+        {"label": "D", "text": "Data key"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "Customer managed keys (CMKs) provide full control over key policies, rotation schedules, and CloudTrail logging of key usage. You can enable automatic annual rotation or rotate manually. AWS managed keys rotate automatically every year but you can't control rotation timing or view CloudTrail logs. AWS owned keys are used by AWS services internally with no customer control or visibility. Data keys are generated by KMS for encrypting data, not the master key itself.",
+      "why_this_matters": "KMS key type selection affects control, auditability, and compliance. Customer managed keys provide maximum control for regulatory requirements, custom key policies, and rotation schedules. AWS managed keys are convenient but limit control. Understanding these tradeoffs is essential for meeting security and compliance requirements while balancing operational complexity.",
+      "key_takeaway": "Use customer managed KMS keys when you need control over key policies, rotation schedules, or detailed CloudTrail audit logs—AWS managed keys limit control despite handling rotation automatically.",
+      "option_explanations": {
+        "A": "AWS managed keys rotate automatically but don't provide control over rotation timing or full CloudTrail visibility.",
+        "B": "Customer managed keys provide full control over policies, rotation, and complete CloudTrail audit logging.",
+        "C": "AWS owned keys are internal to AWS services with no customer visibility or control.",
+        "D": "Data keys encrypt data and are generated by KMS; they're not the master key type for access control."
+      },
+      "tags": ["topic:kms", "subtopic:kms-keys", "domain:2", "service:kms", "key-types", "key-rotation"]
+    },
+    {
+      "id": "kms-key-002",
+      "concept_id": "envelope-encryption",
+      "variant_index": 0,
+      "topic": "kms",
+      "subtopic": "kms-encryption",
+      "domain": "domain-2-security",
+      "difficulty_inferred": "hard",
+      "question_type": "single",
+      "stem": "An application needs to encrypt 10 MB files using KMS. Direct encryption with KMS Encrypt API fails. What is the cause and solution?",
+      "options": [
+        {"label": "A", "text": "KMS Encrypt has a 4 KB data size limit; use envelope encryption with data keys instead"},
+        {"label": "B", "text": "Increase the KMS request quota"},
+        {"label": "C", "text": "Use a larger KMS key size"},
+        {"label": "D", "text": "Split the file into 1 KB chunks and encrypt each separately"}
+      ],
+      "correct_options": ["A"],
+      "answer_explanation": "KMS Encrypt API has a 4 KB payload limit and is designed for encrypting small data like secrets. For larger data, use envelope encryption: call KMS GenerateDataKey to get a data encryption key (plaintext and encrypted versions), use the plaintext key to encrypt the data locally, store the encrypted key with the encrypted data, and discard the plaintext key. To decrypt, call KMS Decrypt with the encrypted key to get the plaintext key back, then decrypt the data locally. Request quotas don't affect payload size limits. Key size doesn't change payload limits. Chunking doesn't solve the design issue—envelope encryption is the proper pattern.",
+      "why_this_matters": "Envelope encryption is a fundamental pattern in AWS encryption. It enables encrypting large datasets without sending data to KMS, reducing latency and costs while staying within KMS API limits. Understanding envelope encryption is essential for implementing encryption at scale with KMS, as it's used by S3, EBS, and other AWS services.",
+      "key_takeaway": "Use envelope encryption for data larger than 4 KB—generate data keys with KMS, encrypt data locally with the data key, and store the encrypted data key alongside encrypted data.",
+      "option_explanations": {
+        "A": "KMS Encrypt has a 4 KB limit; envelope encryption with GenerateDataKey is the correct pattern for large data.",
+        "B": "Request quotas are separate from payload size limits; envelope encryption is needed for large data.",
+        "C": "Key size doesn't affect the API's 4 KB payload limit for encryption operations.",
+        "D": "Chunking creates management complexity; envelope encryption is the designed pattern for large data."
+      },
+      "tags": ["topic:kms", "subtopic:kms-encryption", "domain:2", "service:kms", "envelope-encryption", "data-keys"]
+    },
+    {
+      "id": "kms-key-003",
+      "concept_id": "kms-key-policies",
+      "variant_index": 0,
+      "topic": "kms",
+      "subtopic": "kms-keys",
+      "domain": "domain-2-security",
+      "difficulty_inferred": "hard",
+      "question_type": "single",
+      "stem": "A Lambda function in Account A needs to decrypt data encrypted with a KMS key in Account B. Both the KMS key policy and Lambda execution role have the necessary permissions, but decryption fails. What is the MOST likely missing configuration?",
+      "options": [
+        {"label": "A", "text": "KMS keys cannot be used across accounts"},
+        {"label": "B", "text": "The KMS key policy must explicitly allow the Lambda role from Account A, and the role must have kms:Decrypt permission"},
+        {"label": "C", "text": "Cross-account KMS requires VPC peering"},
+        {"label": "D", "text": "Lambda functions cannot use KMS keys"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "Cross-account KMS access requires both: (1) the key policy in Account B must allow the principal from Account A (the Lambda role), and (2) the Lambda role in Account A must have kms:Decrypt permission. Both policies must allow the operation—if either denies or doesn't allow, access fails. KMS fully supports cross-account access. VPC peering is for network connectivity, not KMS permissions. Lambda can use KMS keys normally.",
+      "why_this_matters": "Cross-account KMS usage is common in multi-account architectures for centralized encryption key management or shared encrypted data. Understanding that both the key policy and identity policy must allow access prevents common permission issues. This dual-policy requirement applies to all cross-account resource access in AWS.",
+      "key_takeaway": "Cross-account KMS access requires permissions in both the key policy (allowing external account principals) and the IAM role policy (granting KMS permissions)—both must allow the operation.",
+      "option_explanations": {
+        "A": "KMS keys fully support cross-account access when properly configured in key and identity policies.",
+        "B": "Both key policy (in key account) and identity policy (in user account) must allow cross-account access.",
+        "C": "VPC peering provides network connectivity; KMS access uses IAM permissions, not network configuration.",
+        "D": "Lambda functions can use KMS keys normally for encryption and decryption operations."
+      },
+      "tags": ["topic:kms", "subtopic:kms-keys", "domain:2", "service:kms", "cross-account", "key-policies"]
+    },
+    {
+      "id": "sm-secret-001",
+      "concept_id": "secrets-manager-basics",
+      "variant_index": 0,
+      "topic": "secrets-manager",
+      "subtopic": "secrets-manager-basics",
+      "domain": "domain-2-security",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "A Lambda function needs to connect to an RDS database. The database password needs to be rotated monthly without redeploying the Lambda function. Where should the password be stored?",
+      "options": [
+        {"label": "A", "text": "Lambda environment variables"},
+        {"label": "B", "text": "AWS Secrets Manager with automatic rotation enabled"},
+        {"label": "C", "text": "Hard-coded in the Lambda function code"},
+        {"label": "D", "text": "S3 bucket with versioning"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "Secrets Manager is designed for storing and automatically rotating secrets like database passwords. It integrates with RDS for automatic rotation using Lambda functions. The Lambda function retrieves the current password at runtime via API call. Environment variables don't support automatic rotation. Hard-coding is a severe security anti-pattern. S3 with versioning provides no rotation automation or secure secret storage.",
+      "why_this_matters": "Password rotation is a security best practice that's operationally challenging without automation. Secrets Manager provides automatic rotation integrated with RDS, eliminating manual rotation processes that are error-prone and often neglected. Understanding Secrets Manager's rotation capabilities is essential for implementing secure, maintainable database credential management.",
+      "key_takeaway": "Use Secrets Manager with automatic rotation for database credentials and other secrets requiring periodic rotation—it handles rotation automatically without application changes.",
+      "option_explanations": {
+        "A": "Environment variables require redeployment for updates and don't support automatic rotation.",
+        "B": "Secrets Manager provides automatic secret rotation with RDS integration, retrievable at runtime without redeployment.",
+        "C": "Hard-coded credentials are a critical security vulnerability and prevent rotation without code changes.",
+        "D": "S3 lacks secure secret storage features and automatic rotation capabilities."
+      },
+      "tags": ["topic:secrets-manager", "subtopic:secrets-manager-basics", "domain:2", "service:secrets-manager", "service:rds", "rotation", "secrets"]
+    },
+    {
+      "id": "sm-secret-002",
+      "concept_id": "secrets-manager-vs-parameter-store",
+      "variant_index": 0,
+      "topic": "secrets-manager",
+      "subtopic": "secrets-manager-basics",
+      "domain": "domain-2-security",
+      "difficulty_inferred": "hard",
+      "question_type": "single",
+      "stem": "A development team needs to store database passwords and API keys. They're deciding between Secrets Manager and Systems Manager Parameter Store (SecureString). What is a key differentiator that favors Secrets Manager?",
+      "options": [
+        {"label": "A", "text": "Secrets Manager is free while Parameter Store has costs"},
+        {"label": "B", "text": "Secrets Manager supports automatic rotation with built-in Lambda functions for RDS and other services"},
+        {"label": "C", "text": "Only Secrets Manager encrypts data at rest"},
+        {"label": "D", "text": "Parameter Store doesn't support IAM permissions"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "The primary differentiator is automatic rotation. Secrets Manager provides built-in rotation functions for RDS, Redshift, DocumentDB, and other services, plus a framework for custom rotation. Parameter Store SecureString encrypts data but doesn't provide automatic rotation. Secrets Manager has per-secret monthly costs plus API call costs, while Parameter Store Standard parameters are free (Advanced parameters have costs). Both encrypt at rest with KMS. Both support IAM permissions.",
+      "why_this_matters": "Choosing between Secrets Manager and Parameter Store involves cost-feature tradeoffs. Secrets Manager's automatic rotation justifies its cost for credentials requiring rotation (databases, APIs with expiring keys). Parameter Store is cost-effective for configuration that doesn't need rotation. Understanding these differences guides appropriate service selection for different secret types.",
+      "key_takeaway": "Choose Secrets Manager when you need automatic secret rotation—its rotation capabilities justify costs for credentials; use Parameter Store for configuration and secrets not requiring rotation.",
+      "option_explanations": {
+        "A": "Secrets Manager has costs; Parameter Store Standard is free but Advanced has costs. Cost isn't the differentiator.",
+        "B": "Automatic rotation with built-in integrations is Secrets Manager's key differentiator over Parameter Store.",
+        "C": "Both Secrets Manager and Parameter Store SecureString encrypt data at rest using KMS.",
+        "D": "Parameter Store fully supports IAM permissions for access control like Secrets Manager."
+      },
+      "tags": ["topic:secrets-manager", "subtopic:secrets-manager-basics", "domain:2", "service:secrets-manager", "service:systems-manager", "parameter-store", "comparison"]
+    },
+    {
+      "id": "ssm-param-001",
+      "concept_id": "parameter-types",
+      "variant_index": 0,
+      "topic": "systems-manager",
+      "subtopic": "parameter-store",
+      "domain": "domain-2-security",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "An application stores configuration in Systems Manager Parameter Store, including database endpoints (public) and API keys (sensitive). What parameter types should be used?",
+      "options": [
+        {"label": "A", "text": "Use String type for all parameters"},
+        {"label": "B", "text": "Use String for public config and SecureString for sensitive values"},
+        {"label": "C", "text": "Use SecureString for all parameters"},
+        {"label": "D", "text": "Parameter Store doesn't support sensitive data"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "Parameter Store supports String (plain text), StringList (comma-separated), and SecureString (encrypted with KMS). Use String for non-sensitive config like endpoints and SecureString for sensitive data like API keys. SecureString encrypts values at rest and in transit. Using String for everything exposes secrets. Using SecureString for everything adds unnecessary KMS costs and complexity for public config. Parameter Store fully supports sensitive data via SecureString.",
+      "why_this_matters": "Properly classifying configuration as sensitive or non-sensitive ensures appropriate protection while avoiding unnecessary encryption costs. SecureString provides encryption and audit trails for sensitive values. Using String for all parameters exposes secrets in CloudTrail logs and console. Understanding parameter types is fundamental to secure configuration management with Parameter Store.",
+      "key_takeaway": "Use SecureString parameter type for sensitive configuration (passwords, API keys) to encrypt at rest with KMS; use String for non-sensitive configuration to avoid unnecessary costs.",
+      "option_explanations": {
+        "A": "String type exposes sensitive values in logs and console; SecureString should be used for secrets.",
+        "B": "String for public config and SecureString for sensitive values appropriately balances security and cost.",
+        "C": "SecureString for all parameters adds unnecessary KMS costs for non-sensitive configuration.",
+        "D": "Parameter Store SecureString type is specifically designed for storing sensitive encrypted data."
+      },
+      "tags": ["topic:systems-manager", "subtopic:parameter-store", "domain:2", "service:systems-manager", "parameter-types", "securestring"]
+    },
+    {
+      "id": "ssm-param-002",
+      "concept_id": "parameter-hierarchy",
+      "variant_index": 0,
+      "topic": "systems-manager",
+      "subtopic": "parameter-store",
+      "domain": "domain-2-security",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "An application has dev, test, and prod environments with different database endpoints. How should these be organized in Parameter Store for easy retrieval?",
+      "options": [
+        {"label": "A", "text": "Create separate parameter names like db-dev, db-test, db-prod"},
+        {"label": "B", "text": "Use hierarchical paths like /myapp/dev/database, /myapp/test/database, /myapp/prod/database"},
+        {"label": "C", "text": "Store all values in a single parameter as JSON"},
+        {"label": "D", "text": "Use separate AWS accounts for each environment"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "Parameter Store supports hierarchical naming like /app/environment/config. This enables retrieving all parameters for an environment with GetParametersByPath. It also enables IAM policies scoped to paths (e.g., dev role can access /myapp/dev/* but not /myapp/prod/*). Flat naming lacks organization benefits. Single JSON parameter doesn't support per-value access control or retrieval. Separate accounts may be used for security but doesn't address Parameter Store organization.",
+      "why_this_matters": "Hierarchical parameter organization enables logical grouping, batch retrieval, and path-based IAM policies. This pattern is essential for multi-environment applications, allowing environment-specific configurations with appropriate access control. Understanding parameter hierarchies simplifies configuration management and security in complex applications.",
+      "key_takeaway": "Use hierarchical parameter paths (/app/env/config) in Parameter Store to enable logical organization, batch retrieval with GetParametersByPath, and path-based IAM access control.",
+      "option_explanations": {
+        "A": "Flat naming lacks organizational benefits and doesn't enable batch retrieval or path-based access control.",
+        "B": "Hierarchical paths enable logical organization, batch retrieval, and granular IAM policies by path.",
+        "C": "Single JSON parameter doesn't support per-value access control, retrieval, or encryption.",
+        "D": "Account separation may be used for isolation but doesn't address Parameter Store organization within accounts."
+      },
+      "tags": ["topic:systems-manager", "subtopic:parameter-store", "domain:2", "service:systems-manager", "parameter-hierarchy", "organization"]
+    },
+    {
+      "id": "sts-cred-001",
+      "concept_id": "temporary-credentials",
+      "variant_index": 0,
+      "topic": "sts",
+      "subtopic": "sts-credentials",
+      "domain": "domain-2-security",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "A third-party auditor needs temporary read-only access to an S3 bucket for 2 hours. What is the MOST secure approach?",
+      "options": [
+        {"label": "A", "text": "Create an IAM user with read-only permissions and delete it after 2 hours"},
+        {"label": "B", "text": "Use STS AssumeRole to generate temporary credentials valid for 2 hours"},
+        {"label": "C", "text": "Share the AWS account root credentials for 2 hours"},
+        {"label": "D", "text": "Make the S3 bucket public for 2 hours"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "STS AssumeRole generates temporary security credentials (access key, secret key, session token) that automatically expire. Specify a duration (15 minutes to 12 hours) when calling AssumeRole. This is more secure than creating/deleting IAM users (which risks forgetting to delete or reuse) and much better than sharing root credentials or making buckets public. Temporary credentials automatically expire, eliminating manual cleanup.",
+      "why_this_matters": "Temporary credentials eliminate the risk of forgotten cleanup and credential exposure from long-term credentials. They're essential for granting time-limited access to external parties, cross-account access, or applications. Understanding STS credential generation and expiration is fundamental to implementing least-privilege, time-bound access in AWS.",
+      "key_takeaway": "Use STS AssumeRole for temporary access needs—generated credentials automatically expire, eliminating manual cleanup and reducing risk from long-term credential exposure.",
+      "option_explanations": {
+        "A": "IAM users are long-term credentials requiring manual deletion; STS temporary credentials auto-expire securely.",
+        "B": "STS AssumeRole generates temporary credentials that auto-expire after specified duration, ideal for time-limited access.",
+        "C": "Root credentials should never be shared; they provide unlimited access without time constraints.",
+        "D": "Public buckets expose data to everyone, not just the auditor, and require manual reverting."
+      },
+      "tags": ["topic:sts", "subtopic:sts-credentials", "domain:2", "service:sts", "temporary-credentials", "assume-role"]
+    },
+    {
+      "id": "acm-cert-001",
+      "concept_id": "acm-certificate-validation",
+      "variant_index": 0,
+      "topic": "acm",
+      "subtopic": "acm-certificates",
+      "domain": "domain-2-security",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "A developer requests an SSL/TLS certificate from AWS Certificate Manager for a custom domain. What validation method allows automated certificate renewal without manual intervention?",
+      "options": [
+        {"label": "A", "text": "Email validation"},
+        {"label": "B", "text": "DNS validation with Route 53"},
+        {"label": "C", "text": "HTTP validation"},
+        {"label": "D", "text": "ACM certificates don't require validation"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "DNS validation with Route 53 enables automatic certificate renewal. ACM adds a CNAME record to Route 53, which remains in place. When renewal time comes, ACM verifies ownership via the CNAME and renews automatically. Email validation requires manual email clicks for each renewal. HTTP validation also requires manual setup. All ACM public certificates require domain validation to prove ownership before issuance.",
+      "why_this_matters": "Automatic certificate renewal prevents expiration-related outages, a common cause of production incidents. DNS validation with Route 53 provides hands-free renewal, eliminating operational toil. Manual validation methods risk missed renewal deadlines. Understanding validation methods is essential for choosing the right approach and ensuring continuous SSL/TLS coverage.",
+      "key_takeaway": "Use DNS validation with Route 53 for ACM certificates to enable automatic renewal without manual intervention—this prevents certificate expiration outages.",
+      "option_explanations": {
+        "A": "Email validation requires manual email confirmation for each renewal, risking missed renewals.",
+        "B": "DNS validation with Route 53 enables fully automatic renewal without manual intervention.",
+        "C": "HTTP validation requires manual setup and doesn't support automatic renewal as seamlessly as DNS.",
+        "D": "All ACM public certificates require validation to prove domain ownership before issuance."
+      },
+      "tags": ["topic:acm", "subtopic:acm-certificates", "domain:2", "service:acm", "service:route53", "certificate-validation", "automation"]
+    }
+  ]
+}

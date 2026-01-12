@@ -1,0 +1,887 @@
+{
+  "exam": "AWS Certified Developer – Associate (DVA-C02)",
+  "question_bank_version": "v1.0-continuation",
+  "generated_at": "2026-01-11T00:00:00Z",
+  "note": "This file continues from Lambda and DynamoDB partition keys, covering remaining topics",
+  "domains": [
+    {
+      "domain_id": "domain-1-development",
+      "name": "Development with AWS Services",
+      "topics": [
+        {
+          "topic_id": "dynamodb",
+          "name": "Amazon DynamoDB",
+          "subtopics": [
+            {
+              "subtopic_id": "dynamodb-indexes",
+              "name": "DynamoDB secondary indexes (GSI and LSI)",
+              "num_questions_generated": 10,
+              "questions": [
+                {
+                  "id": "ddb-idx-001",
+                  "concept_id": "gsi-vs-lsi",
+                  "variant_index": 0,
+                  "topic": "dynamodb",
+                  "subtopic": "dynamodb-indexes",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "A developer needs to add a secondary index to an existing DynamoDB table to support a new query pattern. The table already has data and is in production. The new index requires a different partition key than the base table. Which type of index should the developer create?",
+                  "options": [
+                    {"label": "A", "text": "Local Secondary Index (LSI) because it can be added after table creation"},
+                    {"label": "B", "text": "Global Secondary Index (GSI) because it supports a different partition key"},
+                    {"label": "C", "text": "Either LSI or GSI will work equally well"},
+                    {"label": "D", "text": "Create a new table with the desired partition key instead"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Global Secondary Indexes (GSIs) can be created at any time and support different partition keys from the base table. Local Secondary Indexes (LSIs) must be created at table creation time and must share the same partition key as the base table. Since the requirement is for a different partition key and the table already exists, a GSI is the only option. While creating a new table is possible, it's unnecessary when GSI meets the requirement.",
+                  "why_this_matters": "Understanding the differences between GSIs and LSIs is critical for evolving DynamoDB schema to support new access patterns. GSIs provide flexibility for production tables by allowing addition of indexes with different partition keys after creation, enabling applications to adapt to changing requirements without data migration. LSIs are more restrictive but offer strongly consistent reads.",
+                  "key_takeaway": "Use Global Secondary Indexes (GSI) when you need a different partition key from the base table or need to add indexes to existing tables; LSIs must be created at table creation and share the base table's partition key.",
+                  "option_explanations": {
+                    "A": "LSIs must be created at table creation time and cannot have different partition keys from the base table.",
+                    "B": "GSIs support different partition keys and can be added to existing tables, meeting both requirements.",
+                    "C": "LSIs and GSIs have different constraints; only GSI works for this scenario.",
+                    "D": "Creating a new table is unnecessary overhead when GSI provides the needed functionality."
+                  },
+                  "tags": ["topic:dynamodb", "subtopic:dynamodb-indexes", "domain:1", "service:dynamodb", "gsi", "lsi", "indexes"]
+                },
+                {
+                  "id": "ddb-idx-002",
+                  "concept_id": "gsi-projection",
+                  "variant_index": 0,
+                  "topic": "dynamodb",
+                  "subtopic": "dynamodb-indexes",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "A DynamoDB table stores product catalog data with 20 attributes per item. A GSI is created to support searching products by category. Queries on this GSI only need to return 3 attributes: ProductID, Name, and Price. What projection type provides the MOST cost-effective solution?",
+                  "options": [
+                    {"label": "A", "text": "Use KEYS_ONLY projection"},
+                    {"label": "B", "text": "Use INCLUDE projection with ProductID, Name, and Price"},
+                    {"label": "C", "text": "Use ALL projection to include all attributes"},
+                    {"label": "D", "text": "Use INCLUDE projection with all 20 attributes"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "INCLUDE projection allows you to specify exactly which attributes to project into the GSI. By including only the 3 attributes needed (ProductID, Name, Price), you minimize storage costs for the GSI while ensuring queries can retrieve all required data without fetching from the base table. KEYS_ONLY would require fetching from the base table. ALL projection wastes storage on 17 unnecessary attributes. Including all 20 attributes defeats the purpose of selective projection.",
+                  "why_this_matters": "GSI projections directly impact storage costs and query performance. Projecting only needed attributes reduces GSI storage costs while maintaining query efficiency. Over-projecting with ALL wastes money on unused data. Under-projecting with KEYS_ONLY requires expensive base table fetches. Understanding projection optimization is essential for cost-effective DynamoDB design at scale.",
+                  "key_takeaway": "Use INCLUDE projection in GSIs to project only the attributes your queries need, minimizing storage costs while avoiding base table fetches for common access patterns.",
+                  "option_explanations": {
+                    "A": "KEYS_ONLY includes only key attributes, requiring expensive base table fetches for ProductID, Name, and Price.",
+                    "B": "INCLUDE projection with specific attributes minimizes storage costs while providing all needed query data.",
+                    "C": "ALL projection wastes storage on 17 attributes that queries don't need.",
+                    "D": "Including all attributes is identical to ALL projection and wastes storage unnecessarily."
+                  },
+                  "tags": ["topic:dynamodb", "subtopic:dynamodb-indexes", "domain:1", "service:dynamodb", "gsi", "projection", "cost-optimization"]
+                },
+                {
+                  "id": "ddb-idx-003",
+                  "concept_id": "lsi-consistency",
+                  "variant_index": 0,
+                  "topic": "dynamodb",
+                  "subtopic": "dynamodb-indexes",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "A financial application requires strongly consistent reads when querying transaction data by different sort keys. The table uses AccountID as partition key and TransactionID as sort key. The application needs to query transactions by timestamp. What index type supports this requirement?",
+                  "options": [
+                    {"label": "A", "text": "Global Secondary Index with AccountID as partition key and Timestamp as sort key"},
+                    {"label": "B", "text": "Local Secondary Index with AccountID as partition key and Timestamp as sort key"},
+                    {"label": "C", "text": "Global Secondary Index with Timestamp as partition key"},
+                    {"label": "D", "text": "Either GSI or LSI will provide strongly consistent reads"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Local Secondary Indexes support strongly consistent reads and must share the base table's partition key (AccountID) while providing an alternate sort key (Timestamp). This meets the requirement perfectly. GSIs only support eventually consistent reads. While option A has the right key structure, it's a GSI and doesn't support strong consistency. Option C changes the partition key, which doesn't maintain account-level grouping.",
+                  "why_this_matters": "Strong consistency requirements are critical for financial applications where reading outdated data could cause errors. LSIs are the only DynamoDB index type supporting strongly consistent reads, making them essential for use cases requiring read-after-write consistency. Understanding this distinction prevents architectural mistakes in applications with strict consistency requirements.",
+                  "key_takeaway": "Use Local Secondary Indexes (LSI) when you need strongly consistent reads with alternate sort keys; GSIs only support eventually consistent reads regardless of configuration.",
+                  "option_explanations": {
+                    "A": "GSIs only support eventually consistent reads, not strongly consistent reads.",
+                    "B": "LSIs support strongly consistent reads and share the base table partition key with alternate sort key.",
+                    "C": "Changing partition key to Timestamp doesn't maintain account grouping and GSIs don't support strong consistency.",
+                    "D": "Only LSIs support strongly consistent reads; GSIs are always eventually consistent."
+                  },
+                  "tags": ["topic:dynamodb", "subtopic:dynamodb-indexes", "domain:1", "service:dynamodb", "lsi", "consistency", "strong-consistency"]
+                },
+                {
+                  "id": "ddb-idx-004",
+                  "concept_id": "sparse-indexes",
+                  "variant_index": 0,
+                  "topic": "dynamodb",
+                  "subtopic": "dynamodb-indexes",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "hard",
+                  "question_type": "single",
+                  "stem": "A DynamoDB table stores user accounts where only 5% of users are premium subscribers. The application needs to efficiently query all premium users. The base table has 1 million items. What is the MOST cost-effective indexing strategy?",
+                  "options": [
+                    {"label": "A", "text": "Create a GSI with SubscriptionType as partition key, projecting all attributes"},
+                    {"label": "B", "text": "Create a sparse GSI using PremiumExpiryDate as partition key, only set for premium users"},
+                    {"label": "C", "text": "Use a Scan operation with a filter expression for SubscriptionType = 'PREMIUM'"},
+                    {"label": "D", "text": "Create a separate table for premium users only"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "A sparse index leverages the fact that GSIs only contain items where the index key attributes are defined. By creating a GSI with PremiumExpiryDate as partition key and only setting this attribute for premium users, the GSI contains only 50,000 items (5% of 1M) instead of all items. This dramatically reduces storage costs and query costs. Option A would index all 1M items. Scan is expensive and slow. A separate table adds operational complexity.",
+                  "why_this_matters": "Sparse indexes are a powerful cost optimization technique for scenarios where you need to query a small subset of items. By leveraging DynamoDB's behavior of only indexing items with defined key attributes, you can create indexes containing only relevant items, reducing storage costs and improving query performance. This pattern is especially valuable for large tables with small active subsets.",
+                  "key_takeaway": "Create sparse indexes by using GSI key attributes that are only defined for the subset of items you want to index, dramatically reducing index size and costs for querying small subsets.",
+                  "option_explanations": {
+                    "A": "Indexing SubscriptionType indexes all 1M items with low-cardinality key, wasting storage.",
+                    "B": "Sparse index with attribute only set for premium users indexes only 50,000 items, minimizing costs.",
+                    "C": "Scan operations are expensive and slow, examining all items regardless of subscription type.",
+                    "D": "Separate table adds operational complexity and requires data synchronization logic."
+                  },
+                  "tags": ["topic:dynamodb", "subtopic:dynamodb-indexes", "domain:1", "service:dynamodb", "gsi", "sparse-index", "cost-optimization"]
+                },
+                {
+                  "id": "ddb-idx-005",
+                  "concept_id": "gsi-provisioning",
+                  "variant_index": 0,
+                  "topic": "dynamodb",
+                  "subtopic": "dynamodb-indexes",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "A DynamoDB table uses provisioned capacity mode with 1000 WCU and 1000 RCU. A new GSI is being added. How should the developer configure the GSI's capacity?",
+                  "options": [
+                    {"label": "A", "text": "GSI automatically inherits the base table's capacity settings"},
+                    {"label": "B", "text": "GSI requires separate capacity configuration independent of the base table"},
+                    {"label": "C", "text": "GSI shares the base table's capacity pool"},
+                    {"label": "D", "text": "GSI capacity cannot be configured separately"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "In provisioned capacity mode, each GSI requires its own separate read and write capacity allocation, independent of the base table. When planning GSI capacity, consider that writes to the base table also consume GSI write capacity (for each updated item that affects the GSI). GSI capacity doesn't automatically inherit or share base table capacity. Each GSI must be provisioned independently based on expected query and write patterns.",
+                  "why_this_matters": "Understanding that GSIs require separate capacity provisioning is critical for capacity planning and cost management. A heavily queried GSI might need more read capacity than the base table, while GSIs receiving updates from every base table write need adequate write capacity. Failing to provision GSI capacity independently leads to throttling, even when the base table has adequate capacity.",
+                  "key_takeaway": "Global Secondary Indexes require separate capacity provisioning in provisioned mode—plan GSI capacity based on query patterns and base table write volume affecting the GSI.",
+                  "option_explanations": {
+                    "A": "GSIs do not inherit capacity; they require independent capacity configuration.",
+                    "B": "Each GSI needs separate read and write capacity units configured independently from the base table.",
+                    "C": "GSIs have separate capacity pools; they don't share the base table's capacity.",
+                    "D": "GSI capacity must be configured separately for each GSI in provisioned mode."
+                  },
+                  "tags": ["topic:dynamodb", "subtopic:dynamodb-indexes", "domain:1", "service:dynamodb", "gsi", "provisioned-capacity", "capacity-planning"]
+                },
+                {
+                  "id": "ddb-idx-006",
+                  "concept_id": "gsi-backfilling",
+                  "variant_index": 0,
+                  "topic": "dynamodb",
+                  "subtopic": "dynamodb-indexes",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "A developer adds a new GSI to a DynamoDB table containing 10 million items. What happens during the GSI creation process?",
+                  "options": [
+                    {"label": "A", "text": "The GSI becomes immediately available and queryable"},
+                    {"label": "B", "text": "DynamoDB backfills the GSI by scanning the base table and populating the index; queries wait until completion"},
+                    {"label": "C", "text": "The base table becomes read-only until GSI creation completes"},
+                    {"label": "D", "text": "GSI creation fails because indexes cannot be added to tables with existing data"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "When creating a GSI on a table with existing data, DynamoDB backfills the index by scanning the base table and populating the GSI. The GSI status is CREATING during this process, and queries against it will fail. The base table remains fully available for reads and writes. For large tables, backfilling can take significant time. Once complete, the GSI becomes ACTIVE and queryable. The base table is never made read-only, and GSIs can be added to tables with any amount of existing data.",
+                  "why_this_matters": "Understanding GSI backfilling behavior is essential for planning index additions to production tables. Large tables may take hours to backfill, during which the GSI is unusable. Applications must handle this gracefully, potentially using feature flags or phased rollouts. Knowing that the base table remains available prevents unnecessary downtime concerns when adding GSIs to production systems.",
+                  "key_takeaway": "Adding GSIs to existing tables triggers a backfill process that scans the base table; the GSI is unavailable until backfilling completes, but the base table remains fully operational.",
+                  "option_explanations": {
+                    "A": "GSIs require backfilling from existing base table data before becoming queryable.",
+                    "B": "DynamoDB backfills new GSIs by scanning the base table; the GSI is unavailable during CREATING status until backfill completes.",
+                    "C": "The base table remains fully available for all operations during GSI creation and backfilling.",
+                    "D": "GSIs can be added to tables with any amount of existing data; DynamoDB handles backfilling automatically."
+                  },
+                  "tags": ["topic:dynamodb", "subtopic:dynamodb-indexes", "domain:1", "service:dynamodb", "gsi", "backfilling", "index-creation"]
+                },
+                {
+                  "id": "ddb-idx-007",
+                  "concept_id": "index-overloading",
+                  "variant_index": 0,
+                  "topic": "dynamodb",
+                  "subtopic": "dynamodb-indexes",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "hard",
+                  "question_type": "single",
+                  "stem": "A DynamoDB table stores multiple entity types (Users, Orders, Products) using a single table design. The table uses a generic partition key 'PK' and sort key 'SK'. Which indexing strategy supports querying each entity type by different attributes efficiently?",
+                  "options": [
+                    {"label": "A", "text": "Create a separate GSI for each entity type"},
+                    {"label": "B", "text": "Create a single overloaded GSI with generic key names that hold different values for different entity types"},
+                    {"label": "C", "text": "Use the base table keys and filter expressions"},
+                    {"label": "D", "text": "Create separate tables for each entity type"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Index overloading is a single-table design pattern where one GSI serves multiple entity types by using generic attribute names (like GSI1PK, GSI1SK) that contain different semantic values for different entity types. For Users, GSI1PK might be 'EMAIL#user@example.com'; for Orders, 'STATUS#PENDING'. This maximizes the 20-GSI limit. Creating separate GSIs per entity wastes index quota. Filter expressions require scanning. Separate tables defeat single-table design benefits.",
+                  "why_this_matters": "Single-table design is a DynamoDB best practice for related entities, reducing costs and operational complexity. Index overloading enables this pattern to scale to many entity types and access patterns within the 20-GSI limit. Understanding this advanced pattern is essential for building sophisticated applications that leverage DynamoDB's strengths while working within its constraints.",
+                  "key_takeaway": "Use index overloading with generic GSI key attributes (GSI1PK, GSI1SK) that store different values for different entity types to support multiple access patterns within the 20-GSI limit in single-table designs.",
+                  "option_explanations": {
+                    "A": "Creating separate GSIs per entity quickly exhausts the 20-GSI limit and doesn't scale.",
+                    "B": "Overloaded GSIs with generic keys serve multiple entity types efficiently, maximizing the GSI limit.",
+                    "C": "Filter expressions require scanning, which is expensive and slow for large tables.",
+                    "D": "Separate tables increase costs and operational complexity, defeating single-table design benefits."
+                  },
+                  "tags": ["topic:dynamodb", "subtopic:dynamodb-indexes", "domain:1", "service:dynamodb", "gsi", "single-table-design", "index-overloading"]
+                },
+                {
+                  "id": "ddb-idx-008",
+                  "concept_id": "lsi-limits",
+                  "variant_index": 0,
+                  "topic": "dynamodb",
+                  "subtopic": "dynamodb-indexes",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "easy",
+                  "question_type": "single",
+                  "stem": "A developer is designing a new DynamoDB table and wants to add multiple Local Secondary Indexes. What is the maximum number of LSIs that can be created on a DynamoDB table?",
+                  "options": [
+                    {"label": "A", "text": "5 LSIs per table"},
+                    {"label": "B", "text": "10 LSIs per table"},
+                    {"label": "C", "text": "20 LSIs per table"},
+                    {"label": "D", "text": "Unlimited LSIs"}
+                  ],
+                  "correct_options": ["A"],
+                  "answer_explanation": "DynamoDB supports a maximum of 5 Local Secondary Indexes per table. This is a hard limit that cannot be increased. LSIs must be created at table creation time and cannot be added later. In contrast, you can have up to 20 Global Secondary Indexes per table. The LSI limit is lower because LSIs share partition space with the base table and can impact partition size limits.",
+                  "why_this_matters": "The 5-LSI limit is a critical constraint in table design that requires careful planning of strongly consistent secondary access patterns. Since LSIs cannot be added after table creation, you must identify all strongly consistent query patterns upfront. Understanding this limit prevents table redesigns and guides decisions between LSIs and GSIs during initial schema design.",
+                  "key_takeaway": "DynamoDB tables are limited to 5 Local Secondary Indexes that must be created at table creation time—plan strongly consistent query patterns carefully as LSIs cannot be added later.",
+                  "option_explanations": {
+                    "A": "DynamoDB supports a maximum of 5 LSIs per table, a hard limit.",
+                    "B": "10 is not the LSI limit; the actual limit is 5 LSIs per table.",
+                    "C": "20 is the GSI limit, not the LSI limit which is 5.",
+                    "D": "LSIs have a hard limit of 5 per table, not unlimited."
+                  },
+                  "tags": ["topic:dynamodb", "subtopic:dynamodb-indexes", "domain:1", "service:dynamodb", "lsi", "limits"]
+                },
+                {
+                  "id": "ddb-idx-009",
+                  "concept_id": "gsi-write-costs",
+                  "variant_index": 0,
+                  "topic": "dynamodb",
+                  "subtopic": "dynamodb-indexes",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "A DynamoDB table has 3 Global Secondary Indexes. When an item is written to the base table and the write affects all 3 GSIs, how many write operations are consumed?",
+                  "options": [
+                    {"label": "A", "text": "1 write operation (base table only)"},
+                    {"label": "B", "text": "2 write operations (base table + indexes combined)"},
+                    {"label": "C", "text": "4 write operations (1 base table + 3 GSIs)"},
+                    {"label": "D", "text": "3 write operations (indexes only)"}
+                  ],
+                  "correct_options": ["C"],
+                  "answer_explanation": "When writing to a DynamoDB table with GSIs, you consume one write for the base table plus one write for each GSI that is affected by the change. If an item write affects all 3 GSIs (because the item has the GSI partition keys defined), you consume 4 total writes: 1 for the base table + 3 for the GSIs. This multiplicative effect significantly impacts write costs and capacity planning for tables with many GSIs.",
+                  "why_this_matters": "Understanding GSI write costs is critical for capacity planning and cost optimization. Each GSI that indexes an item multiplies write costs. Tables with many GSIs can consume 5-10x more write capacity than the base table alone. This knowledge guides decisions about how many GSIs to create, projection strategies, and whether to use sparse indexes to limit which items are indexed.",
+                  "key_takeaway": "Each write to a DynamoDB item consumes write capacity for the base table plus one write per GSI affected by the change—plan capacity accounting for this multiplication factor.",
+                  "option_explanations": {
+                    "A": "GSI writes are not free; each affected GSI consumes additional write capacity.",
+                    "B": "Each GSI affected by the write consumes separate write capacity, not combined.",
+                    "C": "One write for base table plus one write per affected GSI equals 4 total writes.",
+                    "D": "The base table write is always counted in addition to GSI writes."
+                  },
+                  "tags": ["topic:dynamodb", "subtopic:dynamodb-indexes", "domain:1", "service:dynamodb", "gsi", "write-costs", "capacity-planning"]
+                },
+                {
+                  "id": "ddb-idx-010",
+                  "concept_id": "index-key-schema",
+                  "variant_index": 0,
+                  "topic": "dynamodb",
+                  "subtopic": "dynamodb-indexes",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "multi",
+                  "stem": "A developer is creating a GSI for a DynamoDB table. Which TWO statements about GSI key schema are correct? (Select TWO)",
+                  "options": [
+                    {"label": "A", "text": "The GSI partition key must be different from the base table partition key"},
+                    {"label": "B", "text": "The GSI can use any base table attribute as its partition key or sort key"},
+                    {"label": "C", "text": "The GSI must include the base table's primary key attributes in its projection"},
+                    {"label": "D", "text": "The GSI sort key is optional"}
+                  ],
+                  "correct_options": ["B", "D"],
+                  "answer_explanation": "GSIs can use any scalar attribute from the base table as their partition or sort key, providing flexibility for different access patterns. The GSI partition key can be the same as or different from the base table's partition key. GSI sort keys are optional—you can create a GSI with only a partition key. DynamoDB automatically includes the base table's primary key in GSI projections regardless of projection type, so you don't need to explicitly include them.",
+                  "why_this_matters": "Understanding GSI key schema flexibility enables effective index design for diverse access patterns. The ability to use any attribute as GSI keys and make sort keys optional provides powerful querying capabilities. Knowing that base table keys are automatically projected prevents redundant attribute specification and ensures you can always retrieve full items from GSI queries.",
+                  "key_takeaway": "GSIs can use any base table attribute as partition or sort key, sort keys are optional, and base table primary keys are automatically projected to all GSIs regardless of projection settings.",
+                  "option_explanations": {
+                    "A": "GSI partition keys can be the same as or different from the base table partition key.",
+                    "B": "Any scalar base table attribute can serve as a GSI partition or sort key, providing query flexibility.",
+                    "C": "Base table primary keys are automatically included in GSI projections; explicit inclusion is unnecessary.",
+                    "D": "GSI sort keys are optional; partition-key-only GSIs are valid and useful for many access patterns."
+                  },
+                  "tags": ["topic:dynamodb", "subtopic:dynamodb-indexes", "domain:1", "service:dynamodb", "gsi", "key-schema", "design"]
+                }
+              ]
+            },
+            {
+              "subtopic_id": "dynamodb-consistency",
+              "name": "DynamoDB consistency models and read operations",
+              "num_questions_generated": 10,
+              "questions": [
+                {
+                  "id": "ddb-cons-001",
+                  "concept_id": "eventual-vs-strong-consistency",
+                  "variant_index": 0,
+                  "topic": "dynamodb",
+                  "subtopic": "dynamodb-consistency",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "A banking application writes a transaction to DynamoDB and immediately reads it back to confirm the write. The application occasionally reads stale data. What is the MOST likely cause?",
+                  "options": [
+                    {"label": "A", "text": "The application is using eventually consistent reads instead of strongly consistent reads"},
+                    {"label": "B", "text": "DynamoDB is experiencing replication lag due to high load"},
+                    {"label": "C", "text": "The table is configured with eventual consistency mode"},
+                    {"label": "D", "text": "The application needs to wait at least 1 second between write and read"}
+                  ],
+                  "correct_options": ["A"],
+                  "answer_explanation": "Eventually consistent reads may return stale data because they don't guarantee reading the most recent write. Strongly consistent reads ensure you get the latest data. DynamoDB doesn't have table-level consistency modes—consistency is specified per read operation. While DynamoDB replicates data across availability zones, this is typically sub-second and isn't configurable. No minimum wait time is required; strongly consistent reads immediately reflect writes.",
+                  "why_this_matters": "Understanding consistency models is critical for applications requiring read-after-write consistency, such as financial systems, inventory management, and booking systems. Eventually consistent reads are cheaper (consume half the RCU) but may return stale data. Strongly consistent reads guarantee current data but cost more. Choosing the wrong consistency model can lead to data integrity issues or unnecessary costs.",
+                  "key_takeaway": "Use strongly consistent reads when you need to immediately read your own writes or require the latest data; use eventually consistent reads for cost savings when stale data is acceptable.",
+                  "option_explanations": {
+                    "A": "Eventually consistent reads can return stale data; strongly consistent reads guarantee the most recent write is reflected.",
+                    "B": "DynamoDB's replication is sub-second and not configurable; consistency choice determines read behavior.",
+                    "C": "Consistency is set per read operation, not at the table level.",
+                    "D": "Strongly consistent reads immediately reflect writes without requiring wait times."
+                  },
+                  "tags": ["topic:dynamodb", "subtopic:dynamodb-consistency", "domain:1", "service:dynamodb", "consistency", "reads"]
+                },
+                {
+                  "id": "ddb-cons-002",
+                  "concept_id": "gsi-consistency-limitation",
+                  "variant_index": 0,
+                  "topic": "dynamodb",
+                  "subtopic": "dynamodb-consistency",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "easy",
+                  "question_type": "single",
+                  "stem": "A developer needs to query a DynamoDB Global Secondary Index and requires strongly consistent reads. What will happen?",
+                  "options": [
+                    {"label": "A", "text": "The query will succeed with strongly consistent reads"},
+                    {"label": "B", "text": "The query will fail because GSIs only support eventually consistent reads"},
+                    {"label": "C", "text": "The query will automatically fall back to the base table for strongly consistent reads"},
+                    {"label": "D", "text": "The query will succeed but with higher latency"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Global Secondary Indexes only support eventually consistent reads. If you specify ConsistentRead=true when querying a GSI, DynamoDB will return an error. This is a fundamental limitation of GSIs. If strong consistency is required, you must either query the base table directly using its primary key, or use a Local Secondary Index (which does support strongly consistent reads). GSIs cannot automatically fall back to base table reads.",
+                  "why_this_matters": "Understanding that GSIs don't support strong consistency is critical for applications with consistency requirements. This limitation influences index type selection—if you need strongly consistent reads with alternate sort keys, you must use LSIs instead. For many applications, eventual consistency on GSIs is acceptable, but financial, inventory, or booking systems may require LSI or base table queries.",
+                  "key_takeaway": "Global Secondary Indexes only support eventually consistent reads—use Local Secondary Indexes or base table queries if you require strongly consistent reads.",
+                  "option_explanations": {
+                    "A": "GSIs do not support strongly consistent reads; the operation will fail.",
+                    "B": "GSIs only support eventually consistent reads; requesting strong consistency returns an error.",
+                    "C": "DynamoDB doesn't automatically fall back to base table; the query fails if strong consistency is requested on a GSI.",
+                    "D": "The query doesn't succeed with higher latency; it fails because GSIs don't support strong consistency."
+                  },
+                  "tags": ["topic:dynamodb", "subtopic:dynamodb-consistency", "domain:1", "service:dynamodb", "gsi", "consistency", "limitations"]
+                },
+                {
+                  "id": "ddb-cons-003",
+                  "concept_id": "consistency-cost",
+                  "variant_index": 0,
+                  "topic": "dynamodb",
+                  "subtopic": "dynamodb-consistency",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "An application reads 1000 items per second from DynamoDB, each item being 4 KB. If the application switches from eventually consistent reads to strongly consistent reads, how will read capacity consumption change?",
+                  "options": [
+                    {"label": "A", "text": "No change in capacity consumption"},
+                    {"label": "B", "text": "Read capacity consumption will double"},
+                    {"label": "C", "text": "Read capacity consumption will be reduced by half"},
+                    {"label": "D", "text": "Read capacity consumption will increase by 50%"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Strongly consistent reads consume twice the read capacity units of eventually consistent reads. For a 4 KB item, an eventually consistent read consumes 1 RCU while a strongly consistent read consumes 2 RCU. Therefore, switching from eventual to strong consistency doubles read costs. This is an important cost consideration—if eventual consistency is acceptable, you can serve twice the traffic with the same capacity budget.",
+                  "why_this_matters": "The 2x cost difference between consistency modes significantly impacts both provisioned capacity planning and on-demand pricing. For read-heavy applications where eventual consistency is acceptable (e.g., product catalogs, social feeds), using eventually consistent reads cuts read costs in half. Understanding this cost tradeoff helps optimize spending while meeting application requirements.",
+                  "key_takeaway": "Strongly consistent reads consume twice the read capacity of eventually consistent reads—use eventual consistency when acceptable to reduce read costs by 50%.",
+                  "option_explanations": {
+                    "A": "Consistency mode directly impacts RCU consumption; there is a cost difference.",
+                    "B": "Strongly consistent reads consume 2x the RCU of eventually consistent reads for the same data.",
+                    "C": "Strong consistency increases costs; it doesn't reduce them.",
+                    "D": "The increase is 100% (double), not 50%."
+                  },
+                  "tags": ["topic:dynamodb", "subtopic:dynamodb-consistency", "domain:1", "service:dynamodb", "consistency", "cost", "rcu"]
+                },
+                {
+                  "id": "ddb-cons-004",
+                  "concept_id": "transactional-read-consistency",
+                  "variant_index": 0,
+                  "topic": "dynamodb",
+                  "subtopic": "dynamodb-consistency",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "A developer uses DynamoDB TransactGetItems to read multiple items in a single atomic operation. What consistency model do transactional reads provide?",
+                  "options": [
+                    {"label": "A", "text": "Eventually consistent reads"},
+                    {"label": "B", "text": "Strongly consistent reads"},
+                    {"label": "C", "text": "Configurable consistency per item in the transaction"},
+                    {"label": "D", "text": "Serializable isolation"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "DynamoDB transactional reads (TransactGetItems) always use strongly consistent reads. You cannot configure them to use eventual consistency. This ensures that all items in the transaction reflect their most recent committed state. While DynamoDB transactions provide serializable isolation for the transaction as a whole, the question specifically asks about the consistency model, which is strongly consistent.",
+                  "why_this_matters": "Understanding that transactional reads are always strongly consistent is important for capacity planning and cost estimation. Transactional reads consume 2 RCUs per item (same as regular strongly consistent reads) plus potential additional costs for the transactional guarantee. You cannot save costs by using eventual consistency in transactions—if you don't need atomicity, use BatchGetItem with eventual consistency instead.",
+                  "key_takeaway": "DynamoDB transactional reads always use strongly consistent reads and cannot be configured for eventual consistency—factor this into capacity planning and cost estimates.",
+                  "option_explanations": {
+                    "A": "Transactional reads always use strong consistency, not eventual consistency.",
+                    "B": "TransactGetItems always performs strongly consistent reads across all items in the transaction.",
+                    "C": "Consistency cannot be configured per item in transactional reads; all reads are strongly consistent.",
+                    "D": "While transactions provide serializable isolation, the consistency model is specifically strongly consistent reads."
+                  },
+                  "tags": ["topic:dynamodb", "subtopic:dynamodb-consistency", "domain:1", "service:dynamodb", "transactions", "consistency"]
+                },
+                {
+                  "id": "ddb-cons-005",
+                  "concept_id": "cross-region-consistency",
+                  "variant_index": 0,
+                  "topic": "dynamodb",
+                  "subtopic": "dynamodb-consistency",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "hard",
+                  "question_type": "single",
+                  "stem": "An application uses DynamoDB Global Tables with replicas in us-east-1 and eu-west-1. A write is made to the us-east-1 replica. What consistency guarantee does a strongly consistent read from the eu-west-1 replica provide?",
+                  "options": [
+                    {"label": "A", "text": "The read will immediately reflect the write from us-east-1"},
+                    {"label": "B", "text": "The read will reflect the latest write to the eu-west-1 replica, but not necessarily the us-east-1 write"},
+                    {"label": "C", "text": "Global Tables do not support strongly consistent reads"},
+                    {"label": "D", "text": "The read will wait until the us-east-1 write replicates to eu-west-1"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Strongly consistent reads guarantee consistency within a single region only—they reflect the most recent write to that specific replica. Cross-region replication in Global Tables is asynchronous, typically completing in under a second. A strongly consistent read from eu-west-1 returns the latest data written to eu-west-1, not necessarily reflecting concurrent writes to us-east-1. Global Tables do support strongly consistent reads, but the consistency guarantee is region-scoped, not global.",
+                  "why_this_matters": "Understanding the regional scope of strong consistency is critical for globally distributed applications. Global Tables provide high availability and low latency through multi-region replication, but don't provide global strong consistency. Applications requiring global consistency across regions need application-level coordination or different architecture patterns. This knowledge prevents incorrect assumptions about data consistency in multi-region deployments.",
+                  "key_takeaway": "Strong consistency in DynamoDB Global Tables is region-scoped—reads are strongly consistent within a region but cannot guarantee immediate visibility of writes from other regions due to asynchronous replication.",
+                  "option_explanations": {
+                    "A": "Cross-region replication is asynchronous; strongly consistent reads don't wait for or guarantee visibility of other regions' writes.",
+                    "B": "Strongly consistent reads are region-scoped, reflecting the latest write to that replica, not necessarily cross-region writes.",
+                    "C": "Global Tables support strongly consistent reads, but the consistency is region-scoped.",
+                    "D": "Strongly consistent reads don't wait for cross-region replication; they return the latest regional data immediately."
+                  },
+                  "tags": ["topic:dynamodb", "subtopic:dynamodb-consistency", "domain:1", "service:dynamodb", "global-tables", "consistency", "multi-region"]
+                },
+                {
+                  "id": "ddb-cons-006",
+                  "concept_id": "read-consistency-sdk",
+                  "variant_index": 0,
+                  "topic": "dynamodb",
+                  "subtopic": "dynamodb-consistency",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "easy",
+                  "question_type": "single",
+                  "stem": "A developer is using the AWS SDK to query a DynamoDB table. What is the default read consistency mode if ConsistentRead is not specified in the query?",
+                  "options": [
+                    {"label": "A", "text": "Strongly consistent reads"},
+                    {"label": "B", "text": "Eventually consistent reads"},
+                    {"label": "C", "text": "The table's configured default consistency mode"},
+                    {"label": "D", "text": "Transactional reads"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "DynamoDB uses eventually consistent reads by default when the ConsistentRead parameter is not specified or is set to false. To use strongly consistent reads, you must explicitly set ConsistentRead=true in your query or get item request. There is no table-level consistency configuration—consistency is chosen per read operation. Transactional reads require using the TransactGetItems API, not regular Query or GetItem operations.",
+                  "why_this_matters": "Knowing the default consistency behavior prevents unintended stale reads in applications requiring strong consistency. Many developers assume SDK reads are strongly consistent by default, leading to subtle bugs where applications occasionally see stale data. Always explicitly setting ConsistentRead based on application requirements ensures predictable behavior and prevents consistency-related issues.",
+                  "key_takeaway": "DynamoDB reads are eventually consistent by default—explicitly set ConsistentRead=true when you need strongly consistent reads to avoid unintended stale data.",
+                  "option_explanations": {
+                    "A": "Strongly consistent reads require explicit ConsistentRead=true parameter; they're not the default.",
+                    "B": "Eventually consistent reads are the default when ConsistentRead is not specified or is false.",
+                    "C": "Consistency is set per read operation, not configured at the table level.",
+                    "D": "Transactional reads require using TransactGetItems API, not default query behavior."
+                  },
+                  "tags": ["topic:dynamodb", "subtopic:dynamodb-consistency", "domain:1", "service:dynamodb", "consistency", "sdk", "defaults"]
+                },
+                {
+                  "id": "ddb-cons-007",
+                  "concept_id": "batch-read-consistency",
+                  "variant_index": 0,
+                  "topic": "dynamodb",
+                  "subtopic": "dynamodb-consistency",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "A developer uses BatchGetItem to retrieve 25 items from a DynamoDB table. Half the items should use eventually consistent reads and half should use strongly consistent reads. How should this be implemented?",
+                  "options": [
+                    {"label": "A", "text": "Set ConsistentRead parameter differently for each item in the batch"},
+                    {"label": "B", "text": "Make two separate BatchGetItem calls, one with ConsistentRead=false and one with ConsistentRead=true"},
+                    {"label": "C", "text": "Use TransactGetItems with mixed consistency settings"},
+                    {"label": "D", "text": "BatchGetItem doesn't support strongly consistent reads"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "BatchGetItem applies a single consistency setting to all items in the batch request. You cannot mix consistency models within a single BatchGetItem call. To read some items with eventual consistency and others with strong consistency, you must make two separate BatchGetItem calls with different ConsistentRead settings. TransactGetItems always uses strong consistency and cannot be configured for mixed consistency. BatchGetItem does support strongly consistent reads when ConsistentRead=true is specified.",
+                  "why_this_matters": "Understanding BatchGetItem consistency limitations is important for optimizing batch read operations. If you need different consistency models for different items, you must split them into separate batch calls. This impacts both application code structure and performance characteristics. Many developers incorrectly assume per-item consistency configuration is possible, leading to incorrect implementations.",
+                  "key_takeaway": "BatchGetItem applies one consistency setting to all items in the batch—use separate batch calls when you need different consistency models for different items.",
+                  "option_explanations": {
+                    "A": "BatchGetItem doesn't support per-item consistency configuration; one setting applies to the entire batch.",
+                    "B": "Separate BatchGetItem calls with different ConsistentRead settings are required for mixed consistency needs.",
+                    "C": "TransactGetItems always uses strong consistency and doesn't support mixed or eventual consistency.",
+                    "D": "BatchGetItem supports strongly consistent reads when ConsistentRead=true is specified for the batch."
+                  },
+                  "tags": ["topic:dynamodb", "subtopic:dynamodb-consistency", "domain:1", "service:dynamodb", "consistency", "batch-operations"]
+                },
+                {
+                  "id": "ddb-cons-008",
+                  "concept_id": "scan-consistency",
+                  "variant_index": 0,
+                  "topic": "dynamodb",
+                  "subtopic": "dynamodb-consistency",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "easy",
+                  "question_type": "single",
+                  "stem": "A developer runs a Scan operation on a DynamoDB table with ConsistentRead=true. What behavior should they expect?",
+                  "options": [
+                    {"label": "A", "text": "The scan will return all items as of the moment the scan started"},
+                    {"label": "B", "text": "The scan will return strongly consistent data for each item as it's read"},
+                    {"label": "C", "text": "Scan operations do not support strongly consistent reads"},
+                    {"label": "D", "text": "The scan will use transactional isolation"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Scan operations support strongly consistent reads via the ConsistentRead parameter. When set to true, each item is read with strong consistency as the scan progresses. However, scans are not atomic snapshots—items modified during the scan may or may not be included depending on when they're accessed. Strong consistency means each individual item reflects recent writes, but doesn't create a point-in-time snapshot of the entire table. Scans don't use transactional isolation.",
+                  "why_this_matters": "Understanding scan consistency behavior is important for applications that scan tables for reporting or analytics. While strongly consistent scans ensure each item reflects recent writes, they don't provide snapshot isolation. Items modified during long-running scans may be seen in their old or new state depending on timing. This knowledge helps developers set correct expectations for scan results and choose appropriate tools for consistent snapshots.",
+                  "key_takeaway": "Scan operations support strongly consistent reads on a per-item basis but don't provide atomic snapshots—items can be modified during the scan with unpredictable results.",
+                  "option_explanations": {
+                    "A": "Scans don't create point-in-time snapshots; items can change during the scan.",
+                    "B": "ConsistentRead=true makes each item strongly consistent as it's read, though not as an atomic snapshot.",
+                    "C": "Scan operations support strongly consistent reads via the ConsistentRead parameter.",
+                    "D": "Scans don't provide transactional isolation or snapshot consistency, even with ConsistentRead=true."
+                  },
+                  "tags": ["topic:dynamodb", "subtopic:dynamodb-consistency", "domain:1", "service:dynamodb", "scan", "consistency"]
+                },
+                {
+                  "id": "ddb-cons-009",
+                  "concept_id": "conditional-write-consistency",
+                  "variant_index": 0,
+                  "topic": "dynamodb",
+                  "subtopic": "dynamodb-consistency",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "A developer uses a conditional write (PutItem with ConditionExpression) to update an item only if a specific attribute value matches the expected value. What consistency guarantee does the condition check provide?",
+                  "options": [
+                    {"label": "A", "text": "The condition is checked against eventually consistent data"},
+                    {"label": "B", "text": "The condition is checked against strongly consistent data"},
+                    {"label": "C", "text": "The consistency depends on the ConsistentRead parameter"},
+                    {"label": "D", "text": "Conditional writes don't guarantee any specific consistency"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Conditional writes always evaluate conditions against strongly consistent data. This ensures the condition check sees the most recent committed value, preventing race conditions. There is no ConsistentRead parameter for writes—DynamoDB always uses strong consistency for condition evaluation to maintain data integrity. This behavior is automatic and cannot be configured otherwise.",
+                  "why_this_matters": "Understanding that conditional writes use strong consistency is essential for implementing optimistic locking and preventing race conditions. The strong consistency guarantee ensures that condition checks accurately reflect the current item state, enabling safe concurrent updates. This is fundamental to building correct distributed systems with DynamoDB where multiple clients might update the same items.",
+                  "key_takeaway": "Conditional writes always evaluate conditions against strongly consistent data, ensuring accurate condition checks and preventing race conditions in concurrent update scenarios.",
+                  "option_explanations": {
+                    "A": "Conditional writes always use strong consistency for condition evaluation, not eventual consistency.",
+                    "B": "Conditions are evaluated against strongly consistent data to ensure accurate checks and prevent race conditions.",
+                    "C": "There is no ConsistentRead parameter for writes; strong consistency is always used for condition evaluation.",
+                    "D": "Conditional writes guarantee strong consistency for condition checks to maintain data integrity."
+                  },
+                  "tags": ["topic:dynamodb", "subtopic:dynamodb-consistency", "domain:1", "service:dynamodb", "conditional-writes", "consistency"]
+                },
+                {
+                  "id": "ddb-cons-010",
+                  "concept_id": "consistency-best-practices",
+                  "variant_index": 0,
+                  "topic": "dynamodb",
+                  "subtopic": "dynamodb-consistency",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "hard",
+                  "question_type": "multi",
+                  "stem": "A high-traffic e-commerce application uses DynamoDB to store product inventory. Which TWO scenarios should use strongly consistent reads? (Select TWO)",
+                  "options": [
+                    {"label": "A", "text": "Displaying product details on product listing pages"},
+                    {"label": "B", "text": "Checking inventory availability during checkout before payment processing"},
+                    {"label": "C", "text": "Reading user's order history for display on account page"},
+                    {"label": "D", "text": "Verifying inventory levels immediately after updating stock quantities"}
+                  ],
+                  "correct_options": ["B", "D"],
+                  "answer_explanation": "Checking inventory during checkout requires strongly consistent reads to ensure accurate availability before processing payment—stale data could lead to overselling. Verifying inventory after updates also requires strong consistency to confirm the write succeeded. Product listing pages can use eventual consistency since slightly stale product details don't cause critical issues. Order history display tolerates eventual consistency as historical data doesn't require immediate accuracy.",
+                  "why_this_matters": "Choosing appropriate consistency levels balances cost and correctness. Over-using strong consistency wastes money on double RCU costs for reads where stale data is acceptable. Under-using it causes data integrity issues in critical paths like payment processing or inventory management. Understanding which operations truly require strong consistency is essential for building cost-effective, correct applications.",
+                  "key_takeaway": "Use strongly consistent reads for critical operations requiring accuracy (checkout, post-write verification); use eventually consistent reads for display and non-critical operations to reduce costs.",
+                  "option_explanations": {
+                    "A": "Product listing pages tolerate slightly stale data; eventual consistency reduces costs without impacting user experience.",
+                    "B": "Checkout requires accurate inventory to prevent overselling; strongly consistent reads ensure correct availability data.",
+                    "C": "Historical order data doesn't require immediate consistency; eventual consistency is acceptable for display.",
+                    "D": "Post-write verification requires strong consistency to confirm the update succeeded and see current state."
+                  },
+                  "tags": ["topic:dynamodb", "subtopic:dynamodb-consistency", "domain:1", "service:dynamodb", "consistency", "best-practices", "use-cases"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "topic_id": "api-gateway",
+          "name": "Amazon API Gateway",
+          "subtopics": [
+            {
+              "subtopic_id": "api-gateway-integration",
+              "name": "API Gateway integration types and request/response transformation",
+              "num_questions_generated": 10,
+              "questions": [
+                {
+                  "id": "apigw-int-001",
+                  "concept_id": "integration-types",
+                  "variant_index": 0,
+                  "topic": "api-gateway",
+                  "subtopic": "api-gateway-integration",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "A developer is creating an API Gateway REST API that proxies requests directly to a Lambda function without any request/response transformation. Which integration type should the developer use?",
+                  "options": [
+                    {"label": "A", "text": "AWS integration"},
+                    {"label": "B", "text": "AWS_PROXY integration"},
+                    {"label": "C", "text": "HTTP integration"},
+                    {"label": "D", "text": "MOCK integration"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "AWS_PROXY (also called Lambda proxy integration) passes the entire request to Lambda as a structured event and expects a specifically formatted response. This eliminates the need for integration request/response mapping templates. AWS integration requires explicit mapping templates for request/response transformation. HTTP integration is for HTTP endpoints, not Lambda. MOCK integration returns responses without calling a backend.",
+                  "why_this_matters": "Understanding integration types is fundamental to API Gateway development. Lambda proxy integration is the simplest and most common pattern, reducing configuration complexity by delegating request/response handling to Lambda code. This simplifies development and reduces API Gateway configuration errors, making it the recommended approach for most Lambda-backed APIs.",
+                  "key_takeaway": "Use AWS_PROXY (Lambda proxy) integration for Lambda functions to simplify configuration by handling request/response transformation in Lambda code rather than API Gateway mapping templates.",
+                  "option_explanations": {
+                    "A": "AWS integration requires explicit mapping templates for request/response transformation, not direct proxying.",
+                    "B": "AWS_PROXY integration directly passes requests to Lambda and expects Lambda to format responses, eliminating mapping templates.",
+                    "C": "HTTP integration is for HTTP endpoints, not Lambda functions.",
+                    "D": "MOCK integration returns static responses without invoking any backend service."
+                  },
+                  "tags": ["topic:api-gateway", "subtopic:api-gateway-integration", "domain:1", "service:api-gateway", "service:lambda", "integration-types"]
+                },
+                {
+                  "id": "apigw-int-002",
+                  "concept_id": "mapping-templates",
+                  "variant_index": 0,
+                  "topic": "api-gateway",
+                  "subtopic": "api-gateway-integration",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "hard",
+                  "question_type": "single",
+                  "stem": "An API Gateway REST API receives JSON requests but needs to transform them into XML format before passing to a SOAP-based backend service. What feature should the developer use?",
+                  "options": [
+                    {"label": "A", "text": "Request validators"},
+                    {"label": "B", "text": "Integration request mapping templates using VTL (Velocity Template Language)"},
+                    {"label": "C", "text": "Lambda authorizers to transform the request"},
+                    {"label": "D", "text": "Method response headers"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Integration request mapping templates using Velocity Template Language (VTL) transform incoming requests before they reach the backend integration. This is the proper way to convert JSON to XML or perform other request transformations. Request validators check request format but don't transform it. Lambda authorizers handle authentication/authorization, not request transformation. Method response headers configure response metadata, not request transformation.",
+                  "why_this_matters": "Request transformation is common when integrating modern REST APIs with legacy SOAP or other protocols. Mapping templates in API Gateway enable protocol translation without requiring additional Lambda functions or proxy servers, reducing latency and costs. Understanding VTL mapping templates is essential for building APIs that bridge different systems and protocols.",
+                  "key_takeaway": "Use integration request mapping templates with Velocity Template Language to transform requests (e.g., JSON to XML) before they reach backend integrations.",
+                  "option_explanations": {
+                    "A": "Request validators validate request format but don't transform request content or structure.",
+                    "B": "Integration request mapping templates with VTL transform request format and structure before backend invocation.",
+                    "C": "Lambda authorizers perform authentication/authorization, not request content transformation.",
+                    "D": "Method response headers configure response metadata, not request transformation."
+                  },
+                  "tags": ["topic:api-gateway", "subtopic:api-gateway-integration", "domain:1", "service:api-gateway", "mapping-templates", "vtl", "transformation"]
+                },
+                {
+                  "id": "apigw-int-003",
+                  "concept_id": "http-integration",
+                  "variant_index": 0,
+                  "topic": "api-gateway",
+                  "subtopic": "api-gateway-integration",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "An API Gateway REST API needs to call a public HTTP API endpoint and transform both the request and response. Which integration type provides the MOST control over request/response transformation?",
+                  "options": [
+                    {"label": "A", "text": "HTTP integration"},
+                    {"label": "B", "text": "HTTP_PROXY integration"},
+                    {"label": "C", "text": "AWS integration"},
+                    {"label": "D", "text": "VPC_LINK integration"}
+                  ],
+                  "correct_options": ["A"],
+                  "answer_explanation": "HTTP integration allows full control over request and response transformation using mapping templates. HTTP_PROXY passes requests through without transformation capability. AWS integration is for AWS services, not HTTP endpoints. VPC_LINK is for accessing HTTP APIs in VPCs, but when using proxy mode, it doesn't allow transformations. Standard HTTP integration with mapping templates provides maximum transformation control.",
+                  "why_this_matters": "Choosing between HTTP and HTTP_PROXY integration types affects your ability to transform requests and responses. When integrating with external APIs that require different data formats, authentication headers, or response structure changes, HTTP integration with mapping templates is essential. HTTP_PROXY is simpler but inflexible for transformation needs.",
+                  "key_takeaway": "Use HTTP integration (not HTTP_PROXY) when you need to transform requests or responses for external HTTP endpoints; proxy mode eliminates transformation capabilities.",
+                  "option_explanations": {
+                    "A": "HTTP integration enables request/response transformation via mapping templates while calling HTTP endpoints.",
+                    "B": "HTTP_PROXY passes requests through to HTTP backends without allowing transformation via mapping templates.",
+                    "C": "AWS integration is for calling AWS services, not public HTTP endpoints.",
+                    "D": "VPC_LINK is for private HTTP endpoints in VPCs; proxy mode doesn't support transformations."
+                  },
+                  "tags": ["topic:api-gateway", "subtopic:api-gateway-integration", "domain:1", "service:api-gateway", "http-integration", "transformation"]
+                },
+                {
+                  "id": "apigw-int-004",
+                  "concept_id": "mock-integration",
+                  "variant_index": 0,
+                  "topic": "api-gateway",
+                  "subtopic": "api-gateway-integration",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "easy",
+                  "question_type": "single",
+                  "stem": "A development team wants to test API Gateway configuration before implementing backend Lambda functions. What integration type allows returning static responses for testing?",
+                  "options": [
+                    {"label": "A", "text": "AWS integration"},
+                    {"label": "B", "text": "HTTP integration"},
+                    {"label": "C", "text": "MOCK integration"},
+                    {"label": "D", "text": "Lambda proxy integration"}
+                  ],
+                  "correct_options": ["C"],
+                  "answer_explanation": "MOCK integration returns responses directly from API Gateway without invoking any backend service. This is ideal for testing API structure, request validation, and response mapping before implementing backend logic. You configure the mock response using integration response mapping templates. AWS, HTTP, and Lambda integrations all require actual backend services to be available.",
+                  "why_this_matters": "MOCK integration enables API-first development where API contracts are defined and tested before backend implementation begins. This allows frontend and backend teams to work in parallel using agreed-upon API specifications. Mock endpoints also serve as examples in API documentation and enable testing of API Gateway features like request validation and response transformation without backend dependencies.",
+                  "key_takeaway": "Use MOCK integration to return static responses for testing API Gateway configuration and enabling API-first development without requiring backend implementations.",
+                  "option_explanations": {
+                    "A": "AWS integration requires an actual AWS service backend to invoke.",
+                    "B": "HTTP integration requires an actual HTTP endpoint to call.",
+                    "C": "MOCK integration returns configured static responses without invoking any backend, ideal for testing.",
+                    "D": "Lambda proxy integration requires an actual Lambda function to be implemented and deployed."
+                  },
+                  "tags": ["topic:api-gateway", "subtopic:api-gateway-integration", "domain:1", "domain:3", "service:api-gateway", "mock-integration", "testing"]
+                },
+                {
+                  "id": "apigw-int-005",
+                  "concept_id": "integration-timeout",
+                  "variant_index": 0,
+                  "topic": "api-gateway",
+                  "subtopic": "api-gateway-integration",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "An API Gateway REST API integrates with a Lambda function that occasionally takes 45 seconds to process requests. Clients are receiving 504 Gateway Timeout errors. What is the MOST likely cause?",
+                  "options": [
+                    {"label": "A", "text": "Lambda function timeout is set to 3 seconds"},
+                    {"label": "B", "text": "API Gateway has a maximum integration timeout of 29 seconds"},
+                    {"label": "C", "text": "The Lambda function is being throttled"},
+                    {"label": "D", "text": "API Gateway request body size limit is exceeded"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "API Gateway REST APIs have a hard limit of 29 seconds for integration timeout. Any backend integration taking longer than 29 seconds will result in a 504 Gateway Timeout error. This limit cannot be increased. For operations requiring more than 29 seconds, consider using asynchronous patterns with Step Functions, SQS, or returning a job ID for status polling. Lambda timeout would cause different errors. Throttling causes 429 errors. Body size limits cause 413 errors.",
+                  "why_this_matters": "The 29-second timeout limit is a critical API Gateway constraint that affects architectural decisions. Long-running operations cannot be implemented synchronously through API Gateway. Understanding this limit prevents building systems that will fail in production and guides developers toward appropriate asynchronous patterns for time-consuming operations like file processing, report generation, or batch jobs.",
+                  "key_takeaway": "API Gateway REST APIs have a maximum 29-second integration timeout—use asynchronous patterns for operations requiring longer processing times.",
+                  "option_explanations": {
+                    "A": "Lambda timeout would cause the Lambda to error, but API Gateway's 29-second limit is reached first.",
+                    "B": "API Gateway REST APIs have a hard 29-second integration timeout limit that cannot be increased.",
+                    "C": "Lambda throttling produces 429 errors, not 504 Gateway Timeout errors.",
+                    "D": "Body size limit violations produce 413 Payload Too Large errors, not 504 timeout errors."
+                  },
+                  "tags": ["topic:api-gateway", "subtopic:api-gateway-integration", "domain:1", "domain:4", "service:api-gateway", "timeout", "limits"]
+                },
+                {
+                  "id": "apigw-int-006",
+                  "concept_id": "content-type-mapping",
+                  "variant_index": 0,
+                  "topic": "api-gateway",
+                  "subtopic": "api-gateway-integration",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "hard",
+                  "question_type": "single",
+                  "stem": "An API Gateway REST API needs to apply different mapping templates based on the Content-Type header of incoming requests. How can this be implemented?",
+                  "options": [
+                    {"label": "A", "text": "Create multiple methods for each Content-Type"},
+                    {"label": "B", "text": "Configure content-type specific mapping templates in the integration request"},
+                    {"label": "C", "text": "Use a Lambda function to detect Content-Type and route accordingly"},
+                    {"label": "D", "text": "Content-Type cannot be used to select different mapping templates"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "API Gateway allows configuring multiple mapping templates in the integration request, each associated with a specific content-type (like application/json, application/xml, etc.). API Gateway automatically selects the appropriate template based on the request's Content-Type header. This enables handling different request formats with a single API method. Creating multiple methods is unnecessary overhead. Lambda-based routing adds latency and complexity. Content-type-based template selection is a native API Gateway feature.",
+                  "why_this_matters": "Supporting multiple content types is common in APIs that serve diverse clients or integrate with legacy systems. API Gateway's content-type-based template selection enables elegant handling of JSON, XML, and other formats without code duplication or complex routing logic. This feature is essential for building flexible APIs that accommodate different client capabilities and protocols.",
+                  "key_takeaway": "Configure content-type-specific mapping templates in API Gateway integration requests to automatically handle different request formats based on the Content-Type header.",
+                  "option_explanations": {
+                    "A": "Multiple methods are unnecessary; content-type-specific mapping templates handle this within a single method.",
+                    "B": "Integration request supports multiple mapping templates keyed by content-type, automatically selecting the right one.",
+                    "C": "Lambda routing adds unnecessary complexity when API Gateway natively supports content-type-based template selection.",
+                    "D": "Content-Type-based mapping template selection is a native API Gateway feature for handling multiple formats."
+                  },
+                  "tags": ["topic:api-gateway", "subtopic:api-gateway-integration", "domain:1", "service:api-gateway", "content-type", "mapping-templates"]
+                },
+                {
+                  "id": "apigw-int-007",
+                  "concept_id": "passthrough-behavior",
+                  "variant_index": 0,
+                  "topic": "api-gateway",
+                  "subtopic": "api-gateway-integration",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "An API Gateway REST API receives a request with Content-Type: text/plain but only has mapping templates configured for application/json. The passthrough behavior is set to WHEN_NO_MATCH. What will happen?",
+                  "options": [
+                    {"label": "A", "text": "API Gateway will reject the request with a 415 Unsupported Media Type error"},
+                    {"label": "B", "text": "API Gateway will pass the request through to the backend without transformation"},
+                    {"label": "C", "text": "API Gateway will apply the application/json template anyway"},
+                    {"label": "D", "text": "API Gateway will return a 400 Bad Request error"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "When passthrough behavior is set to WHEN_NO_MATCH and no matching content-type template exists, API Gateway passes the request through to the backend without applying any mapping template transformation. WHEN_NO_TEMPLATES would reject with 415. NEVER would reject with 415 when no match is found. The request passes through as-is, allowing the backend to handle it. API Gateway doesn't apply mismatched templates or return 400 errors for content-type mismatches.",
+                  "why_this_matters": "Understanding passthrough behavior is important for building flexible APIs that handle unexpected content types gracefully. WHEN_NO_MATCH allows backends to handle content types not explicitly configured in API Gateway, providing flexibility. WHEN_NO_TEMPLATES or NEVER enforce strict content-type checking. Choosing the right passthrough behavior affects API flexibility and error handling.",
+                  "key_takeaway": "Passthrough behavior WHEN_NO_MATCH allows requests with unconfigured content types to pass through untransformed; use NEVER to strictly enforce configured content types.",
+                  "option_explanations": {
+                    "A": "WHEN_NO_MATCH doesn't reject requests; it passes them through without transformation when no matching template exists.",
+                    "B": "WHEN_NO_MATCH passthrough behavior sends requests without matching templates directly to the backend untransformed.",
+                    "C": "API Gateway doesn't apply mismatched templates; behavior depends on passthrough configuration.",
+                    "D": "Content-type mismatches with WHEN_NO_MATCH result in passthrough, not 400 errors."
+                  },
+                  "tags": ["topic:api-gateway", "subtopic:api-gateway-integration", "domain:1", "service:api-gateway", "passthrough-behavior", "content-type"]
+                },
+                {
+                  "id": "apigw-int-008",
+                  "concept_id": "response-mapping",
+                  "variant_index": 0,
+                  "topic": "api-gateway",
+                  "subtopic": "api-gateway-integration",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "hard",
+                  "question_type": "single",
+                  "stem": "An API Gateway REST API uses AWS integration to call DynamoDB. The DynamoDB response needs to be transformed to match the API's response schema. Where should the developer configure this transformation?",
+                  "options": [
+                    {"label": "A", "text": "Integration request mapping template"},
+                    {"label": "B", "text": "Integration response mapping template"},
+                    {"label": "C", "text": "Method request"},
+                    {"label": "D", "text": "Method response"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Integration response mapping templates transform the backend's response before it's returned to the client. Integration request templates transform the incoming request before sending to the backend. Method request defines request parameters and validation. Method response defines the response structure that clients see. To transform DynamoDB's response format, use integration response mapping templates.",
+                  "why_this_matters": "Understanding the distinction between integration and method request/response is fundamental to API Gateway configuration. Integration components handle backend communication and transformation, while method components define the API contract with clients. Response transformation in integration response enables clean API contracts that abstract backend implementation details from clients.",
+                  "key_takeaway": "Use integration response mapping templates to transform backend responses before returning to clients; integration request templates transform client requests before backend invocation.",
+                  "option_explanations": {
+                    "A": "Integration request templates transform client requests before backend calls, not backend responses.",
+                    "B": "Integration response templates transform backend responses before returning to clients, the correct location for this transformation.",
+                    "C": "Method request defines request parameters and validation, not response transformation.",
+                    "D": "Method response defines the client-facing response schema but doesn't perform transformation from backend format."
+                  },
+                  "tags": ["topic:api-gateway", "subtopic:api-gateway-integration", "domain:1", "service:api-gateway", "service:dynamodb", "response-mapping", "transformation"]
+                },
+                {
+                  "id": "apigw-int-009",
+                  "concept_id": "vpc-link-integration",
+                  "variant_index": 0,
+                  "topic": "api-gateway",
+                  "subtopic": "api-gateway-integration",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "An API Gateway REST API needs to integrate with a private Application Load Balancer in a VPC. What must be configured to enable this integration?",
+                  "options": [
+                    {"label": "A", "text": "VPC endpoint for API Gateway"},
+                    {"label": "B", "text": "VPC Link to connect API Gateway to the VPC resource"},
+                    {"label": "C", "text": "Direct VPC integration in API Gateway settings"},
+                    {"label": "D", "text": "Make the ALB publicly accessible"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "VPC Link enables API Gateway REST APIs to access private HTTP resources like ALBs, NLBs, or EC2 instances in VPCs. The VPC Link uses a Network Load Balancer to bridge API Gateway (which runs outside your VPC) to private VPC resources. VPC endpoints are for services in your VPC to reach API Gateway, not the reverse. API Gateway doesn't have direct VPC integration. Making the ALB public defeats the purpose of VPC privacy.",
+                  "why_this_matters": "VPC Link is essential for building APIs that front private backend services without exposing them to the internet. This pattern is common for microservices architectures where API Gateway provides a public interface while backend services remain private and secure. Understanding VPC Link enables proper architectural separation between public APIs and private implementation layers.",
+                  "key_takeaway": "Use VPC Link to connect API Gateway REST APIs to private HTTP resources in VPCs (ALB, NLB, EC2) without exposing backend services to the internet.",
+                  "option_explanations": {
+                    "A": "VPC endpoints allow VPC resources to reach API Gateway, not the reverse direction needed here.",
+                    "B": "VPC Link enables API Gateway to securely access private HTTP resources in VPCs.",
+                    "C": "API Gateway doesn't have direct VPC integration; VPC Link is required for private resource access.",
+                    "D": "Making the ALB public exposes backend services unnecessarily and defeats VPC security."
+                  },
+                  "tags": ["topic:api-gateway", "subtopic:api-gateway-integration", "domain:1", "service:api-gateway", "service:vpc", "vpc-link", "private-integration"]
+                },
+                {
+                  "id": "apigw-int-010",
+                  "concept_id": "parameter-mapping",
+                  "variant_index": 0,
+                  "topic": "api-gateway",
+                  "subtopic": "api-gateway-integration",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "multi",
+                  "stem": "An API Gateway method receives a request with query parameter 'userId'. The backend Lambda function expects this value in a JSON body field called 'user_id'. Which TWO configurations are needed? (Select TWO)",
+                  "options": [
+                    {"label": "A", "text": "Define userId as a query string parameter in method request"},
+                    {"label": "B", "text": "Create an integration request mapping template that maps query parameter to JSON body"},
+                    {"label": "C", "text": "Configure a request validator"},
+                    {"label": "D", "text": "Use Lambda proxy integration"}
+                  ],
+                  "correct_options": ["A", "B"],
+                  "answer_explanation": "First, define the query parameter in method request to make it available to API Gateway. Then, create an integration request mapping template that extracts the query parameter value and places it in the JSON body with the desired field name. Request validators check parameter presence/format but don't transform data. Lambda proxy integration would receive the query parameter as-is in the event object without transformation, requiring Lambda code to handle the mapping.",
+                  "why_this_matters": "Parameter mapping is fundamental to bridging differences between API contracts and backend implementations. Integration mapping templates enable transforming parameter locations (query to body, header to body, etc.) and names without changing backend code. This decoupling allows evolving APIs independently of backend implementations and integrating with services that have different parameter conventions.",
+                  "key_takeaway": "Use method request parameter definitions combined with integration request mapping templates to transform parameter locations and names between client requests and backend expectations.",
+                  "option_explanations": {
+                    "A": "Method request parameter definition makes the query parameter available for mapping.",
+                    "B": "Integration request mapping template transforms the query parameter into the JSON body field.",
+                    "C": "Request validators check data but don't transform parameter locations or names.",
+                    "D": "Lambda proxy sends query parameters as-is in the event; transformation would be needed in Lambda code, not API Gateway."
+                  },
+                  "tags": ["topic:api-gateway", "subtopic:api-gateway-integration", "domain:1", "service:api-gateway", "parameter-mapping", "transformation"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
