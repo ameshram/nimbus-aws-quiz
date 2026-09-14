@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { Op } from 'sequelize';
 import { QuizAttempt, QuestionResponse, UserProgress, User } from '../db/models/index.js';
 import { sequelize } from '../db/config.js';
+import { computeSm2 } from '../utils/sm2.js';
 
 const router = Router();
 
@@ -297,24 +298,14 @@ async function updateUserProgress(userId, examId, subtopicId, isCorrect) {
       const newCorrect = progress.correctAttempts + (isCorrect ? 1 : 0);
       const newMastery = (newCorrect / newTotal) * 100;
 
-      // SM-2 spaced repetition algorithm
-      let { easeFactor, interval, repetitions } = progress;
-
-      if (isCorrect) {
-        repetitions += 1;
-        if (repetitions === 1) {
-          interval = 1;
-        } else if (repetitions === 2) {
-          interval = 6;
-        } else {
-          interval = Math.round(interval * easeFactor);
-        }
-        easeFactor = Math.max(1.3, easeFactor + 0.1);
-      } else {
-        repetitions = 0;
-        interval = 1;
-        easeFactor = Math.max(1.3, easeFactor - 0.2);
-      }
+      // SM-2 spaced repetition. Coercion of the (string) DECIMAL easeFactor
+      // lives in computeSm2 — see server/utils/sm2.js.
+      const { easeFactor, interval, repetitions } = computeSm2({
+        easeFactor: progress.easeFactor,
+        interval: progress.interval,
+        repetitions: progress.repetitions,
+        isCorrect
+      });
 
       const nextReviewAt = new Date();
       nextReviewAt.setDate(nextReviewAt.getDate() + interval);

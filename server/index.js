@@ -13,7 +13,6 @@ import {
   writeQuestionBank,
   getAllSubtopics,
   getSubtopicsWithUnvalidatedQuestions,
-  findSubtopic,
   getTopicsForApi,
   getValidationStats,
   processGeneratedQuestions

@@ -16,8 +16,10 @@ not the quiz UI. See ["How the content pipeline works"](#how-the-content-pipelin
 
 **Study experience**
 - Multiple-choice quiz for AWS DVA-C02 with domain / topic / subtopic /
-  difficulty filters, shuffled per session, and per-answer explanations that
-  cite AWS documentation (as authored by the generation prompts).
+  difficulty filters, shuffled per session, and per-answer explanations with a
+  suggested AWS-documentation pointer for further reading. Those pointers are
+  AI-authored and unverified — the bank ships a `provenance` block that says so
+  (see the honest caveat below).
 - Flashcard mode with 3D flip, category filters, keyboard shortcuts, and
   progress tracking.
 - Progress persistence via PostgreSQL + Sequelize.

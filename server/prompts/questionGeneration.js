@@ -171,10 +171,13 @@ Return ONLY a valid JSON array:
       "D": "Elastic Beanstalk simplifies deployment but still runs on EC2 instances requiring some management. Aurora is not serverless by default (Aurora Serverless v2 would be needed)."
     },
     "aws_doc_reference": "AWS Well-Architected Framework - Serverless Applications Lens; Lambda Developer Guide - Best Practices",
-    "tags": ["topic:${topicId}", "subtopic:${subtopicId}", "domain:${domainId.split('-')[1]}"],
-    "verified_against_docs": true
+    "tags": ["topic:${topicId}", "subtopic:${subtopicId}", "domain:${domainId.split('-')[1]}"]
   }
 ]
+
+Note: "aws_doc_reference" is your best suggestion for where a reader could
+confirm the answer; it is a pointer for further reading, not a claim that the
+question has been verified against that document.
 
 ## Final Instructions
 
