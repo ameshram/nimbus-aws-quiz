@@ -1,0 +1,33 @@
+{
+  "serviceName": "nimbus-quiz",
+  "containers": {
+    "nimbus": {
+      "image": "",
+      "ports": {
+        "3001": "HTTP"
+      },
+      "environment": {
+        "NODE_ENV": "production",
+        "PORT": "3001",
+        "DB_HOST": "",
+        "DB_PORT": "5432",
+        "DB_NAME": "nimbus",
+        "DB_USER": "nimbus",
+        "DB_PASSWORD": "",
+        "DB_SSL": "true"
+      }
+    }
+  },
+  "publicEndpoint": {
+    "containerName": "nimbus",
+    "containerPort": 3001,
+    "healthCheck": {
+      "healthyThreshold": 2,
+      "unhealthyThreshold": 2,
+      "timeoutSeconds": 5,
+      "intervalSeconds": 10,
+      "path": "/api/topics",
+      "successCodes": "200"
+    }
+  }
+}

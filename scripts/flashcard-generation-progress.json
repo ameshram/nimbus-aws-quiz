@@ -1,0 +1,1197 @@
+{
+  "completed": [
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "lambda",
+      "categoryName": "AWS Lambda",
+      "subtopicId": "lambda-basics",
+      "subtopicName": "Lambda Basics and Invocation Models",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "lambda",
+      "categoryName": "AWS Lambda",
+      "subtopicId": "lambda-concurrency",
+      "subtopicName": "Lambda Concurrency and Scaling",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "lambda",
+      "categoryName": "AWS Lambda",
+      "subtopicId": "lambda-layers",
+      "subtopicName": "Lambda Layers",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "lambda",
+      "categoryName": "AWS Lambda",
+      "subtopicId": "lambda-destinations",
+      "subtopicName": "Lambda Destinations",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "lambda",
+      "categoryName": "AWS Lambda",
+      "subtopicId": "lambda-error-handling",
+      "subtopicName": "Lambda Error Handling",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "lambda",
+      "categoryName": "AWS Lambda",
+      "subtopicId": "lambda-performance",
+      "subtopicName": "Lambda Performance Optimization",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "lambda",
+      "categoryName": "AWS Lambda",
+      "subtopicId": "lambda-event-sources",
+      "subtopicName": "Lambda Event Sources",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "lambda",
+      "categoryName": "AWS Lambda",
+      "subtopicId": "lambda-permissions",
+      "subtopicName": "Lambda Permissions and Execution Roles",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "lambda",
+      "categoryName": "AWS Lambda",
+      "subtopicId": "lambda-versions-aliases",
+      "subtopicName": "Lambda Versions and Aliases",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "lambda",
+      "categoryName": "AWS Lambda",
+      "subtopicId": "lambda-environment-variables",
+      "subtopicName": "Lambda Environment Variables",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "dynamodb",
+      "categoryName": "Amazon DynamoDB",
+      "subtopicId": "dynamodb-basics",
+      "subtopicName": "DynamoDB Basics and Data Modeling",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "dynamodb",
+      "categoryName": "Amazon DynamoDB",
+      "subtopicId": "dynamodb-indexes",
+      "subtopicName": "DynamoDB Indexes (LSI/GSI)",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "dynamodb",
+      "categoryName": "Amazon DynamoDB",
+      "subtopicId": "dynamodb-queries-scans",
+      "subtopicName": "DynamoDB Queries and Scans",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "dynamodb",
+      "categoryName": "Amazon DynamoDB",
+      "subtopicId": "dynamodb-streams",
+      "subtopicName": "DynamoDB Streams",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "dynamodb",
+      "categoryName": "Amazon DynamoDB",
+      "subtopicId": "dynamodb-transactions",
+      "subtopicName": "DynamoDB Transactions",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "dynamodb",
+      "categoryName": "Amazon DynamoDB",
+      "subtopicId": "dynamodb-ttl",
+      "subtopicName": "DynamoDB TTL",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "dynamodb",
+      "categoryName": "Amazon DynamoDB",
+      "subtopicId": "dynamodb-global-tables",
+      "subtopicName": "DynamoDB Global Tables",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "dynamodb",
+      "categoryName": "Amazon DynamoDB",
+      "subtopicId": "dynamodb-capacity-modes",
+      "subtopicName": "DynamoDB Capacity Modes",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "dynamodb",
+      "categoryName": "Amazon DynamoDB",
+      "subtopicId": "dynamodb-dax",
+      "subtopicName": "DynamoDB DAX",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "api-gateway",
+      "categoryName": "Amazon API Gateway",
+      "subtopicId": "api-gateway-basics",
+      "subtopicName": "API Gateway Basics",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "api-gateway",
+      "categoryName": "Amazon API Gateway",
+      "subtopicId": "api-gateway-authentication",
+      "subtopicName": "API Gateway Authentication",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "api-gateway",
+      "categoryName": "Amazon API Gateway",
+      "subtopicId": "api-gateway-throttling",
+      "subtopicName": "API Gateway Throttling and Caching",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "api-gateway",
+      "categoryName": "Amazon API Gateway",
+      "subtopicId": "api-gateway-cors",
+      "subtopicName": "API Gateway CORS",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "api-gateway",
+      "categoryName": "Amazon API Gateway",
+      "subtopicId": "api-gateway-websocket",
+      "subtopicName": "API Gateway WebSocket APIs",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "api-gateway",
+      "categoryName": "Amazon API Gateway",
+      "subtopicId": "api-gateway-rest-vs-http",
+      "subtopicName": "REST API vs HTTP API",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "api-gateway",
+      "categoryName": "Amazon API Gateway",
+      "subtopicId": "api-gateway-stages",
+      "subtopicName": "API Gateway Stages and Deployments",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "s3",
+      "categoryName": "Amazon S3",
+      "subtopicId": "s3-basics",
+      "subtopicName": "S3 Basics and Storage Classes",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "s3",
+      "categoryName": "Amazon S3",
+      "subtopicId": "s3-lifecycle-policies",
+      "subtopicName": "S3 Lifecycle Policies",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "s3",
+      "categoryName": "Amazon S3",
+      "subtopicId": "s3-versioning",
+      "subtopicName": "S3 Versioning",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "s3",
+      "categoryName": "Amazon S3",
+      "subtopicId": "s3-replication",
+      "subtopicName": "S3 Replication",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "s3",
+      "categoryName": "Amazon S3",
+      "subtopicId": "s3-event-notifications",
+      "subtopicName": "S3 Event Notifications",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "s3",
+      "categoryName": "Amazon S3",
+      "subtopicId": "s3-presigned-urls",
+      "subtopicName": "S3 Presigned URLs",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "s3",
+      "categoryName": "Amazon S3",
+      "subtopicId": "s3-multipart-upload",
+      "subtopicName": "S3 Multipart Upload",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "s3",
+      "categoryName": "Amazon S3",
+      "subtopicId": "s3-performance",
+      "subtopicName": "S3 Performance Optimization",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "s3",
+      "categoryName": "Amazon S3",
+      "subtopicId": "s3-encryption",
+      "subtopicName": "S3 Encryption",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "sqs",
+      "categoryName": "Amazon SQS",
+      "subtopicId": "sqs-basics",
+      "subtopicName": "SQS Basics",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "sqs",
+      "categoryName": "Amazon SQS",
+      "subtopicId": "sqs-standard-vs-fifo",
+      "subtopicName": "SQS Standard vs FIFO",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "sqs",
+      "categoryName": "Amazon SQS",
+      "subtopicId": "sqs-long-polling",
+      "subtopicName": "SQS Long Polling",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "sqs",
+      "categoryName": "Amazon SQS",
+      "subtopicId": "sqs-visibility-timeout",
+      "subtopicName": "SQS Visibility Timeout",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "sqs",
+      "categoryName": "Amazon SQS",
+      "subtopicId": "sqs-dead-letter-queues",
+      "subtopicName": "SQS Dead Letter Queues",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "sqs",
+      "categoryName": "Amazon SQS",
+      "subtopicId": "sqs-batch-operations",
+      "subtopicName": "SQS Batch Operations",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "sns",
+      "categoryName": "Amazon SNS",
+      "subtopicId": "sns-basics",
+      "subtopicName": "SNS Basics",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "sns",
+      "categoryName": "Amazon SNS",
+      "subtopicId": "sns-fanout-pattern",
+      "subtopicName": "SNS Fanout Pattern",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "sns",
+      "categoryName": "Amazon SNS",
+      "subtopicId": "sns-message-filtering",
+      "subtopicName": "SNS Message Filtering",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "sns",
+      "categoryName": "Amazon SNS",
+      "subtopicId": "sns-delivery-policies",
+      "subtopicName": "SNS Delivery Policies",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "eventbridge",
+      "categoryName": "Amazon EventBridge",
+      "subtopicId": "eventbridge-basics",
+      "subtopicName": "EventBridge Basics",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "eventbridge",
+      "categoryName": "Amazon EventBridge",
+      "subtopicId": "eventbridge-rules-patterns",
+      "subtopicName": "EventBridge Rules and Patterns",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "eventbridge",
+      "categoryName": "Amazon EventBridge",
+      "subtopicId": "eventbridge-event-buses",
+      "subtopicName": "EventBridge Event Buses",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "eventbridge",
+      "categoryName": "Amazon EventBridge",
+      "subtopicId": "eventbridge-targets",
+      "subtopicName": "EventBridge Targets",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "eventbridge",
+      "categoryName": "Amazon EventBridge",
+      "subtopicId": "eventbridge-archive-replay",
+      "subtopicName": "EventBridge Archive and Replay",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "step-functions",
+      "categoryName": "AWS Step Functions",
+      "subtopicId": "step-functions-basics",
+      "subtopicName": "Step Functions Basics",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "step-functions",
+      "categoryName": "AWS Step Functions",
+      "subtopicId": "step-functions-state-types",
+      "subtopicName": "Step Functions State Types",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "step-functions",
+      "categoryName": "AWS Step Functions",
+      "subtopicId": "step-functions-error-handling",
+      "subtopicName": "Step Functions Error Handling",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "step-functions",
+      "categoryName": "AWS Step Functions",
+      "subtopicId": "step-functions-express-vs-standard",
+      "subtopicName": "Express vs Standard Workflows",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "kinesis",
+      "categoryName": "Amazon Kinesis",
+      "subtopicId": "kinesis-data-streams",
+      "subtopicName": "Kinesis Data Streams",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "kinesis",
+      "categoryName": "Amazon Kinesis",
+      "subtopicId": "kinesis-shards",
+      "subtopicName": "Kinesis Shards and Scaling",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "kinesis",
+      "categoryName": "Amazon Kinesis",
+      "subtopicId": "kinesis-consumers",
+      "subtopicName": "Kinesis Consumers",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "kinesis",
+      "categoryName": "Amazon Kinesis",
+      "subtopicId": "kinesis-firehose",
+      "subtopicName": "Kinesis Data Firehose",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "elasticache",
+      "categoryName": "Amazon ElastiCache",
+      "subtopicId": "elasticache-redis-vs-memcached",
+      "subtopicName": "Redis vs Memcached",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "elasticache",
+      "categoryName": "Amazon ElastiCache",
+      "subtopicId": "elasticache-caching-strategies",
+      "subtopicName": "Caching Strategies",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "elasticache",
+      "categoryName": "Amazon ElastiCache",
+      "subtopicId": "elasticache-cluster-modes",
+      "subtopicName": "ElastiCache Cluster Modes",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "rds-aurora",
+      "categoryName": "Amazon RDS and Aurora",
+      "subtopicId": "rds-basics",
+      "subtopicName": "RDS Basics",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "rds-aurora",
+      "categoryName": "Amazon RDS and Aurora",
+      "subtopicId": "rds-read-replicas",
+      "subtopicName": "RDS Read Replicas",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "rds-aurora",
+      "categoryName": "Amazon RDS and Aurora",
+      "subtopicId": "rds-multi-az",
+      "subtopicName": "RDS Multi-AZ",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "rds-aurora",
+      "categoryName": "Amazon RDS and Aurora",
+      "subtopicId": "rds-encryption",
+      "subtopicName": "RDS Encryption",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "rds-aurora",
+      "categoryName": "Amazon RDS and Aurora",
+      "subtopicId": "aurora-serverless",
+      "subtopicName": "Aurora Serverless",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "ecs-fargate",
+      "categoryName": "Amazon ECS and Fargate",
+      "subtopicId": "ecs-task-definitions",
+      "subtopicName": "ECS Task Definitions",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "ecs-fargate",
+      "categoryName": "Amazon ECS and Fargate",
+      "subtopicId": "ecs-services",
+      "subtopicName": "ECS Services",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "ecs-fargate",
+      "categoryName": "Amazon ECS and Fargate",
+      "subtopicId": "ecs-fargate-vs-ec2",
+      "subtopicName": "Fargate vs EC2 Launch Type",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "elastic-beanstalk",
+      "categoryName": "AWS Elastic Beanstalk",
+      "subtopicId": "beanstalk-basics",
+      "subtopicName": "Elastic Beanstalk Basics",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "elastic-beanstalk",
+      "categoryName": "AWS Elastic Beanstalk",
+      "subtopicId": "beanstalk-deployment-strategies",
+      "subtopicName": "Beanstalk Deployment Strategies",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-1-development",
+      "categoryId": "elastic-beanstalk",
+      "categoryName": "AWS Elastic Beanstalk",
+      "subtopicId": "beanstalk-configuration",
+      "subtopicName": "Beanstalk Configuration",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-2-security",
+      "categoryId": "iam",
+      "categoryName": "AWS IAM",
+      "subtopicId": "iam-basics",
+      "subtopicName": "IAM Basics",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-2-security",
+      "categoryId": "iam",
+      "categoryName": "AWS IAM",
+      "subtopicId": "iam-policies",
+      "subtopicName": "IAM Policies",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-2-security",
+      "categoryId": "iam",
+      "categoryName": "AWS IAM",
+      "subtopicId": "iam-roles-vs-users",
+      "subtopicName": "IAM Roles vs Users",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-2-security",
+      "categoryId": "iam",
+      "categoryName": "AWS IAM",
+      "subtopicId": "iam-policy-evaluation",
+      "subtopicName": "IAM Policy Evaluation",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-2-security",
+      "categoryId": "iam",
+      "categoryName": "AWS IAM",
+      "subtopicId": "iam-least-privilege",
+      "subtopicName": "Least Privilege Principle",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-2-security",
+      "categoryId": "iam",
+      "categoryName": "AWS IAM",
+      "subtopicId": "iam-cross-account-access",
+      "subtopicName": "Cross-Account Access",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-2-security",
+      "categoryId": "iam",
+      "categoryName": "AWS IAM",
+      "subtopicId": "iam-permission-boundaries",
+      "subtopicName": "Permission Boundaries",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-2-security",
+      "categoryId": "iam",
+      "categoryName": "AWS IAM",
+      "subtopicId": "iam-sts",
+      "subtopicName": "AWS STS",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-2-security",
+      "categoryId": "cognito",
+      "categoryName": "Amazon Cognito",
+      "subtopicId": "cognito-user-pools",
+      "subtopicName": "Cognito User Pools",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-2-security",
+      "categoryId": "cognito",
+      "categoryName": "Amazon Cognito",
+      "subtopicId": "cognito-identity-pools",
+      "subtopicName": "Cognito Identity Pools",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-2-security",
+      "categoryId": "cognito",
+      "categoryName": "Amazon Cognito",
+      "subtopicId": "cognito-authentication-flow",
+      "subtopicName": "Cognito Authentication Flow",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-2-security",
+      "categoryId": "cognito",
+      "categoryName": "Amazon Cognito",
+      "subtopicId": "cognito-federation",
+      "subtopicName": "Cognito Federation",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-2-security",
+      "categoryId": "cognito",
+      "categoryName": "Amazon Cognito",
+      "subtopicId": "cognito-tokens",
+      "subtopicName": "Cognito Tokens and JWT",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-2-security",
+      "categoryId": "kms",
+      "categoryName": "AWS KMS",
+      "subtopicId": "kms-basics",
+      "subtopicName": "KMS Basics",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-2-security",
+      "categoryId": "kms",
+      "categoryName": "AWS KMS",
+      "subtopicId": "kms-cmk-types",
+      "subtopicName": "KMS CMK Types",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-2-security",
+      "categoryId": "kms",
+      "categoryName": "AWS KMS",
+      "subtopicId": "kms-envelope-encryption",
+      "subtopicName": "Envelope Encryption",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-2-security",
+      "categoryId": "kms",
+      "categoryName": "AWS KMS",
+      "subtopicId": "kms-key-policies",
+      "subtopicName": "KMS Key Policies",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-2-security",
+      "categoryId": "kms",
+      "categoryName": "AWS KMS",
+      "subtopicId": "kms-key-rotation",
+      "subtopicName": "KMS Key Rotation",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-2-security",
+      "categoryId": "secrets-manager",
+      "categoryName": "AWS Secrets Manager",
+      "subtopicId": "secrets-manager-basics",
+      "subtopicName": "Secrets Manager Basics",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-2-security",
+      "categoryId": "secrets-manager",
+      "categoryName": "AWS Secrets Manager",
+      "subtopicId": "secrets-manager-rotation",
+      "subtopicName": "Secret Rotation",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-2-security",
+      "categoryId": "secrets-manager",
+      "categoryName": "AWS Secrets Manager",
+      "subtopicId": "secrets-manager-vs-parameter-store",
+      "subtopicName": "Secrets Manager vs Parameter Store",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-2-security",
+      "categoryId": "parameter-store",
+      "categoryName": "Systems Manager Parameter Store",
+      "subtopicId": "parameter-store-basics",
+      "subtopicName": "Parameter Store Basics",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-2-security",
+      "categoryId": "parameter-store",
+      "categoryName": "Systems Manager Parameter Store",
+      "subtopicId": "parameter-store-types",
+      "subtopicName": "Parameter Types",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-2-security",
+      "categoryId": "parameter-store",
+      "categoryName": "Systems Manager Parameter Store",
+      "subtopicId": "parameter-store-hierarchies",
+      "subtopicName": "Parameter Hierarchies",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-2-security",
+      "categoryId": "acm",
+      "categoryName": "AWS Certificate Manager",
+      "subtopicId": "acm-basics",
+      "subtopicName": "ACM Basics",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-2-security",
+      "categoryId": "acm",
+      "categoryName": "AWS Certificate Manager",
+      "subtopicId": "acm-validation",
+      "subtopicName": "Certificate Validation",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-2-security",
+      "categoryId": "waf",
+      "categoryName": "AWS WAF",
+      "subtopicId": "waf-basics",
+      "subtopicName": "WAF Basics",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-2-security",
+      "categoryId": "waf",
+      "categoryName": "AWS WAF",
+      "subtopicId": "waf-rules",
+      "subtopicName": "WAF Rules and Web ACLs",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-3-deployment",
+      "categoryId": "codecommit",
+      "categoryName": "AWS CodeCommit",
+      "subtopicId": "codecommit-basics",
+      "subtopicName": "CodeCommit Basics",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-3-deployment",
+      "categoryId": "codecommit",
+      "categoryName": "AWS CodeCommit",
+      "subtopicId": "codecommit-triggers",
+      "subtopicName": "CodeCommit Triggers",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-3-deployment",
+      "categoryId": "codebuild",
+      "categoryName": "AWS CodeBuild",
+      "subtopicId": "codebuild-basics",
+      "subtopicName": "CodeBuild Basics",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-3-deployment",
+      "categoryId": "codebuild",
+      "categoryName": "AWS CodeBuild",
+      "subtopicId": "codebuild-buildspec",
+      "subtopicName": "buildspec.yml",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-3-deployment",
+      "categoryId": "codebuild",
+      "categoryName": "AWS CodeBuild",
+      "subtopicId": "codebuild-environment-variables",
+      "subtopicName": "CodeBuild Environment Variables",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-3-deployment",
+      "categoryId": "codedeploy",
+      "categoryName": "AWS CodeDeploy",
+      "subtopicId": "codedeploy-basics",
+      "subtopicName": "CodeDeploy Basics",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-3-deployment",
+      "categoryId": "codedeploy",
+      "categoryName": "AWS CodeDeploy",
+      "subtopicId": "codedeploy-appspec",
+      "subtopicName": "appspec.yml",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-3-deployment",
+      "categoryId": "codedeploy",
+      "categoryName": "AWS CodeDeploy",
+      "subtopicId": "codedeploy-deployment-types",
+      "subtopicName": "CodeDeploy Deployment Types",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-3-deployment",
+      "categoryId": "codedeploy",
+      "categoryName": "AWS CodeDeploy",
+      "subtopicId": "codedeploy-hooks",
+      "subtopicName": "CodeDeploy Lifecycle Hooks",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-3-deployment",
+      "categoryId": "codedeploy",
+      "categoryName": "AWS CodeDeploy",
+      "subtopicId": "codedeploy-rollback",
+      "subtopicName": "CodeDeploy Rollback",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-3-deployment",
+      "categoryId": "codepipeline",
+      "categoryName": "AWS CodePipeline",
+      "subtopicId": "codepipeline-basics",
+      "subtopicName": "CodePipeline Basics",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-3-deployment",
+      "categoryId": "codepipeline",
+      "categoryName": "AWS CodePipeline",
+      "subtopicId": "codepipeline-stages-actions",
+      "subtopicName": "CodePipeline Stages and Actions",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-3-deployment",
+      "categoryId": "codepipeline",
+      "categoryName": "AWS CodePipeline",
+      "subtopicId": "codepipeline-artifacts",
+      "subtopicName": "CodePipeline Artifacts",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-3-deployment",
+      "categoryId": "cloudformation",
+      "categoryName": "AWS CloudFormation",
+      "subtopicId": "cloudformation-basics",
+      "subtopicName": "CloudFormation Basics",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-3-deployment",
+      "categoryId": "cloudformation",
+      "categoryName": "AWS CloudFormation",
+      "subtopicId": "cloudformation-intrinsic-functions",
+      "subtopicName": "Intrinsic Functions",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-3-deployment",
+      "categoryId": "cloudformation",
+      "categoryName": "AWS CloudFormation",
+      "subtopicId": "cloudformation-stack-updates",
+      "subtopicName": "Stack Updates",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-3-deployment",
+      "categoryId": "cloudformation",
+      "categoryName": "AWS CloudFormation",
+      "subtopicId": "cloudformation-change-sets",
+      "subtopicName": "Change Sets",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-3-deployment",
+      "categoryId": "cloudformation",
+      "categoryName": "AWS CloudFormation",
+      "subtopicId": "cloudformation-nested-stacks",
+      "subtopicName": "Nested Stacks",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-3-deployment",
+      "categoryId": "sam",
+      "categoryName": "AWS SAM",
+      "subtopicId": "sam-basics",
+      "subtopicName": "SAM Basics",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-3-deployment",
+      "categoryId": "sam",
+      "categoryName": "AWS SAM",
+      "subtopicId": "sam-templates",
+      "subtopicName": "SAM Templates",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-3-deployment",
+      "categoryId": "sam",
+      "categoryName": "AWS SAM",
+      "subtopicId": "sam-cli",
+      "subtopicName": "SAM CLI",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-3-deployment",
+      "categoryId": "cdk",
+      "categoryName": "AWS CDK",
+      "subtopicId": "cdk-basics",
+      "subtopicName": "CDK Basics",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-3-deployment",
+      "categoryId": "cdk",
+      "categoryName": "AWS CDK",
+      "subtopicId": "cdk-constructs",
+      "subtopicName": "CDK Constructs",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-3-deployment",
+      "categoryId": "deployment-strategies",
+      "categoryName": "Deployment Strategies",
+      "subtopicId": "blue-green-deployment",
+      "subtopicName": "Blue-Green Deployment",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-3-deployment",
+      "categoryId": "deployment-strategies",
+      "categoryName": "Deployment Strategies",
+      "subtopicId": "canary-deployment",
+      "subtopicName": "Canary Deployment",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-3-deployment",
+      "categoryId": "deployment-strategies",
+      "categoryName": "Deployment Strategies",
+      "subtopicId": "rolling-deployment",
+      "subtopicName": "Rolling Deployment",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-3-deployment",
+      "categoryId": "deployment-strategies",
+      "categoryName": "Deployment Strategies",
+      "subtopicId": "immutable-deployment",
+      "subtopicName": "Immutable Deployment",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-4-troubleshooting",
+      "categoryId": "cloudwatch",
+      "categoryName": "Amazon CloudWatch",
+      "subtopicId": "cloudwatch-basics",
+      "subtopicName": "CloudWatch Basics",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-4-troubleshooting",
+      "categoryId": "cloudwatch",
+      "categoryName": "Amazon CloudWatch",
+      "subtopicId": "cloudwatch-logs",
+      "subtopicName": "CloudWatch Logs",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-4-troubleshooting",
+      "categoryId": "cloudwatch",
+      "categoryName": "Amazon CloudWatch",
+      "subtopicId": "cloudwatch-metrics",
+      "subtopicName": "CloudWatch Metrics",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-4-troubleshooting",
+      "categoryId": "cloudwatch",
+      "categoryName": "Amazon CloudWatch",
+      "subtopicId": "cloudwatch-alarms",
+      "subtopicName": "CloudWatch Alarms",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-4-troubleshooting",
+      "categoryId": "cloudwatch",
+      "categoryName": "Amazon CloudWatch",
+      "subtopicId": "cloudwatch-log-insights",
+      "subtopicName": "CloudWatch Logs Insights",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-4-troubleshooting",
+      "categoryId": "cloudwatch",
+      "categoryName": "Amazon CloudWatch",
+      "subtopicId": "cloudwatch-embedded-metric-format",
+      "subtopicName": "Embedded Metric Format",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-4-troubleshooting",
+      "categoryId": "xray",
+      "categoryName": "AWS X-Ray",
+      "subtopicId": "xray-basics",
+      "subtopicName": "X-Ray Basics",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-4-troubleshooting",
+      "categoryId": "xray",
+      "categoryName": "AWS X-Ray",
+      "subtopicId": "xray-segments-subsegments",
+      "subtopicName": "X-Ray Segments and Subsegments",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-4-troubleshooting",
+      "categoryId": "xray",
+      "categoryName": "AWS X-Ray",
+      "subtopicId": "xray-annotations-metadata",
+      "subtopicName": "X-Ray Annotations and Metadata",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-4-troubleshooting",
+      "categoryId": "xray",
+      "categoryName": "AWS X-Ray",
+      "subtopicId": "xray-service-map",
+      "subtopicName": "X-Ray Service Map",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-4-troubleshooting",
+      "categoryId": "xray",
+      "categoryName": "AWS X-Ray",
+      "subtopicId": "xray-sampling",
+      "subtopicName": "X-Ray Sampling",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-4-troubleshooting",
+      "categoryId": "cloudtrail",
+      "categoryName": "AWS CloudTrail",
+      "subtopicId": "cloudtrail-basics",
+      "subtopicName": "CloudTrail Basics",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-4-troubleshooting",
+      "categoryId": "cloudtrail",
+      "categoryName": "AWS CloudTrail",
+      "subtopicId": "cloudtrail-events",
+      "subtopicName": "CloudTrail Event Types",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-4-troubleshooting",
+      "categoryId": "debugging",
+      "categoryName": "Debugging",
+      "subtopicId": "lambda-debugging",
+      "subtopicName": "Lambda Debugging",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-4-troubleshooting",
+      "categoryId": "debugging",
+      "categoryName": "Debugging",
+      "subtopicId": "api-gateway-debugging",
+      "subtopicName": "API Gateway Debugging",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-4-troubleshooting",
+      "categoryId": "debugging",
+      "categoryName": "Debugging",
+      "subtopicId": "permission-errors",
+      "subtopicName": "Permission Error Troubleshooting",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-4-troubleshooting",
+      "categoryId": "performance-optimization",
+      "categoryName": "Performance Optimization",
+      "subtopicId": "lambda-optimization",
+      "subtopicName": "Lambda Optimization",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-4-troubleshooting",
+      "categoryId": "performance-optimization",
+      "categoryName": "Performance Optimization",
+      "subtopicId": "dynamodb-optimization",
+      "subtopicName": "DynamoDB Optimization",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-4-troubleshooting",
+      "categoryId": "performance-optimization",
+      "categoryName": "Performance Optimization",
+      "subtopicId": "caching-strategies",
+      "subtopicName": "Caching Strategies",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-4-troubleshooting",
+      "categoryId": "performance-optimization",
+      "categoryName": "Performance Optimization",
+      "subtopicId": "cold-start-optimization",
+      "subtopicName": "Cold Start Optimization",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-4-troubleshooting",
+      "categoryId": "cost-optimization",
+      "categoryName": "Cost Optimization",
+      "subtopicId": "lambda-cost",
+      "subtopicName": "Lambda Cost Optimization",
+      "generated": 5
+    },
+    {
+      "domainId": "domain-4-troubleshooting",
+      "categoryId": "cost-optimization",
+      "categoryName": "Cost Optimization",
+      "subtopicId": "right-sizing",
+      "subtopicName": "Right-Sizing Resources",
+      "generated": 5
+    }
+  ],
+  "failed": []
+}

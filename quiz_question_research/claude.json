@@ -1,0 +1,1033 @@
+{
+  "exam": "AWS Certified Developer – Associate (DVA-C02)",
+  "question_bank_version": "v1.0",
+  "generated_at": "2026-01-11T00:00:00Z",
+  "domains": [
+    {
+      "domain_id": "domain-1-development",
+      "name": "Development with AWS Services",
+      "topics": [
+        {
+          "topic_id": "lambda",
+          "name": "AWS Lambda",
+          "subtopics": [
+            {
+              "subtopic_id": "lambda-concurrency",
+              "name": "Lambda concurrency and scaling",
+              "num_questions_generated": 10,
+              "questions": [
+                {
+                  "id": "lam-conc-001",
+                  "concept_id": "lambda-reserved-concurrency",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-concurrency",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "A developer is building a Lambda function that processes payment transactions. The function must never process more than 50 concurrent executions to avoid overwhelming the downstream payment gateway API. What should the developer configure to enforce this limit?",
+                  "options": [
+                    {"label": "A", "text": "Set the function timeout to 50 seconds"},
+                    {"label": "B", "text": "Configure reserved concurrency to 50 for the Lambda function"},
+                    {"label": "C", "text": "Set the provisioned concurrency to 50 for the Lambda function"},
+                    {"label": "D", "text": "Configure an Amazon SQS queue with a visibility timeout of 50 seconds"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Reserved concurrency sets a hard limit on the maximum number of concurrent executions for a Lambda function. Setting reserved concurrency to 50 ensures that no more than 50 instances of the function will run simultaneously, protecting the downstream payment gateway from being overwhelmed. Function timeout controls how long a single invocation can run, not how many can run concurrently. Provisioned concurrency pre-initializes instances but doesn't limit maximum concurrency. An SQS queue can help with rate limiting but doesn't directly control Lambda concurrency.",
+                  "why_this_matters": "Controlling Lambda concurrency is critical when integrating with third-party APIs or databases that have rate limits or connection pool constraints. Without proper concurrency controls, a sudden spike in Lambda invocations could overwhelm downstream systems, causing failures, throttling, or service degradation. Reserved concurrency provides a safety mechanism to protect both your Lambda function and the systems it depends on.",
+                  "key_takeaway": "Use reserved concurrency to set hard limits on Lambda function executions when you need to protect downstream systems from being overwhelmed by too many concurrent requests.",
+                  "option_explanations": {
+                    "A": "Function timeout controls execution duration, not the number of concurrent executions.",
+                    "B": "Reserved concurrency directly limits the maximum number of concurrent executions for a Lambda function.",
+                    "C": "Provisioned concurrency pre-warms instances for performance but doesn't cap maximum concurrency.",
+                    "D": "SQS visibility timeout controls message reprocessing, not Lambda concurrency limits."
+                  },
+                  "tags": ["topic:lambda", "subtopic:lambda-concurrency", "domain:1", "service:lambda", "concurrency", "rate-limiting"]
+                },
+                {
+                  "id": "lam-conc-002",
+                  "concept_id": "lambda-provisioned-concurrency",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-concurrency",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "A financial services application uses a Lambda function that experiences predictable traffic spikes every weekday at 9 AM when users check their account balances. Users are complaining about slow response times during these peak periods. What is the MOST effective solution to reduce latency during peak traffic?",
+                  "options": [
+                    {"label": "A", "text": "Increase the function memory allocation to 3008 MB"},
+                    {"label": "B", "text": "Configure provisioned concurrency for the Lambda function with a scheduled scaling policy"},
+                    {"label": "C", "text": "Enable reserved concurrency set to the maximum expected concurrent executions"},
+                    {"label": "D", "text": "Increase the function timeout value to 900 seconds"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Provisioned concurrency keeps Lambda execution environments initialized and ready to respond immediately, eliminating cold start latency. Using scheduled scaling allows you to provision capacity before the predictable 9 AM traffic spike and scale down afterward to control costs. Increasing memory allocation can improve performance but doesn't eliminate cold starts. Reserved concurrency limits maximum executions but doesn't pre-warm instances. Increasing timeout only affects how long functions can run, not initialization time.",
+                  "why_this_matters": "Cold starts can add hundreds of milliseconds to Lambda response times, which is unacceptable for latency-sensitive applications like financial services. Provisioned concurrency ensures execution environments are pre-initialized and ready to handle requests immediately, providing consistent sub-second response times. This is especially valuable for predictable traffic patterns where you can schedule capacity in advance.",
+                  "key_takeaway": "Use provisioned concurrency with scheduled scaling to eliminate cold starts during predictable traffic peaks while controlling costs by scaling down during off-peak hours.",
+                  "option_explanations": {
+                    "A": "Higher memory can improve execution performance but doesn't prevent cold start initialization delays.",
+                    "B": "Provisioned concurrency pre-initializes execution environments, eliminating cold starts for immediate response during peak times.",
+                    "C": "Reserved concurrency caps maximum executions but doesn't keep instances warm or reduce cold starts.",
+                    "D": "Timeout controls maximum execution duration, not initialization or cold start latency."
+                  },
+                  "tags": ["topic:lambda", "subtopic:lambda-concurrency", "domain:1", "service:lambda", "cold-start", "provisioned-concurrency", "performance"]
+                },
+                {
+                  "id": "lam-conc-003",
+                  "concept_id": "lambda-throttling-behavior",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-concurrency",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "hard",
+                  "question_type": "single",
+                  "stem": "A developer notices that a Lambda function is being throttled during traffic spikes even though the account's regional concurrency limit has not been reached. The function has reserved concurrency set to 100, and the account has 1000 total concurrent executions available. What is the MOST likely cause of the throttling?",
+                  "options": [
+                    {"label": "A", "text": "The function is experiencing cold starts which count against the concurrency limit"},
+                    {"label": "B", "text": "Other Lambda functions in the account are consuming the unreserved concurrency pool"},
+                    {"label": "C", "text": "The function's invocations are exceeding the reserved concurrency limit of 100"},
+                    {"label": "D", "text": "The Lambda service is automatically throttling to protect downstream services"}
+                  ],
+                  "correct_options": ["C"],
+                  "answer_explanation": "When a Lambda function has reserved concurrency set to 100, it can use up to 100 concurrent executions but no more, regardless of how much total account concurrency is available. If invocations exceed this limit, Lambda will throttle the function. The reserved concurrency creates an isolated pool that other functions cannot use, but it also caps the function at that limit. Other functions using unreserved concurrency won't affect this function since it has its own reserved pool. Cold starts don't cause throttling—they're part of normal scaling. Lambda doesn't automatically throttle to protect downstream services.",
+                  "why_this_matters": "Reserved concurrency is a double-edged sword: it guarantees capacity for your function but also sets a hard ceiling. Understanding this behavior is critical for capacity planning and avoiding unexpected throttling. You need to set reserved concurrency high enough to handle peak loads while still protecting downstream resources. Throttling can lead to failed invocations, retries, and poor user experience.",
+                  "key_takeaway": "Reserved concurrency both guarantees and limits concurrent executions—set it high enough for peak traffic or remove it if you need unlimited scaling within your account limits.",
+                  "option_explanations": {
+                    "A": "Cold starts are initialization delays, not a cause of concurrency throttling.",
+                    "B": "Reserved concurrency isolates a function from other functions' concurrency usage.",
+                    "C": "Reserved concurrency creates a hard cap; exceeding 100 concurrent executions causes throttling regardless of account limits.",
+                    "D": "Lambda doesn't automatically throttle based on downstream service health."
+                  },
+                  "tags": ["topic:lambda", "subtopic:lambda-concurrency", "domain:1", "service:lambda", "throttling", "reserved-concurrency"]
+                },
+                {
+                  "id": "lam-conc-004",
+                  "concept_id": "lambda-burst-concurrency",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-concurrency",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "An e-commerce application uses Lambda functions to process orders. During a flash sale, the order processing function needs to scale from 10 concurrent executions to 500 within seconds. What should the developer understand about Lambda's scaling behavior in this scenario?",
+                  "options": [
+                    {"label": "A", "text": "Lambda will immediately scale to 500 concurrent executions without any limits"},
+                    {"label": "B", "text": "Lambda will scale with an initial burst, then add capacity more gradually if needed"},
+                    {"label": "C", "text": "Lambda requires provisioned concurrency to be configured for rapid scaling"},
+                    {"label": "D", "text": "Lambda will queue excess requests until it reaches 500 concurrent executions"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Lambda has burst concurrency limits that allow rapid initial scaling, but then scales more gradually afterward. In most regions, Lambda can burst to 3000 concurrent executions immediately, then add 500 concurrent executions per minute thereafter. This means Lambda can handle the spike to 500 executions quickly since it's within the burst limit. Lambda doesn't scale instantly to any number—it follows burst and gradual scaling patterns. Provisioned concurrency helps with cold starts but isn't required for scaling. Lambda doesn't automatically queue requests—synchronous invocations fail with throttling errors if limits are exceeded.",
+                  "why_this_matters": "Understanding Lambda's scaling behavior is essential for architecting applications that handle traffic spikes. The burst concurrency limit handles most sudden traffic increases automatically, but applications experiencing extremely rapid growth beyond burst limits need additional strategies like SQS queues for buffering or provisioned concurrency. This knowledge helps you design systems that gracefully handle spikes without overwhelming downstream services or experiencing throttling.",
+                  "key_takeaway": "Lambda provides burst concurrency for rapid initial scaling, followed by gradual scaling—design for this pattern by adding buffers like SQS for extremely spiky workloads.",
+                  "option_explanations": {
+                    "A": "Lambda has burst limits and gradual scaling rates, not instant unlimited scaling.",
+                    "B": "Lambda scales with an initial burst (typically 3000 in most regions), then adds capacity at 500 per minute.",
+                    "C": "Provisioned concurrency reduces cold starts but isn't required for Lambda to scale capacity.",
+                    "D": "Lambda doesn't automatically queue requests; synchronous invocations return throttling errors when limits are exceeded."
+                  },
+                  "tags": ["topic:lambda", "subtopic:lambda-concurrency", "domain:1", "service:lambda", "burst-scaling", "performance"]
+                },
+                {
+                  "id": "lam-conc-005",
+                  "concept_id": "lambda-account-concurrency",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-concurrency",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "easy",
+                  "question_type": "single",
+                  "stem": "A developer has multiple Lambda functions in a production AWS account. One critical function is occasionally being throttled because other functions in the account are consuming all available concurrent executions. What is the BEST way to ensure the critical function always has capacity available?",
+                  "options": [
+                    {"label": "A", "text": "Move the critical function to a separate AWS account"},
+                    {"label": "B", "text": "Set reserved concurrency for the critical function"},
+                    {"label": "C", "text": "Increase the function's memory allocation"},
+                    {"label": "D", "text": "Set provisioned concurrency for the critical function"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Reserved concurrency allocates a dedicated portion of your account's concurrent execution limit exclusively to a specific function. This ensures the critical function always has capacity available and cannot be starved by other functions. Moving to a separate account is unnecessary overhead. Increasing memory allocation doesn't guarantee capacity. Provisioned concurrency keeps instances warm but doesn't guarantee capacity in an account-level concurrency shortage.",
+                  "why_this_matters": "In production environments with multiple Lambda functions, account-level concurrency can become a shared resource that causes contention. Critical functions can be starved by less important functions during traffic spikes. Reserved concurrency provides isolation and guarantees capacity for mission-critical workloads, ensuring they can always execute even when other functions are consuming significant concurrency.",
+                  "key_takeaway": "Use reserved concurrency to guarantee capacity for critical Lambda functions and prevent them from being throttled by other functions in the same account.",
+                  "option_explanations": {
+                    "A": "Separate accounts add management complexity and are unnecessary when reserved concurrency solves the problem.",
+                    "B": "Reserved concurrency guarantees dedicated capacity for the function, preventing starvation by other functions.",
+                    "C": "Memory allocation affects compute power per execution, not guaranteed capacity availability.",
+                    "D": "Provisioned concurrency keeps instances warm but doesn't reserve capacity from the account pool."
+                  },
+                  "tags": ["topic:lambda", "subtopic:lambda-concurrency", "domain:1", "service:lambda", "reserved-concurrency", "capacity-planning"]
+                },
+                {
+                  "id": "lam-conc-006",
+                  "concept_id": "lambda-unreserved-concurrency",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-concurrency",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "An AWS account has a total concurrent execution limit of 1000. Three Lambda functions have reserved concurrency set to 200, 150, and 100 respectively. How much unreserved concurrency is available for all other Lambda functions in the account?",
+                  "options": [
+                    {"label": "A", "text": "1000 concurrent executions"},
+                    {"label": "B", "text": "550 concurrent executions"},
+                    {"label": "C", "text": "450 concurrent executions"},
+                    {"label": "D", "text": "650 concurrent executions"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Unreserved concurrency is calculated by subtracting all reserved concurrency allocations from the total account limit. The total is 1000, and reserved concurrency allocations are 200 + 150 + 100 = 450. Therefore, unreserved concurrency is 1000 - 450 = 550 concurrent executions. This unreserved pool is shared among all functions that don't have reserved concurrency configured.",
+                  "why_this_matters": "Understanding how reserved and unreserved concurrency pools work is essential for capacity planning in multi-function environments. Reserved concurrency reduces the shared pool available to other functions, so over-allocating reserved concurrency can starve functions without reservations. You need to balance guaranteeing capacity for critical functions while leaving sufficient unreserved capacity for other workloads.",
+                  "key_takeaway": "Reserved concurrency subtracts from your account's total limit—carefully plan allocations to ensure adequate unreserved concurrency remains for other functions.",
+                  "option_explanations": {
+                    "A": "Total account limit doesn't account for reserved concurrency allocations to specific functions.",
+                    "B": "Unreserved concurrency is total (1000) minus all reserved allocations (450), equaling 550.",
+                    "C": "This incorrectly adds the reserved amounts instead of subtracting them from the total.",
+                    "D": "This only subtracts two of the three reserved concurrency values."
+                  },
+                  "tags": ["topic:lambda", "subtopic:lambda-concurrency", "domain:1", "service:lambda", "capacity-planning", "unreserved-concurrency"]
+                },
+                {
+                  "id": "lam-conc-007",
+                  "concept_id": "lambda-concurrency-alarms",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-concurrency",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "A development team wants to be alerted when a Lambda function's concurrent executions approach its reserved concurrency limit of 200. Which CloudWatch metric should they monitor to create an appropriate alarm?",
+                  "options": [
+                    {"label": "A", "text": "Invocations"},
+                    {"label": "B", "text": "ConcurrentExecutions"},
+                    {"label": "C", "text": "Throttles"},
+                    {"label": "D", "text": "Duration"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "The ConcurrentExecutions metric tracks the number of function instances processing events at a given time. Monitoring this metric and setting an alarm when it approaches the reserved concurrency limit (e.g., at 180 out of 200) provides proactive warning before throttling occurs. Invocations counts total requests but doesn't indicate concurrent executions. Throttles only alerts after throttling has already occurred. Duration measures execution time, not concurrency.",
+                  "why_this_matters": "Proactive monitoring of concurrent executions allows teams to identify capacity issues before they cause throttling and service degradation. By setting alarms at a threshold below the limit (e.g., 90% of reserved concurrency), you can take action such as increasing limits, optimizing function performance, or adding buffering mechanisms before users are impacted. Reactive monitoring of throttles means problems have already occurred.",
+                  "key_takeaway": "Monitor the ConcurrentExecutions metric and set alarms below your concurrency limits to proactively detect and prevent throttling before it impacts users.",
+                  "option_explanations": {
+                    "A": "Invocations counts total requests over time, not concurrent executions at a point in time.",
+                    "B": "ConcurrentExecutions shows the number of instances running simultaneously, ideal for tracking against concurrency limits.",
+                    "C": "Throttles indicates throttling has already occurred, making it reactive rather than proactive.",
+                    "D": "Duration measures how long each execution takes, not how many run concurrently."
+                  },
+                  "tags": ["topic:lambda", "subtopic:lambda-concurrency", "domain:1", "service:lambda", "service:cloudwatch", "monitoring", "alarms"]
+                },
+                {
+                  "id": "lam-conc-008",
+                  "concept_id": "lambda-async-concurrency",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-concurrency",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "hard",
+                  "question_type": "multi",
+                  "stem": "A Lambda function is invoked asynchronously by an S3 event notification and is being throttled during high-volume uploads. The developer wants to prevent data loss while managing the throttling. Which TWO actions will help handle this scenario? (Select TWO)",
+                  "options": [
+                    {"label": "A", "text": "Configure a dead-letter queue (DLQ) to capture failed events"},
+                    {"label": "B", "text": "Increase the function's timeout value"},
+                    {"label": "C", "text": "Increase reserved concurrency for the Lambda function"},
+                    {"label": "D", "text": "Enable Lambda function versioning"}
+                  ],
+                  "correct_options": ["A", "C"],
+                  "answer_explanation": "Configuring a DLQ ensures that events which fail after retries due to throttling are captured for later processing, preventing data loss. Increasing reserved concurrency provides more concurrent execution capacity, reducing or eliminating throttling. Together, these actions both prevent throttling and provide a safety net for any remaining failures. Increasing timeout doesn't address concurrency limits. Versioning helps with deployment management but doesn't affect concurrency or throttling.",
+                  "why_this_matters": "Asynchronous Lambda invocations automatically retry throttled requests, but after exhausting retries, events can be lost unless you configure a DLQ or destination. For data processing pipelines where every S3 upload must be processed, combining increased capacity with failure capture ensures both performance and data integrity. This pattern is essential for mission-critical event-driven architectures.",
+                  "key_takeaway": "For asynchronous Lambda invocations, combine adequate concurrency limits with DLQs or destinations to prevent data loss from throttling while handling peak loads.",
+                  "option_explanations": {
+                    "A": "A DLQ captures failed asynchronous invocations after retries are exhausted, preventing data loss.",
+                    "B": "Timeout controls execution duration but doesn't address concurrency throttling.",
+                    "C": "Increasing reserved concurrency provides more execution capacity, reducing throttling during high volume.",
+                    "D": "Versioning manages function deployments but doesn't affect concurrency or throttling behavior."
+                  },
+                  "tags": ["topic:lambda", "subtopic:lambda-concurrency", "domain:1", "service:lambda", "service:s3", "async-invocation", "dlq", "throttling"]
+                },
+                {
+                  "id": "lam-conc-009",
+                  "concept_id": "lambda-concurrency-per-instance",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-concurrency",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "easy",
+                  "question_type": "single",
+                  "stem": "A developer is optimizing a Lambda function's concurrency settings. They want to understand how many requests a single Lambda execution environment can process simultaneously. What is the correct answer?",
+                  "options": [
+                    {"label": "A", "text": "A single execution environment can process multiple requests concurrently using threads"},
+                    {"label": "B", "text": "A single execution environment processes one request at a time"},
+                    {"label": "C", "text": "A single execution environment can process up to 10 requests concurrently"},
+                    {"label": "D", "text": "The number of concurrent requests depends on the function's memory configuration"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Each Lambda execution environment processes one request at a time. When a second request arrives while an execution environment is busy, Lambda creates a new execution environment to handle it. This single-request-per-environment model simplifies concurrency management and prevents thread safety issues. Concurrency is achieved by running multiple execution environments in parallel, not by processing multiple requests in one environment.",
+                  "why_this_matters": "Understanding that each Lambda execution environment handles one request at a time is fundamental to reasoning about Lambda concurrency, scaling, and cost. It means that concurrent requests directly translate to concurrent execution environments, and it eliminates the need to handle thread safety in your Lambda code. This model also explains why Lambda scales by creating new environments rather than handling more requests in existing ones.",
+                  "key_takeaway": "Lambda execution environments process one request at a time—concurrency is achieved through multiple parallel environments, not multi-threading within a single environment.",
+                  "option_explanations": {
+                    "A": "Lambda execution environments are single-threaded for request processing, handling one request at a time.",
+                    "B": "Each execution environment processes exactly one request at a time; concurrency requires multiple environments.",
+                    "C": "There is no multi-request processing within a single Lambda execution environment.",
+                    "D": "Memory affects compute power per execution but doesn't change the single-request-per-environment model."
+                  },
+                  "tags": ["topic:lambda", "subtopic:lambda-concurrency", "domain:1", "service:lambda", "execution-model"]
+                },
+                {
+                  "id": "lam-conc-010",
+                  "concept_id": "lambda-sqs-concurrency",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-concurrency",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "hard",
+                  "question_type": "single",
+                  "stem": "A Lambda function is configured with an SQS queue as an event source. The function has reserved concurrency set to 50. The queue receives 1000 messages in a short burst. How will Lambda process these messages?",
+                  "options": [
+                    {"label": "A", "text": "Lambda will process up to 50 messages concurrently, and the remaining messages stay in the queue until capacity becomes available"},
+                    {"label": "B", "text": "Lambda will be throttled and messages will be moved to a dead-letter queue"},
+                    {"label": "C", "text": "Lambda will automatically increase concurrency beyond 50 to process all messages"},
+                    {"label": "D", "text": "The SQS event source mapping will be disabled due to throttling"}
+                  ],
+                  "correct_options": ["A"],
+                  "answer_explanation": "When Lambda has reserved concurrency set to 50 and is triggered by SQS, it will poll and process up to 50 messages concurrently. The remaining messages stay in the SQS queue with their visibility timeout set, and Lambda will continue polling and processing as execution environments become available. This provides natural rate limiting and buffering. Messages are not automatically moved to a DLQ due to concurrency limits. Lambda doesn't exceed its concurrency limit. The event source mapping continues operating—it simply processes messages at the rate allowed by the concurrency limit.",
+                  "why_this_matters": "The combination of SQS and Lambda with reserved concurrency provides an elegant pattern for controlled, resilient message processing. SQS acts as a durable buffer that holds messages when Lambda reaches its concurrency limit, preventing overwhelming downstream systems while ensuring no messages are lost. This pattern is essential for building reliable, rate-limited processing pipelines that can handle variable load without compromising downstream service stability.",
+                  "key_takeaway": "SQS paired with Lambda reserved concurrency provides automatic rate limiting—messages buffer in the queue when concurrency limits are reached, ensuring controlled processing rates.",
+                  "option_explanations": {
+                    "A": "Lambda respects the reserved concurrency limit; excess messages remain in SQS and are processed as capacity becomes available.",
+                    "B": "Messages only move to a DLQ after exceeding the maxReceiveCount due to processing failures, not concurrency limits.",
+                    "C": "Reserved concurrency creates a hard cap that Lambda will not exceed.",
+                    "D": "Event source mappings continue polling even during throttling; they simply process at the allowed concurrency rate."
+                  },
+                  "tags": ["topic:lambda", "subtopic:lambda-concurrency", "domain:1", "service:lambda", "service:sqs", "event-source-mapping", "rate-limiting"]
+                }
+              ]
+            },
+            {
+              "subtopic_id": "lambda-vpc-integration",
+              "name": "Lambda VPC integration and networking",
+              "num_questions_generated": 10,
+              "questions": [
+                {
+                  "id": "lam-vpc-001",
+                  "concept_id": "lambda-vpc-access",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-vpc-integration",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "A Lambda function needs to access an RDS database in a private subnet. The function is not currently configured for VPC access. What must the developer configure to enable this access?",
+                  "options": [
+                    {"label": "A", "text": "Attach an IAM role with RDS access permissions to the Lambda function"},
+                    {"label": "B", "text": "Configure the Lambda function with VPC settings including subnets and security groups"},
+                    {"label": "C", "text": "Enable RDS public accessibility and use the public endpoint"},
+                    {"label": "D", "text": "Create a VPC peering connection between Lambda and RDS"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "To access resources in a VPC, Lambda functions must be configured with VPC settings that specify which subnets and security groups to use. Lambda creates elastic network interfaces (ENIs) in the specified subnets, allowing the function to communicate with VPC resources like RDS. IAM permissions alone don't provide network connectivity. Making RDS publicly accessible is a security risk and unnecessary. Lambda doesn't require VPC peering—it runs within the VPC when properly configured.",
+                  "why_this_matters": "Many production applications require Lambda functions to access private resources like databases, caching layers, or internal APIs that are not exposed to the internet. VPC integration is essential for maintaining security by keeping sensitive resources private while still allowing Lambda to access them. Understanding VPC configuration prevents connectivity issues and security gaps in serverless architectures.",
+                  "key_takeaway": "Configure Lambda functions with VPC subnets and security groups to access private VPC resources like RDS databases without exposing them to the public internet.",
+                  "option_explanations": {
+                    "A": "IAM permissions control API access but don't provide network connectivity to VPC resources.",
+                    "B": "VPC configuration with subnets and security groups enables Lambda to access private VPC resources.",
+                    "C": "Public accessibility creates security risks and is unnecessary when Lambda can access RDS privately via VPC.",
+                    "D": "VPC peering is for connecting separate VPCs; Lambda joins the VPC directly when configured."
+                  },
+                  "tags": ["topic:lambda", "subtopic:lambda-vpc-integration", "domain:1", "service:lambda", "service:vpc", "service:rds", "networking"]
+                },
+                {
+                  "id": "lam-vpc-002",
+                  "concept_id": "lambda-vpc-nat-gateway",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-vpc-integration",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "hard",
+                  "question_type": "single",
+                  "stem": "A VPC-enabled Lambda function needs to access both an RDS database in a private subnet and an external API on the internet. The function is configured with private subnets but cannot reach the external API. What is the MOST likely cause?",
+                  "options": [
+                    {"label": "A", "text": "The Lambda function's IAM role lacks permissions to access the external API"},
+                    {"label": "B", "text": "The private subnets do not have a route to a NAT Gateway or NAT Instance for internet access"},
+                    {"label": "C", "text": "The Lambda function needs to be configured with both private and public subnets"},
+                    {"label": "D", "text": "The security group attached to the Lambda function blocks outbound internet traffic"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Lambda functions in VPC private subnets need a NAT Gateway or NAT Instance to access the internet. Private subnets by default only route to internal VPC resources. Without a NAT Gateway route, the function cannot reach external APIs even though it can access internal RDS. IAM permissions don't affect network connectivity. Lambda cannot be configured with both private and public subnets simultaneously—it runs in private subnets and uses NAT for internet access. Security groups default to allowing all outbound traffic.",
+                  "why_this_matters": "Many serverless applications need to access both private VPC resources and external services like third-party APIs, SaaS platforms, or AWS services via public endpoints. Understanding that VPC-enabled Lambda functions require NAT Gateway configuration for internet access is critical for hybrid architectures. Without NAT Gateway, functions can access private resources but are isolated from the internet, causing integration failures.",
+                  "key_takeaway": "VPC-enabled Lambda functions in private subnets require a NAT Gateway with proper route table configuration to access both private VPC resources and the public internet.",
+                  "option_explanations": {
+                    "A": "IAM permissions don't control network-level connectivity to external services.",
+                    "B": "Private subnets need NAT Gateway routes for internet access; without it, Lambda cannot reach external APIs.",
+                    "C": "Lambda uses private subnets and accesses the internet via NAT Gateway, not by being in public subnets.",
+                    "D": "Security groups default to allowing all outbound traffic unless explicitly restricted."
+                  },
+                  "tags": ["topic:lambda", "subtopic:lambda-vpc-integration", "domain:1", "service:lambda", "service:vpc", "nat-gateway", "networking"]
+                },
+                {
+                  "id": "lam-vpc-003",
+                  "concept_id": "lambda-hyperplane-eni",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-vpc-integration",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "A development team is concerned about the cold start latency they experienced with VPC-enabled Lambda functions in the past. What improvement has AWS made to reduce VPC-related cold starts?",
+                  "options": [
+                    {"label": "A", "text": "Lambda now creates ENIs only once per subnet and shares them across execution environments"},
+                    {"label": "B", "text": "Lambda automatically provisions 10 ENIs when VPC configuration is first added"},
+                    {"label": "C", "text": "Lambda now bypasses security groups to reduce connection time"},
+                    {"label": "D", "text": "Lambda creates a dedicated VPC endpoint for each function"}
+                  ],
+                  "correct_options": ["A"],
+                  "answer_explanation": "AWS improved Lambda VPC networking using Hyperplane ENIs, where Lambda creates a shared ENI per subnet/security group combination rather than per execution environment. This ENI is created once and reused, eliminating the ENI creation delay from cold starts. Previously, each execution environment needed its own ENI, causing significant cold start delays. Lambda doesn't pre-provision multiple ENIs. Security groups are still enforced. Lambda doesn't create dedicated VPC endpoints per function.",
+                  "why_this_matters": "The Hyperplane ENI improvement dramatically reduced VPC-related cold starts from many seconds to milliseconds, making VPC-enabled Lambda functions viable for latency-sensitive applications. Understanding this architecture helps developers confidently use VPC integration without worrying about the performance penalties that existed in older implementations. This knowledge is essential for designing secure, performant serverless applications.",
+                  "key_takeaway": "Modern Lambda VPC integration uses shared Hyperplane ENIs that eliminate most VPC-related cold start delays, making VPC configuration practical for latency-sensitive workloads.",
+                  "option_explanations": {
+                    "A": "Hyperplane ENIs are created once per subnet/security group combination and shared, eliminating per-execution-environment ENI creation delays.",
+                    "B": "Lambda creates ENIs on-demand as needed, not pre-provisioned in bulk.",
+                    "C": "Security groups remain enforced for VPC-enabled Lambda functions.",
+                    "D": "Lambda uses shared Hyperplane ENIs, not dedicated VPC endpoints per function."
+                  },
+                  "tags": ["topic:lambda", "subtopic:lambda-vpc-integration", "domain:1", "service:lambda", "service:vpc", "cold-start", "hyperplane-eni"]
+                },
+                {
+                  "id": "lam-vpc-004",
+                  "concept_id": "lambda-security-groups",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-vpc-integration",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "multi",
+                  "stem": "A Lambda function in a VPC needs to access an ElastiCache Redis cluster. Which TWO configurations are required for the Lambda function to successfully connect to the cache? (Select TWO)",
+                  "options": [
+                    {"label": "A", "text": "Configure the Lambda function with subnets in the same VPC as ElastiCache"},
+                    {"label": "B", "text": "Attach a security group to the Lambda function and allow the ElastiCache security group to accept traffic from it"},
+                    {"label": "C", "text": "Enable ElastiCache encryption in transit"},
+                    {"label": "D", "text": "Create a VPC endpoint for ElastiCache"}
+                  ],
+                  "correct_options": ["A", "B"],
+                  "answer_explanation": "Lambda must be configured in the same VPC as ElastiCache by specifying appropriate subnets. Additionally, security groups must be configured to allow traffic: either add the Lambda security group as a source in the ElastiCache security group's inbound rules, or ensure the Lambda security group can send outbound traffic to the ElastiCache security group. Encryption in transit is a security best practice but not required for basic connectivity. ElastiCache doesn't use VPC endpoints—it's accessed directly via VPC networking.",
+                  "why_this_matters": "Proper VPC and security group configuration is essential for Lambda to access ElastiCache and other VPC-based services. Misconfigured security groups are one of the most common causes of connectivity failures in VPC environments. Understanding the bidirectional relationship between security groups—Lambda must be able to send traffic and ElastiCache must be configured to accept it—prevents troubleshooting headaches and connection timeouts.",
+                  "key_takeaway": "For Lambda to access VPC resources like ElastiCache, configure Lambda in the same VPC and ensure security groups allow traffic between Lambda and the target resource.",
+                  "option_explanations": {
+                    "A": "Lambda must be in the same VPC as ElastiCache to establish network connectivity.",
+                    "B": "Security groups must be configured to allow traffic flow between Lambda and ElastiCache.",
+                    "C": "Encryption in transit is optional for connectivity, though recommended for security.",
+                    "D": "ElastiCache is accessed via direct VPC networking, not through VPC endpoints."
+                  },
+                  "tags": ["topic:lambda", "subtopic:lambda-vpc-integration", "domain:1", "service:lambda", "service:vpc", "service:elasticache", "security-groups"]
+                },
+                {
+                  "id": "lam-vpc-005",
+                  "concept_id": "lambda-vpc-iam-permissions",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-vpc-integration",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "A developer is configuring a Lambda function to run in a VPC for the first time. The function deployment fails with an error indicating insufficient permissions. Which IAM permissions does the Lambda execution role need to create network interfaces in the VPC?",
+                  "options": [
+                    {"label": "A", "text": "ec2:CreateNetworkInterface, ec2:DescribeNetworkInterfaces, ec2:DeleteNetworkInterface"},
+                    {"label": "B", "text": "vpc:CreateNetworkInterface, vpc:AttachNetworkInterface"},
+                    {"label": "C", "text": "lambda:CreateVPCConfig, lambda:UpdateVPCConfig"},
+                    {"label": "D", "text": "iam:PassRole, iam:CreateRole"}
+                  ],
+                  "correct_options": ["A"],
+                  "answer_explanation": "Lambda requires EC2 permissions to manage elastic network interfaces (ENIs) when configured for VPC access. The execution role needs ec2:CreateNetworkInterface, ec2:DescribeNetworkInterfaces, and ec2:DeleteNetworkInterface permissions. These permissions are included in the AWS managed policy AWSLambdaVPCAccessExecutionRole. There are no VPC-specific API actions for network interfaces. Lambda-specific VPC configuration permissions don't exist. IAM role management permissions are not relevant to VPC networking.",
+                  "why_this_matters": "VPC-enabled Lambda functions require specific IAM permissions beyond basic Lambda execution permissions. Without EC2 network interface permissions, Lambda cannot create the ENIs needed to join the VPC, causing deployment failures. Understanding these permission requirements is essential for successfully deploying VPC-integrated Lambda functions and troubleshooting permission-related errors.",
+                  "key_takeaway": "VPC-enabled Lambda functions require EC2 network interface permissions (CreateNetworkInterface, DescribeNetworkInterfaces, DeleteNetworkInterface) in the execution role, typically granted via AWSLambdaVPCAccessExecutionRole.",
+                  "option_explanations": {
+                    "A": "These EC2 permissions allow Lambda to create and manage ENIs for VPC integration.",
+                    "B": "Network interface management uses EC2 APIs, not separate VPC APIs.",
+                    "C": "No lambda-specific VPC configuration permissions exist; VPC setup uses EC2 APIs.",
+                    "D": "IAM role management permissions are unrelated to VPC network interface creation."
+                  },
+                  "tags": ["topic:lambda", "subtopic:lambda-vpc-integration", "domain:1", "domain:2", "service:lambda", "service:vpc", "service:iam", "permissions"]
+                },
+                {
+                  "id": "lam-vpc-006",
+                  "concept_id": "lambda-multiple-az-resilience",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-vpc-integration",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "hard",
+                  "question_type": "single",
+                  "stem": "A Lambda function is configured to access resources in a VPC. The developer wants to ensure the function remains highly available even if an Availability Zone becomes unavailable. What should the developer do?",
+                  "options": [
+                    {"label": "A", "text": "Configure the Lambda function with subnets in multiple Availability Zones"},
+                    {"label": "B", "text": "Enable Multi-AZ deployment in the Lambda function configuration"},
+                    {"label": "C", "text": "Create separate Lambda functions for each Availability Zone"},
+                    {"label": "D", "text": "Configure the Lambda function with provisioned concurrency in each Availability Zone"}
+                  ],
+                  "correct_options": ["A"],
+                  "answer_explanation": "To ensure high availability, configure Lambda with subnets in multiple Availability Zones. Lambda automatically distributes execution environments across the configured AZs, providing resilience against AZ failures. If one AZ becomes unavailable, Lambda continues running in the remaining AZs. There's no explicit 'Multi-AZ deployment' toggle for Lambda—multi-AZ capability is achieved through subnet configuration. Creating separate functions per AZ adds unnecessary complexity. Provisioned concurrency improves performance but doesn't directly provide multi-AZ distribution beyond what subnet configuration already provides.",
+                  "why_this_matters": "Availability Zone failures, while rare, can impact application availability. Configuring Lambda with subnets across multiple AZs ensures your serverless application continues operating even during AZ-level outages. This is a fundamental best practice for production workloads that require high availability and is especially important for business-critical applications where downtime has significant cost or reputational impact.",
+                  "key_takeaway": "Configure VPC-enabled Lambda functions with subnets spanning multiple Availability Zones to ensure high availability and resilience against AZ failures.",
+                  "option_explanations": {
+                    "A": "Configuring subnets in multiple AZs enables Lambda to automatically distribute across AZs for high availability.",
+                    "B": "Lambda doesn't have an explicit Multi-AZ toggle; AZ distribution is achieved via subnet configuration.",
+                    "C": "Separate functions per AZ add complexity without benefits; Lambda handles AZ distribution automatically.",
+                    "D": "Provisioned concurrency pre-warms instances but doesn't change multi-AZ behavior provided by subnet configuration."
+                  },
+                  "tags": ["topic:lambda", "subtopic:lambda-vpc-integration", "domain:1", "service:lambda", "service:vpc", "high-availability", "multi-az"]
+                },
+                {
+                  "id": "lam-vpc-007",
+                  "concept_id": "lambda-vpc-endpoints",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-vpc-integration",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "hard",
+                  "question_type": "single",
+                  "stem": "A VPC-enabled Lambda function needs to access S3 and DynamoDB. The developer wants to avoid NAT Gateway costs for this AWS service traffic. What is the MOST cost-effective solution?",
+                  "options": [
+                    {"label": "A", "text": "Create VPC endpoints for S3 and DynamoDB in the VPC"},
+                    {"label": "B", "text": "Move the Lambda function to public subnets to access AWS services directly"},
+                    {"label": "C", "text": "Use AWS PrivateLink to connect to S3 and DynamoDB"},
+                    {"label": "D", "text": "Configure the Lambda function without VPC integration and use IAM roles for access"}
+                  ],
+                  "correct_options": ["A"],
+                  "answer_explanation": "VPC endpoints (specifically Gateway endpoints for S3 and DynamoDB) allow Lambda functions in private subnets to access these services without traversing a NAT Gateway, eliminating NAT Gateway data transfer costs. Gateway endpoints are free for S3 and DynamoDB. Lambda cannot run in public subnets—it always runs in private subnets when VPC-enabled. PrivateLink (Interface endpoints) work for many services but cost money, while Gateway endpoints are free for S3/DynamoDB. Removing VPC integration might work but prevents access to private VPC resources the function may need.",
+                  "why_this_matters": "NAT Gateway costs can be substantial for applications with high data transfer volumes to AWS services. VPC Gateway endpoints for S3 and DynamoDB eliminate these costs while keeping traffic private within AWS's network. This optimization is especially important for data-intensive applications processing large amounts of data from S3 or performing high-volume DynamoDB operations, where NAT Gateway costs could be significant.",
+                  "key_takeaway": "Use VPC Gateway endpoints for S3 and DynamoDB to allow VPC-enabled Lambda functions to access these services privately without NAT Gateway costs.",
+                  "option_explanations": {
+                    "A": "Gateway VPC endpoints for S3 and DynamoDB eliminate NAT Gateway costs while keeping traffic private.",
+                    "B": "Lambda runs in private subnets when VPC-enabled, regardless of subnet configuration.",
+                    "C": "PrivateLink Interface endpoints work but cost money; Gateway endpoints for S3/DynamoDB are free.",
+                    "D": "Removing VPC integration prevents access to private VPC resources the function may require."
+                  },
+                  "tags": ["topic:lambda", "subtopic:lambda-vpc-integration", "domain:1", "service:lambda", "service:vpc", "service:s3", "service:dynamodb", "vpc-endpoints", "cost-optimization"]
+                },
+                {
+                  "id": "lam-vpc-008",
+                  "concept_id": "lambda-vpc-troubleshooting",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-vpc-integration",
+                  "domain": "domain-4-troubleshooting-optimization",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "A VPC-enabled Lambda function is timing out when trying to connect to an Aurora database. The function has the correct VPC configuration and IAM permissions. What is the MOST likely cause?",
+                  "options": [
+                    {"label": "A", "text": "The Lambda function's timeout is set too low"},
+                    {"label": "B", "text": "The database security group is not allowing inbound traffic from the Lambda function's security group"},
+                    {"label": "C", "text": "The Lambda function needs to be configured with RDS proxy"},
+                    {"label": "D", "text": "The Aurora database is in a different AWS Region"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Connection timeouts to databases in VPC environments are most commonly caused by security group misconfigurations. The database security group must allow inbound traffic from the Lambda function's security group on the appropriate port (e.g., 3306 for MySQL, 5432 for PostgreSQL). While low timeout settings can cause issues, connection failures typically manifest immediately, not after waiting for timeout. RDS Proxy is beneficial for connection pooling but not required for basic connectivity. Cross-region access requires VPC peering or other connectivity solutions, but the question states 'correct VPC configuration'.",
+                  "why_this_matters": "Security group misconfiguration is the most common issue when connecting Lambda to VPC-based databases. Understanding how to properly configure security groups for bidirectional communication prevents hours of troubleshooting connection timeouts. This knowledge is essential for any developer building serverless data-driven applications with private database access.",
+                  "key_takeaway": "When VPC-enabled Lambda functions cannot connect to databases, check that the database security group allows inbound traffic from the Lambda function's security group on the correct port.",
+                  "option_explanations": {
+                    "A": "Low timeout can cause issues, but connection failures due to security groups typically manifest immediately or quickly.",
+                    "B": "Security group rules blocking traffic from Lambda to the database is the most common cause of connection timeouts.",
+                    "C": "RDS Proxy helps with connection pooling and management but isn't required for basic database connectivity.",
+                    "D": "Cross-region database access requires additional networking setup beyond standard VPC configuration."
+                  },
+                  "tags": ["topic:lambda", "subtopic:lambda-vpc-integration", "domain:4", "service:lambda", "service:vpc", "service:rds", "troubleshooting", "security-groups"]
+                },
+                {
+                  "id": "lam-vpc-009",
+                  "concept_id": "lambda-vpc-ip-addresses",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-vpc-integration",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "A Lambda function in a VPC needs to call a third-party API that requires IP whitelisting. What approach should the developer use to provide a consistent source IP address for the Lambda function?",
+                  "options": [
+                    {"label": "A", "text": "Configure the Lambda function with an Elastic IP address"},
+                    {"label": "B", "text": "Route Lambda traffic through a NAT Gateway with an Elastic IP attached"},
+                    {"label": "C", "text": "Use Lambda's built-in static IP feature"},
+                    {"label": "D", "text": "Configure the Lambda function with a specific subnet that has a reserved IP range"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Lambda functions in VPC private subnets can route internet-bound traffic through a NAT Gateway, which has a consistent Elastic IP address. This Elastic IP can be whitelisted by the third-party API. Lambda functions cannot have Elastic IPs directly attached. Lambda doesn't have a built-in static IP feature. Subnets have CIDR ranges, but individual Lambda executions would still have varying IPs without NAT Gateway.",
+                  "why_this_matters": "Many third-party APIs and legacy systems require IP whitelisting for security. Understanding how to provide consistent source IP addresses from Lambda functions is essential for integrating with such systems. The NAT Gateway pattern is the standard solution and is widely used in production environments for compliance and security requirements where IP whitelisting is mandatory.",
+                  "key_takeaway": "Route VPC-enabled Lambda function traffic through a NAT Gateway with an Elastic IP to provide a consistent source IP address for third-party API whitelisting.",
+                  "option_explanations": {
+                    "A": "Lambda functions cannot have Elastic IPs directly attached to them.",
+                    "B": "NAT Gateway with Elastic IP provides a consistent source IP for all traffic from Lambda to the internet.",
+                    "C": "Lambda has no built-in static IP feature; consistent IPs require NAT Gateway.",
+                    "D": "Subnets have CIDR ranges, but Lambda executions within them don't share a single consistent IP without NAT Gateway."
+                  },
+                  "tags": ["topic:lambda", "subtopic:lambda-vpc-integration", "domain:1", "service:lambda", "service:vpc", "nat-gateway", "networking", "ip-whitelisting"]
+                },
+                {
+                  "id": "lam-vpc-010",
+                  "concept_id": "lambda-vpc-dns-resolution",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-vpc-integration",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "easy",
+                  "question_type": "single",
+                  "stem": "A VPC-enabled Lambda function is experiencing DNS resolution failures when trying to access resources by hostname. What VPC setting should the developer verify?",
+                  "options": [
+                    {"label": "A", "text": "Ensure the VPC has DNS resolution and DNS hostnames enabled"},
+                    {"label": "B", "text": "Configure a custom DNS server in the Lambda function environment variables"},
+                    {"label": "C", "text": "Attach a Route 53 resolver to the Lambda function"},
+                    {"label": "D", "text": "Enable DNS support in the Lambda function's security group"}
+                  ],
+                  "correct_options": ["A"],
+                  "answer_explanation": "VPCs must have DNS resolution and DNS hostnames enabled for resources to resolve DNS names. These are VPC-level settings that can be toggled in the VPC configuration. Without these settings enabled, Lambda functions and other VPC resources cannot resolve hostnames to IP addresses. Lambda doesn't support custom DNS server configuration via environment variables. Route 53 Resolver endpoints are for hybrid DNS scenarios, not basic VPC DNS. Security groups don't have DNS-related settings.",
+                  "why_this_matters": "DNS resolution is fundamental to accessing resources by hostname, whether internal VPC resources or external services. Without DNS enabled in the VPC, applications must use IP addresses directly, which is brittle and impractical. This setting is often overlooked when creating new VPCs or troubleshooting connectivity issues, making it a common source of problems in VPC-enabled Lambda deployments.",
+                  "key_takeaway": "Ensure VPC DNS resolution and DNS hostnames are enabled for Lambda functions to resolve hostnames in VPC environments.",
+                  "option_explanations": {
+                    "A": "VPC DNS resolution and DNS hostnames settings control hostname resolution for all VPC resources including Lambda.",
+                    "B": "Lambda uses VPC DNS settings; custom DNS servers cannot be configured via environment variables.",
+                    "C": "Route 53 Resolver endpoints are for advanced hybrid DNS scenarios, not basic VPC DNS functionality.",
+                    "D": "Security groups control network traffic, not DNS resolution capabilities."
+                  },
+                  "tags": ["topic:lambda", "subtopic:lambda-vpc-integration", "domain:1", "service:lambda", "service:vpc", "dns", "troubleshooting"]
+                }
+              ]
+            },
+            {
+              "subtopic_id": "lambda-configuration",
+              "name": "Lambda function configuration and settings",
+              "num_questions_generated": 10,
+              "questions": [
+                {
+                  "id": "lam-cfg-001",
+                  "concept_id": "lambda-memory-cpu-relationship",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-configuration",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "A Lambda function is CPU-bound and takes 8 seconds to process requests at 512 MB memory. The developer increases memory to 1024 MB and observes that execution time drops to 4 seconds. What explains this behavior?",
+                  "options": [
+                    {"label": "A", "text": "Higher memory allocation provides more disk space for temporary file operations"},
+                    {"label": "B", "text": "Lambda allocates CPU power proportionally to memory; more memory means more CPU"},
+                    {"label": "C", "text": "Higher memory configurations enable multi-threading in Lambda functions"},
+                    {"label": "D", "text": "The Lambda execution environment is cached longer with higher memory settings"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Lambda allocates CPU power proportionally to memory configuration. At 1769 MB, a function gets 1 full vCPU, and CPU scales linearly with memory below that threshold. Doubling memory from 512 MB to 1024 MB doubles CPU power, which explains why a CPU-bound task completes in half the time. Disk space doesn't significantly impact CPU-bound operations. Lambda doesn't enable multi-threading based on memory—code is responsible for threading. Execution environment caching is unrelated to memory settings.",
+                  "why_this_matters": "Understanding the memory-CPU relationship is crucial for optimizing Lambda performance and cost. For CPU-intensive workloads, increasing memory can dramatically reduce execution time while potentially lowering overall costs if the reduction in duration exceeds the increased per-millisecond cost. This optimization strategy is essential for data processing, image manipulation, cryptographic operations, and other compute-heavy tasks.",
+                  "key_takeaway": "Lambda CPU power scales linearly with memory allocation—increasing memory for CPU-bound functions can reduce execution time and may reduce overall cost.",
+                  "option_explanations": {
+                    "A": "Disk space changes don't explain the CPU performance improvement observed.",
+                    "B": "Lambda CPU allocation is proportional to memory; doubling memory doubles CPU, halving CPU-bound execution time.",
+                    "C": "Multi-threading is a code-level concern; Lambda doesn't automatically enable it based on memory.",
+                    "D": "Execution environment caching behavior is independent of memory configuration."
+                  },
+                  "tags": ["topic:lambda", "subtopic:lambda-configuration", "domain:1", "domain:4", "service:lambda", "memory", "cpu", "performance", "optimization"]
+                },
+                {
+                  "id": "lam-cfg-002",
+                  "concept_id": "lambda-environment-variables",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-configuration",
+                  "domain": "domain-2-security",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "A developer needs to store a database connection string in a Lambda function's configuration. The connection string contains a password. What is the MOST secure approach?",
+                  "options": [
+                    {"label": "A", "text": "Store the connection string in an environment variable without encryption"},
+                    {"label": "B", "text": "Store the connection string in an encrypted environment variable using a KMS key"},
+                    {"label": "C", "text": "Store the password in AWS Secrets Manager and retrieve it at runtime"},
+                    {"label": "D", "text": "Hard-code the connection string in the Lambda function code"}
+                  ],
+                  "correct_options": ["C"],
+                  "answer_explanation": "AWS Secrets Manager is purpose-built for storing and managing secrets like database passwords. It provides automatic rotation, fine-grained access control, and audit logging. The Lambda function retrieves the secret at runtime using IAM permissions. While encrypted environment variables provide encryption at rest, they don't support rotation or centralized management. Unencrypted environment variables expose secrets. Hard-coding secrets in code is a critical security vulnerability.",
+                  "why_this_matters": "Proper secrets management is fundamental to application security. Secrets stored in environment variables or code can be exposed through logs, version control, or unauthorized access. Secrets Manager provides enterprise-grade secret storage with rotation capabilities, ensuring credentials can be updated without redeploying code. This approach is essential for compliance requirements and security best practices.",
+                  "key_takeaway": "Store secrets like database passwords in AWS Secrets Manager or Systems Manager Parameter Store (SecureString), not in environment variables or code, and retrieve them at runtime.",
+                  "option_explanations": {
+                    "A": "Unencrypted environment variables expose secrets and violate security best practices.",
+                    "B": "Encrypted environment variables provide at-rest encryption but lack rotation and centralized management.",
+                    "C": "Secrets Manager provides secure storage, automatic rotation, access control, and audit logging for sensitive credentials.",
+                    "D": "Hard-coding secrets in code is a severe security vulnerability and should never be done."
+                  },
+                  "tags": ["topic:lambda", "subtopic:lambda-configuration", "domain:2", "service:lambda", "service:secrets-manager", "security", "secrets-management"]
+                },
+                {
+                  "id": "lam-cfg-003",
+                  "concept_id": "lambda-timeout-configuration",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-configuration",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "easy",
+                  "question_type": "single",
+                  "stem": "A Lambda function occasionally processes large files that take up to 10 minutes to complete. The function is timing out with its default timeout setting. What is the maximum timeout value the developer can configure?",
+                  "options": [
+                    {"label": "A", "text": "5 minutes (300 seconds)"},
+                    {"label": "B", "text": "10 minutes (600 seconds)"},
+                    {"label": "C", "text": "15 minutes (900 seconds)"},
+                    {"label": "D", "text": "30 minutes (1800 seconds)"}
+                  ],
+                  "correct_options": ["C"],
+                  "answer_explanation": "The maximum timeout for Lambda functions is 15 minutes (900 seconds). This is a hard limit that cannot be increased. For tasks requiring more than 15 minutes, developers should consider alternative services like ECS, Fargate, Step Functions with asynchronous processing, or breaking the work into smaller chunks that can be processed by multiple Lambda invocations.",
+                  "why_this_matters": "Understanding Lambda's execution time limits is critical for architectural decisions. Tasks exceeding 15 minutes cannot run in Lambda and require different compute services. This constraint influences how you design data processing pipelines, batch jobs, and long-running workflows. Knowing this limit early prevents costly rearchitecture later in development.",
+                  "key_takeaway": "Lambda functions have a maximum timeout of 15 minutes (900 seconds)—tasks requiring longer execution need alternative compute services or workflow orchestration.",
+                  "option_explanations": {
+                    "A": "300 seconds is below the maximum timeout Lambda supports.",
+                    "B": "600 seconds is below the maximum timeout Lambda supports.",
+                    "C": "900 seconds (15 minutes) is the maximum timeout configurable for Lambda functions.",
+                    "D": "Lambda does not support timeouts beyond 15 minutes."
+                  },
+                  "tags": ["topic:lambda", "subtopic:lambda-configuration", "domain:1", "service:lambda", "timeout", "limits"]
+                },
+                {
+                  "id": "lam-cfg-004",
+                  "concept_id": "lambda-layers",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-configuration",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "multi",
+                  "stem": "A development team maintains 20 Lambda functions that all use the same data validation library. The library is frequently updated. Which TWO benefits would the team gain by packaging the library as a Lambda Layer? (Select TWO)",
+                  "options": [
+                    {"label": "A", "text": "Reduce deployment package size for each function"},
+                    {"label": "B", "text": "Update the library across all functions by updating a single layer version"},
+                    {"label": "C", "text": "Improve function execution performance"},
+                    {"label": "D", "text": "Increase the maximum timeout for functions using the layer"}
+                  ],
+                  "correct_options": ["A", "B"],
+                  "answer_explanation": "Lambda Layers allow you to package common code separately from function code. This reduces individual deployment package sizes since the shared code is in the layer. When the library needs updating, you create a new layer version and update function configurations to reference it, rather than redeploying 20 individual functions. Layers don't inherently improve runtime performance—they're about code organization and deployment efficiency. Layers don't affect timeout limits.",
+                  "why_this_matters": "Lambda Layers are essential for managing shared dependencies across multiple functions efficiently. They reduce deployment times, storage costs, and operational overhead by centralizing common code. For teams maintaining many functions with shared libraries, layers dramatically simplify updates and ensure consistency. This pattern is fundamental to professional serverless application development at scale.",
+                  "key_takeaway": "Use Lambda Layers to share common code and dependencies across multiple functions, reducing deployment package sizes and simplifying updates.",
+                  "option_explanations": {
+                    "A": "Layers separate shared code from function code, reducing deployment package size for each function.",
+                    "B": "Updating a layer version allows all functions using that layer to get the update without individual redeployment.",
+                    "C": "Layers provide code organization benefits but don't directly improve execution performance.",
+                    "D": "Layers don't affect function timeout limits, which are independent of code packaging."
+                  },
+                  "tags": ["topic:lambda", "subtopic:lambda-configuration", "domain:1", "service:lambda", "layers", "code-organization", "deployment"]
+                },
+                {
+                  "id": "lam-cfg-005",
+                  "concept_id": "lambda-ephemeral-storage",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-configuration",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "A Lambda function needs to download a 5 GB file from S3, process it, and upload results back to S3. The function is failing with a disk space error. What should the developer configure?",
+                  "options": [
+                    {"label": "A", "text": "Increase the function's memory allocation"},
+                    {"label": "B", "text": "Configure ephemeral storage to a size larger than 5 GB"},
+                    {"label": "C", "text": "Mount an EFS file system to the Lambda function"},
+                    {"label": "D", "text": "Use an EC2 instance instead of Lambda for this workload"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Lambda provides /tmp directory ephemeral storage, configurable from 512 MB to 10 GB. For a 5 GB file, the developer should increase ephemeral storage to at least 6-7 GB to accommodate the file and processing overhead. Memory allocation doesn't affect /tmp storage size. EFS could work but adds complexity and latency for simple file processing. While EC2 could handle this, it's unnecessary when Lambda's ephemeral storage can be configured appropriately.",
+                  "why_this_matters": "Many data processing tasks require temporary disk space beyond Lambda's default 512 MB. Understanding that ephemeral storage is configurable up to 10 GB allows developers to handle larger files without moving to more complex compute options. This capability makes Lambda viable for a broader range of data processing scenarios including ETL, media processing, and log analysis.",
+                  "key_takeaway": "Lambda ephemeral storage (/tmp) is configurable from 512 MB to 10 GB—increase it when processing large files rather than switching to alternative compute services.",
+                  "option_explanations": {
+                    "A": "Memory allocation affects RAM and CPU, not /tmp directory ephemeral storage size.",
+                    "B": "Ephemeral storage can be increased to 10 GB to accommodate larger files in /tmp.",
+                    "C": "EFS adds complexity and latency; ephemeral storage is simpler for temporary file processing.",
+                    "D": "Lambda can handle this with increased ephemeral storage; EC2 is unnecessary complexity."
+                  },
+                  "tags": ["topic:lambda", "subtopic:lambda-configuration", "domain:1", "service:lambda", "ephemeral-storage", "file-processing"]
+                },
+                {
+                  "id": "lam-cfg-006",
+                  "concept_id": "lambda-execution-role",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-configuration",
+                  "domain": "domain-2-security",
+                  "difficulty_inferred": "easy",
+                  "question_type": "single",
+                  "stem": "A Lambda function needs to read objects from an S3 bucket. What IAM configuration is required?",
+                  "options": [
+                    {"label": "A", "text": "Create an IAM user with S3 read permissions and embed the access keys in the function code"},
+                    {"label": "B", "text": "Attach an IAM execution role to the Lambda function with S3 read permissions"},
+                    {"label": "C", "text": "Configure S3 bucket policy to allow public read access"},
+                    {"label": "D", "text": "Enable S3 access in the Lambda function's VPC security group"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Lambda functions use IAM execution roles to access AWS services. The execution role should have policies granting s3:GetObject and related permissions for the specific bucket. Lambda automatically uses this role's credentials when making AWS API calls. Embedding IAM user access keys in code is a security anti-pattern. Public bucket access is a security risk and unnecessary. Security groups control network traffic, not IAM permissions.",
+                  "why_this_matters": "IAM execution roles are the secure and proper way to grant Lambda functions access to AWS services. They follow the principle of least privilege, provide audit trails through CloudTrail, and eliminate the need to manage long-term credentials in code. Understanding execution roles is fundamental to securing serverless applications and is a cornerstone of AWS security best practices.",
+                  "key_takeaway": "Use IAM execution roles to grant Lambda functions permissions to AWS services—never embed access keys in code.",
+                  "option_explanations": {
+                    "A": "Embedding access keys in code is a critical security vulnerability and violates best practices.",
+                    "B": "IAM execution roles are the secure, proper way to grant Lambda functions AWS service permissions.",
+                    "C": "Public bucket access creates security risks and is unnecessary when using execution roles.",
+                    "D": "Security groups control network connectivity, not IAM permissions for AWS service access."
+                  },
+                  "tags": ["topic:lambda", "subtopic:lambda-configuration", "domain:2", "service:lambda", "service:iam", "service:s3", "security", "permissions"]
+                },
+                {
+                  "id": "lam-cfg-007",
+                  "concept_id": "lambda-runtime-selection",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-configuration",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "easy",
+                  "question_type": "single",
+                  "stem": "A developer needs to deploy a Lambda function written in a language not natively supported by AWS Lambda managed runtimes. What approach should they use?",
+                  "options": [
+                    {"label": "A", "text": "Rewrite the function in Python or Node.js"},
+                    {"label": "B", "text": "Use a custom runtime by implementing the Lambda Runtime API"},
+                    {"label": "C", "text": "Deploy the function to EC2 instead"},
+                    {"label": "D", "text": "Request AWS to add support for the language"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Lambda supports custom runtimes through the Runtime API, allowing you to run code in any language by providing a runtime bootstrap. You package the runtime with your function code or as a layer. This enables languages like Rust, PHP (custom versions), or any compiled binary to run in Lambda. Rewriting eliminates the benefits of using the existing codebase. EC2 adds operational overhead. Waiting for AWS to add language support is impractical.",
+                  "why_this_matters": "Custom runtimes expand Lambda's capabilities beyond managed runtimes, enabling teams to leverage existing code in any language while maintaining serverless benefits. This is particularly valuable for organizations with legacy applications, specialized language requirements, or performance-critical code in compiled languages. Understanding custom runtimes opens serverless architecture to a much wider range of use cases.",
+                  "key_takeaway": "Use custom runtimes with the Lambda Runtime API to run code in any programming language, not just AWS-managed runtimes.",
+                  "option_explanations": {
+                    "A": "Rewriting eliminates existing code investment and may not be feasible for complex applications.",
+                    "B": "Custom runtimes via the Runtime API allow any language to run in Lambda by providing a bootstrap layer.",
+                    "C": "EC2 adds operational complexity and loses serverless benefits unnecessarily.",
+                    "D": "Custom runtimes provide immediate language support without waiting for AWS."
+                  },
+                  "tags": ["topic:lambda", "subtopic:lambda-configuration", "domain:1", "service:lambda", "custom-runtime", "runtime-api"]
+                },
+                {
+                  "id": "lam-cfg-008",
+                  "concept_id": "lambda-destinations",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-configuration",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "A developer wants to route successful Lambda executions to one SQS queue and failed executions to another SQS queue for asynchronous invocations. What Lambda feature should they configure?",
+                  "options": [
+                    {"label": "A", "text": "Configure a dead-letter queue (DLQ) for the Lambda function"},
+                    {"label": "B", "text": "Configure Lambda Destinations with separate success and failure destinations"},
+                    {"label": "C", "text": "Use EventBridge rules to route based on execution status"},
+                    {"label": "D", "text": "Implement custom error handling code to send messages to appropriate queues"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Lambda Destinations allow you to configure separate targets for successful and failed asynchronous invocations. You can specify one SQS queue for success and another for failure, with Lambda automatically routing based on execution result. DLQs only handle failures, not successes. EventBridge could work but Destinations are purpose-built for this use case. Custom error handling adds unnecessary code complexity when Destinations provide this natively.",
+                  "why_this_matters": "Destinations provide a declarative way to handle asynchronous invocation results without writing custom code. This pattern enables robust event-driven architectures where successful and failed executions follow different paths—successful results might trigger downstream processing while failures route to error handling workflows. Destinations reduce code complexity and improve reliability by separating business logic from result routing.",
+                  "key_takeaway": "Use Lambda Destinations to route successful and failed asynchronous invocations to different targets declaratively, without writing custom routing code.",
+                  "option_explanations": {
+                    "A": "DLQs only capture failed invocations; they cannot route successful executions.",
+                    "B": "Destinations allow configuring separate targets for success and failure, automatically routing based on execution result.",
+                    "C": "EventBridge could work but Destinations are the purpose-built, simpler solution for this use case.",
+                    "D": "Custom code adds complexity when Destinations provide native, declarative result routing."
+                  },
+                  "tags": ["topic:lambda", "subtopic:lambda-configuration", "domain:1", "service:lambda", "service:sqs", "destinations", "async-invocation", "error-handling"]
+                },
+                {
+                  "id": "lam-cfg-009",
+                  "concept_id": "lambda-environment-variable-size",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-configuration",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "A developer is trying to store configuration data in Lambda environment variables but receives an error that the environment variables exceed the size limit. What is the maximum total size for all environment variables in a Lambda function?",
+                  "options": [
+                    {"label": "A", "text": "2 KB"},
+                    {"label": "B", "text": "4 KB"},
+                    {"label": "C", "text": "8 KB"},
+                    {"label": "D", "text": "16 KB"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Lambda environment variables have a combined maximum size of 4 KB. For larger configuration needs, developers should use AWS Systems Manager Parameter Store, AWS AppConfig, or store configuration in S3 and load it at runtime or during initialization. Understanding this limit prevents deployment failures and guides appropriate configuration management strategies.",
+                  "why_this_matters": "Environment variable size limits require careful consideration of configuration management strategies. Large configurations exceeding 4 KB need alternative solutions like Parameter Store or AppConfig, which also provide benefits like dynamic updates, versioning, and encryption. Knowing this limit helps architects design appropriate configuration management patterns from the start, avoiding refactoring later.",
+                  "key_takeaway": "Lambda environment variables are limited to 4 KB total—use Parameter Store, AppConfig, or runtime configuration loading for larger configuration needs.",
+                  "option_explanations": {
+                    "A": "2 KB is below the actual environment variable limit.",
+                    "B": "4 KB is the maximum total size for all Lambda environment variables combined.",
+                    "C": "8 KB exceeds Lambda's environment variable size limit.",
+                    "D": "16 KB exceeds Lambda's environment variable size limit."
+                  },
+                  "tags": ["topic:lambda", "subtopic:lambda-configuration", "domain:1", "service:lambda", "environment-variables", "limits", "configuration"]
+                },
+                {
+                  "id": "lam-cfg-010",
+                  "concept_id": "lambda-handler-configuration",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-configuration",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "easy",
+                  "question_type": "single",
+                  "stem": "A Lambda function written in Python is deployed with the handler set to 'app.lambda_handler'. What does this configuration specify?",
+                  "options": [
+                    {"label": "A", "text": "The function will execute the file named app.py"},
+                    {"label": "B", "text": "The function will call the lambda_handler function in the app.py file"},
+                    {"label": "C", "text": "The function will use an application named app with a handler configuration"},
+                    {"label": "D", "text": "The function will execute lambda_handler.app() as the entry point"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "The handler configuration uses the format 'file.function'. In 'app.lambda_handler', 'app' refers to the Python file (app.py) and 'lambda_handler' is the function name within that file. Lambda loads the app.py module and invokes the lambda_handler function when the function is invoked. The file extension is not included in the handler configuration. The format is always file.function_name, not function.file.",
+                  "why_this_matters": "Understanding handler configuration is fundamental to Lambda function deployment. Misconfigured handlers are a common cause of deployment failures and runtime errors. The handler specifies the entry point for your code, and getting this right is essential for Lambda to execute your function correctly. This knowledge applies across all Lambda runtimes, each with language-specific handler formats.",
+                  "key_takeaway": "Lambda handler configuration follows the format 'filename.function_name'—it specifies which file and function Lambda should execute when invoked.",
+                  "option_explanations": {
+                    "A": "The handler specifies both the file and the function within it, not just the file.",
+                    "B": "The handler 'app.lambda_handler' tells Lambda to call the lambda_handler function in app.py.",
+                    "C": "The format is filename.function_name, not an application configuration setting.",
+                    "D": "The format is file.function, meaning app.py contains lambda_handler function, not the reverse."
+                  },
+                  "tags": ["topic:lambda", "subtopic:lambda-configuration", "domain:1", "service:lambda", "handler", "python", "configuration"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "topic_id": "dynamodb",
+          "name": "Amazon DynamoDB",
+          "subtopics": [
+            {
+              "subtopic_id": "dynamodb-partition-keys",
+              "name": "DynamoDB partition key design and data distribution",
+              "num_questions_generated": 10,
+              "questions": [
+                {
+                  "id": "ddb-pk-001",
+                  "concept_id": "high-cardinality-partition-keys",
+                  "variant_index": 0,
+                  "topic": "dynamodb",
+                  "subtopic": "dynamodb-partition-keys",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "hard",
+                  "question_type": "single",
+                  "stem": "An e-commerce application stores order data in DynamoDB with 'OrderStatus' (values: PENDING, SHIPPED, DELIVERED) as the partition key. The application experiences throttling on write operations. Most orders are in PENDING status. What is the BEST solution to improve write throughput?",
+                  "options": [
+                    {"label": "A", "text": "Increase the provisioned write capacity units"},
+                    {"label": "B", "text": "Change the partition key to OrderID, a unique identifier for each order"},
+                    {"label": "C", "text": "Add a sort key to the table to distribute writes"},
+                    {"label": "D", "text": "Enable DynamoDB auto scaling"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "OrderStatus has low cardinality (only three values) causing most writes to go to a single partition for PENDING orders, creating a hot partition. Using OrderID as the partition key provides high cardinality with unique values per order, distributing writes evenly across partitions. While increasing capacity or enabling auto scaling might help temporarily, they don't address the root cause of poor partition key design. Adding a sort key doesn't change partition distribution since writes to the same partition key still target the same partition.",
+                  "why_this_matters": "Partition key design is the most critical factor in DynamoDB performance. Low-cardinality partition keys create hot partitions where a disproportionate amount of traffic goes to a few partitions, wasting capacity in others. This causes throttling even when overall table capacity seems adequate. Understanding high-cardinality keys is essential for building scalable DynamoDB applications that efficiently use provisioned or on-demand capacity.",
+                  "key_takeaway": "Use high-cardinality partition keys with many unique values to distribute data and traffic evenly across partitions, avoiding hot partitions that cause throttling.",
+                  "option_explanations": {
+                    "A": "Increasing capacity doesn't solve the hot partition problem caused by low-cardinality partition keys.",
+                    "B": "OrderID provides high cardinality with unique values, evenly distributing writes across partitions.",
+                    "C": "Sort keys don't affect partition distribution; items with the same partition key still go to the same partition.",
+                    "D": "Auto scaling responds to throttling but doesn't fix the underlying partition key design issue."
+                  },
+                  "tags": ["topic:dynamodb", "subtopic:dynamodb-partition-keys", "domain:1", "service:dynamodb", "partition-key", "performance", "hot-partition"]
+                },
+                {
+                  "id": "ddb-pk-002",
+                  "concept_id": "composite-partition-keys",
+                  "variant_index": 0,
+                  "topic": "dynamodb",
+                  "subtopic": "dynamodb-partition-keys",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "A gaming application stores player scores with TenantID as the partition key. Each tenant has millions of players, causing uneven data distribution. What technique should the developer use to improve distribution?",
+                  "options": [
+                    {"label": "A", "text": "Add a random suffix to the TenantID to create composite partition keys like 'TenantID.1', 'TenantID.2', etc."},
+                    {"label": "B", "text": "Use PlayerID as the partition key instead of TenantID"},
+                    {"label": "C", "text": "Create a global secondary index with TenantID as the partition key"},
+                    {"label": "D", "text": "Enable DynamoDB Streams to distribute the load"}
+                  ],
+                  "correct_options": ["A"],
+                  "answer_explanation": "Adding a calculated suffix to TenantID (like using modulo of PlayerID to generate suffixes 1-10) creates multiple partitions per tenant, distributing large tenants across multiple partition key values. This technique, called write sharding, maintains the tenant grouping concept while improving distribution. Using PlayerID alone might distribute data well but loses the ability to efficiently query all players for a tenant. GSIs don't change base table partition distribution. Streams are for processing changes, not improving data distribution.",
+                  "why_this_matters": "Multi-tenant applications often face the challenge of large tenants that don't fit well in a single partition. Write sharding with composite keys allows you to maintain logical grouping (tenant-based access patterns) while physically distributing data for performance. This pattern is essential for SaaS applications where tenant sizes vary significantly and large tenants could otherwise create hot partitions.",
+                  "key_takeaway": "Use write sharding by adding calculated suffixes to partition keys to distribute large logical groups across multiple physical partitions while maintaining queryability.",
+                  "option_explanations": {
+                    "A": "Composite keys with calculated suffixes distribute large tenants across multiple partitions while maintaining tenant-based access patterns.",
+                    "B": "PlayerID distributes data but loses efficient tenant-based query capability.",
+                    "C": "GSIs don't change the base table's partition distribution or solve hot partition issues.",
+                    "D": "DynamoDB Streams process changes but don't affect data distribution or partition key design."
+                  },
+                  "tags": ["topic:dynamodb", "subtopic:dynamodb-partition-keys", "domain:1", "service:dynamodb", "write-sharding", "multi-tenant", "partition-key"]
+                },
+                {
+                  "id": "ddb-pk-003",
+                  "concept_id": "partition-key-best-practices",
+                  "variant_index": 0,
+                  "topic": "dynamodb",
+                  "subtopic": "dynamodb-partition-keys",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "easy",
+                  "question_type": "single",
+                  "stem": "A developer is designing a DynamoDB table to store user profile data. Each user has a unique email address. What should the developer use as the partition key?",
+                  "options": [
+                    {"label": "A", "text": "User's country code"},
+                    {"label": "B", "text": "User's email address"},
+                    {"label": "C", "text": "User's account creation date"},
+                    {"label": "D", "text": "User's subscription tier (FREE, PREMIUM, ENTERPRISE)"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Email address is an excellent partition key choice because it's unique per user (high cardinality), provides even distribution, and supports the primary access pattern of retrieving user profiles. Country code, account creation date, and subscription tier all have low cardinality, creating hot partitions where many users share the same key value. Low-cardinality keys should be avoided as partition keys.",
+                  "why_this_matters": "Choosing the right partition key determines the performance and scalability of your DynamoDB table for the life of the application. Good partition keys have high cardinality and align with access patterns. Poor choices create hot partitions, waste capacity, and are difficult to fix later since changing partition keys requires creating a new table and migrating data. Getting this right from the start saves significant refactoring effort.",
+                  "key_takeaway": "Choose partition keys with high cardinality and unique values per item, avoiding low-cardinality attributes like status codes, categories, or dates.",
+                  "option_explanations": {
+                    "A": "Country code has low cardinality, causing many users to share few partition values.",
+                    "B": "Email address is unique per user, providing high cardinality and even distribution.",
+                    "C": "Creation dates have low cardinality as many users register on the same day, creating hot partitions.",
+                    "D": "Subscription tier has very low cardinality with only three values, creating severe hot partitions."
+                  },
+                  "tags": ["topic:dynamodb", "subtopic:dynamodb-partition-keys", "domain:1", "service:dynamodb", "partition-key", "design", "best-practices"]
+                },
+                {
+                  "id": "ddb-pk-004",
+                  "concept_id": "partition-key-uniformity",
+                  "variant_index": 0,
+                  "topic": "dynamodb",
+                  "subtopic": "dynamodb-partition-keys",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "An IoT application stores sensor readings in DynamoDB using SensorID as the partition key. Some sensors generate data every second while others generate data once per hour. The application experiences throttling. What is the MOST likely cause?",
+                  "options": [
+                    {"label": "A", "text": "The table does not have enough provisioned capacity"},
+                    {"label": "B", "text": "High-frequency sensors create hot partitions with uneven traffic distribution"},
+                    {"label": "C", "text": "The sort key is not properly configured"},
+                    {"label": "D", "text": "DynamoDB Streams is not enabled"}
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Even though SensorID might seem like a good partition key with unique values per sensor, the uneven traffic pattern creates hot partitions. Sensors writing every second consume disproportionate capacity on their partitions compared to hourly sensors. While increasing capacity might help, it doesn't address the fundamental issue of uneven distribution. The partition key choice works against the access pattern. Adding a time-based component or sharding high-frequency sensors would better distribute the load.",
+                  "why_this_matters": "High cardinality alone doesn't guarantee good partition key design—traffic patterns matter equally. A partition key that creates even data distribution but uneven traffic distribution still causes hot partitions and throttling. Understanding this nuance is critical for real-world applications where access patterns aren't uniform across all key values, such as IoT, time-series data, and applications with power users.",
+                  "key_takeaway": "Good partition keys require both high cardinality and uniform access patterns—uneven traffic across partition key values creates hot partitions even with unique keys.",
+                  "option_explanations": {
+                    "A": "The issue is uneven distribution of traffic to partitions, not total capacity.",
+                    "B": "High-frequency sensors receive disproportionate write traffic, creating hot partitions despite SensorID uniqueness.",
+                    "C": "Sort keys don't affect partition distribution; the partition key determines which partition receives writes.",
+                    "D": "DynamoDB Streams don't affect table write capacity or partition distribution."
+                  },
+                  "tags": ["topic:dynamodb", "subtopic:dynamodb-partition-keys", "domain:1", "service:dynamodb", "hot-partition", "iot", "access-patterns"]
+                },
+                {
+                  "id": "ddb-pk-005",
+                  "concept_id": "partition-key-access-patterns",
+                  "variant_index": 0,
+                  "topic": "dynamodb",
+                  "subtopic": "dynamodb-partition-keys",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "hard",
+                  "question_type": "multi",
+                  "stem": "A developer is designing a DynamoDB table to store customer orders. The primary access patterns are: (1) Retrieve all orders for a specific customer, and (2) Retrieve all orders placed in the last 30 days. Which TWO design choices would efficiently support both access patterns? (Select TWO)",
+                  "options": [
+                    {"label": "A", "text": "Use CustomerID as the partition key and OrderDate as the sort key"},
+                    {"label": "B", "text": "Create a global secondary index with OrderDate as the partition key"},
+                    {"label": "C", "text": "Use OrderDate as the partition key and CustomerID as the sort key"},
+                    {"label": "D", "text": "Create a local secondary index with OrderDate as the sort key"}
+                  ],
+                  "correct_options": ["A", "B"],
+                  "answer_explanation": "Using CustomerID as partition key and OrderDate as sort key efficiently supports retrieving all orders for a customer via a Query operation. Adding a GSI with OrderDate as the partition key (possibly sharded like 'YYYY-MM-DD.1') enables efficient querying of recent orders. This combination supports both access patterns without requiring Scans. Using OrderDate as the base table partition key would work for pattern 2 but make pattern 1 inefficient. LSIs share the same partition key as the base table so can't enable queries by OrderDate alone.",
+                  "why_this_matters": "Real applications often have multiple access patterns that need efficient support. DynamoDB table design requires choosing a primary key structure for the most important pattern and using indexes for additional patterns. Understanding how to combine base table design with GSIs to support multiple query patterns is essential for building performant applications without resorting to expensive Scan operations.",
+                  "key_takeaway": "Design the base table partition key for your primary access pattern and use GSIs to efficiently support secondary access patterns without requiring full table scans.",
+                  "option_explanations": {
+                    "A": "CustomerID as partition key efficiently retrieves customer orders; OrderDate as sort key enables date-range queries.",
+                    "B": "A GSI with OrderDate as partition key efficiently supports time-based queries across all customers.",
+                    "C": "OrderDate as partition key creates hot partitions and makes customer-specific queries inefficient.",
+                    "D": "LSIs share the base table partition key (CustomerID), so can't query by OrderDate alone across customers."
+                  },
+                  "tags": ["topic:dynamodb", "subtopic:dynamodb-partition-keys", "domain:1", "service:dynamodb"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

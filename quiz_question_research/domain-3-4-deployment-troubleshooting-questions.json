@@ -1,0 +1,404 @@
+{
+  "exam": "AWS Certified Developer – Associate (DVA-C02)",
+  "question_bank_version": "v1.0",
+  "domains": "Domain 3: Deployment (24%) and Domain 4: Troubleshooting and Optimization (18%)",
+  "generated_at": "2026-01-11T00:00:00Z",
+  "topics_covered": [
+    "Domain 3: CodePipeline, CodeBuild, CodeDeploy, CloudFormation, SAM, CDK, Elastic Beanstalk, Lambda Deployment, API Gateway Deployment, Blue/Green and Canary Deployments",
+    "Domain 4: CloudWatch Logs and Metrics, X-Ray, CloudWatch Alarms, Performance Optimization, Cost Optimization, Debugging"
+  ],
+  "questions": [
+    {
+      "id": "cp-pipe-001",
+      "concept_id": "codepipeline-basics",
+      "variant_index": 0,
+      "topic": "codepipeline",
+      "subtopic": "codepipeline-stages",
+      "domain": "domain-3-deployment",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "A development team wants to automate deployment of a Lambda function: code changes in GitHub should trigger build, test, and deployment to production. Which AWS service orchestrates this workflow?",
+      "options": [
+        {"label": "A", "text": "AWS CodeBuild"},
+        {"label": "B", "text": "AWS CodeDeploy"},
+        {"label": "C", "text": "AWS CodePipeline"},
+        {"label": "D", "text": "AWS Lambda"}
+      ],
+      "correct_options": ["C"],
+      "answer_explanation": "CodePipeline orchestrates CI/CD workflows by connecting source (GitHub), build (CodeBuild), test, and deploy (CodeDeploy/CloudFormation/SAM) stages. It triggers on source changes and manages workflow execution. CodeBuild compiles/tests code but doesn't orchestrate multi-stage workflows. CodeDeploy handles deployment but not source or build. Lambda executes code but isn't a CI/CD orchestrator.",
+      "why_this_matters": "CodePipeline is the orchestration layer in AWS CI/CD, connecting disparate tools into automated workflows. Understanding CodePipeline's role versus individual tools (Build, Deploy) is fundamental to architecting automated deployment pipelines. This knowledge enables building continuous delivery systems that reduce manual deployment errors and accelerate release cycles.",
+      "key_takeaway": "Use CodePipeline to orchestrate multi-stage CI/CD workflows connecting source control, build, test, and deployment—it's the glue binding AWS developer tools together.",
+      "option_explanations": {
+        "A": "CodeBuild handles build and test stages but doesn't orchestrate entire workflows across source, build, and deploy.",
+        "B": "CodeDeploy handles application deployment but doesn't orchestrate source monitoring or build stages.",
+        "C": "CodePipeline orchestrates end-to-end CI/CD workflows from source changes through build, test, and deployment.",
+        "D": "Lambda executes application code but isn't a CI/CD orchestration service."
+      },
+      "tags": ["topic:codepipeline", "subtopic:codepipeline-stages", "domain:3", "service:codepipeline", "cicd", "orchestration"]
+    },
+    {
+      "id": "cb-build-001",
+      "concept_id": "buildspec-file",
+      "variant_index": 0,
+      "topic": "codebuild",
+      "subtopic": "codebuild-buildspec",
+      "domain": "domain-3-deployment",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "A CodeBuild project needs to install dependencies, run tests, and create deployment artifacts. Where should these build commands be defined?",
+      "options": [
+        {"label": "A", "text": "In the CodeBuild project configuration in the AWS Console"},
+        {"label": "B", "text": "In a buildspec.yml file in the source code repository"},
+        {"label": "C", "text": "In Lambda function triggered by CodeBuild"},
+        {"label": "D", "text": "CodeBuild automatically detects and runs standard build commands"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "buildspec.yml defines build commands and is version-controlled with source code. It specifies phases (install, pre_build, build, post_build), commands, environment variables, and artifacts. This keeps build logic with code for versioning and review. Console configuration can inline buildspec but file-based is best practice. Lambda isn't involved. CodeBuild doesn't auto-detect—it requires explicit buildspec.",
+      "why_this_matters": "Version-controlling build logic via buildspec.yml ensures build reproducibility, enables code review of build changes, and maintains build history alongside code. This is fundamental to reliable CI/CD where build processes must be consistent, auditable, and evolvable. Understanding buildspec structure is essential for CodeBuild usage.",
+      "key_takeaway": "Define CodeBuild commands in buildspec.yml version-controlled with source code—this ensures reproducible builds and allows reviewing build logic changes alongside code.",
+      "option_explanations": {
+        "A": "Console configuration can inline buildspec but version-controlling buildspec.yml with code is best practice.",
+        "B": "buildspec.yml in source repository version-controls build logic and ensures consistent, reproducible builds.",
+        "C": "Lambda isn't part of CodeBuild's build execution model; buildspec defines commands.",
+        "D": "CodeBuild requires explicit build commands in buildspec; it doesn't auto-detect based on project type."
+      },
+      "tags": ["topic:codebuild", "subtopic:codebuild-buildspec", "domain:3", "service:codebuild", "buildspec", "cicd"]
+    },
+    {
+      "id": "cd-deploy-001",
+      "concept_id": "deployment-strategies",
+      "variant_index": 0,
+      "topic": "codedeploy",
+      "subtopic": "codedeploy-strategies",
+      "domain": "domain-3-deployment",
+      "difficulty_inferred": "hard",
+      "question_type": "single",
+      "stem": "An application on EC2 behind an ALB needs zero-downtime deployment. The deployment should route traffic to new instances while keeping old instances running, then terminate old instances after verification. Which CodeDeploy deployment type should be used?",
+      "options": [
+        {"label": "A", "text": "In-place deployment"},
+        {"label": "B", "text": "Blue/green deployment"},
+        {"label": "C", "text": "Rolling deployment"},
+        {"label": "D", "text": "Canary deployment"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "Blue/green deployment creates new instances (green), routes traffic to them via ALB, keeps old instances (blue) running for rollback capability, then terminates blue after verification. This provides zero-downtime with easy rollback. In-place updates instances in current deployment group with downtime. Rolling deploys gradually to existing instances. Canary routes percentage of traffic but doesn't describe the full instance replacement pattern.",
+      "why_this_matters": "Deployment strategies impact downtime, rollback capability, and infrastructure costs. Blue/green provides zero-downtime and instant rollback by maintaining both environments temporarily. Understanding when to use each strategy based on requirements (downtime tolerance, rollback speed, cost constraints) is essential for production deployments.",
+      "key_takeaway": "Use blue/green deployment for zero-downtime deployments with instant rollback capability—new environment is created, tested, and traffic is switched before terminating old environment.",
+      "option_explanations": {
+        "A": "In-place deployment updates existing instances and typically incurs downtime during updates.",
+        "B": "Blue/green creates new instances, switches traffic, maintains old instances for rollback, achieving zero-downtime.",
+        "C": "Rolling deployment gradually updates existing instances but doesn't maintain separate environments for instant rollback.",
+        "D": "Canary routes percentage of traffic to new version but doesn't describe full instance replacement pattern."
+      },
+      "tags": ["topic:codedeploy", "subtopic:codedeploy-strategies", "domain:3", "service:codedeploy", "blue-green", "deployment-strategies"]
+    },
+    {
+      "id": "cfn-stack-001",
+      "concept_id": "cloudformation-parameters",
+      "variant_index": 0,
+      "topic": "cloudformation",
+      "subtopic": "cloudformation-templates",
+      "domain": "domain-3-deployment",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "A CloudFormation template creates VPCs in different regions with different CIDR blocks. The CIDR block should be customizable at stack creation. What template feature enables this?",
+      "options": [
+        {"label": "A", "text": "Mappings section"},
+        {"label": "B", "text": "Parameters section"},
+        {"label": "C", "text": "Outputs section"},
+        {"label": "D", "text": "Conditions section"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "Parameters section defines inputs provided at stack creation/update, enabling template reusability with different values. Users specify CIDR block when creating stack. Mappings store static lookup tables (e.g., AMI IDs by region). Outputs expose stack values. Conditions control resource creation based on input. Parameters are designed for user-provided values at deployment time.",
+      "why_this_matters": "Parameters enable template reusability across environments, regions, and use cases without modification. This is fundamental to Infrastructure as Code best practices where one template serves multiple environments with configuration variations. Understanding CloudFormation template sections and their purposes is essential for writing maintainable templates.",
+      "key_takeaway": "Use CloudFormation Parameters for values that vary between stack deployments—this enables template reuse across environments without template modification.",
+      "option_explanations": {
+        "A": "Mappings store static lookup tables, not runtime-provided values from users.",
+        "B": "Parameters accept user input at stack creation, enabling customization like CIDR blocks per deployment.",
+        "C": "Outputs expose stack values to other stacks or users, not accept input values.",
+        "D": "Conditions control conditional resource creation but don't accept user input values."
+      },
+      "tags": ["topic:cloudformation", "subtopic:cloudformation-templates", "domain:3", "service:cloudformation", "parameters", "iac"]
+    },
+    {
+      "id": "sam-deploy-001",
+      "concept_id": "sam-cli-deployment",
+      "variant_index": 0,
+      "topic": "sam",
+      "subtopic": "sam-deployment",
+      "domain": "domain-3-deployment",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "A developer creates a serverless application using SAM template. What command deploys the application to AWS?",
+      "options": [
+        {"label": "A", "text": "sam build && sam deploy"},
+        {"label": "B", "text": "sam create-stack"},
+        {"label": "C", "text": "sam upload"},
+        {"label": "D", "text": "cloudformation deploy"}
+      ],
+      "correct_options": ["A"],
+      "answer_explanation": "SAM CLI deployment requires 'sam build' (compiles application, dependencies, creates .aws-sam directory) followed by 'sam deploy' (packages artifacts to S3, creates CloudFormation changeset, deploys stack). sam build prepares deployment artifacts; sam deploy handles AWS deployment. create-stack and upload aren't SAM commands. CloudFormation can deploy SAM templates but SAM CLI is the standard tool for SAM applications.",
+      "why_this_matters": "SAM CLI streamlines serverless deployment by handling artifact packaging, S3 uploads, and CloudFormation stack operations. Understanding the build-deploy workflow is fundamental to SAM-based development. 'sam build' ensures dependencies are packaged correctly; 'sam deploy' handles AWS infrastructure creation. This two-step process is central to SAM deployment workflows.",
+      "key_takeaway": "Deploy SAM applications with 'sam build' (compile and package) followed by 'sam deploy' (upload to S3 and create CloudFormation stack)—this is the standard SAM deployment workflow.",
+      "option_explanations": {
+        "A": "'sam build' compiles/packages application; 'sam deploy' uploads artifacts and deploys via CloudFormation—this is the standard SAM workflow.",
+        "B": "create-stack is not a SAM CLI command; use 'sam deploy' for deployment.",
+        "C": "upload is not a SAM CLI command; 'sam deploy' handles artifact upload and deployment.",
+        "D": "CloudFormation CLI can deploy SAM templates but SAM CLI is the purpose-built tool for SAM applications."
+      },
+      "tags": ["topic:sam", "subtopic:sam-deployment", "domain:3", "service:sam", "sam-cli", "deployment"]
+    },
+    {
+      "id": "eb-env-001",
+      "concept_id": "elastic-beanstalk-deployment-policies",
+      "variant_index": 0,
+      "topic": "elastic-beanstalk",
+      "subtopic": "beanstalk-deployment",
+      "domain": "domain-3-deployment",
+      "difficulty_inferred": "hard",
+      "question_type": "single",
+      "stem": "An Elastic Beanstalk environment hosts a web application that must remain available during updates. Updates should deploy to a small percentage of instances first for testing. Which deployment policy should be used?",
+      "options": [
+        {"label": "A", "text": "All at once"},
+        {"label": "B", "text": "Rolling"},
+        {"label": "C", "text": "Rolling with additional batch"},
+        {"label": "D", "text": "Immutable"}
+      ],
+      "correct_options": ["C"],
+      "answer_explanation": "Rolling with additional batch launches new instances with updated version, maintaining full capacity during deployment. It deploys to batches sequentially, starting with a test batch. All at once causes downtime. Basic rolling reduces capacity during deployment. Immutable creates entirely new environment but doesn't do gradual batch-based testing. For testing on small percentage while maintaining capacity, rolling with additional batch is ideal.",
+      "why_this_matters": "Elastic Beanstalk deployment policies balance downtime risk, capacity maintenance, and deployment speed. Understanding each policy's characteristics guides selection based on application requirements. Rolling with additional batch provides safety of gradual deployment without capacity reduction, essential for production applications requiring high availability during updates.",
+      "key_takeaway": "Use Elastic Beanstalk rolling with additional batch deployment for gradual updates maintaining full capacity—it deploys to small batches for testing without reducing available capacity.",
+      "option_explanations": {
+        "A": "All at once deploys to all instances simultaneously, causing downtime—unsuitable for availability requirements.",
+        "B": "Rolling deploys in batches but reduces capacity during deployment as batches are updated.",
+        "C": "Rolling with additional batch launches new instances to maintain full capacity while gradually deploying and testing.",
+        "D": "Immutable creates new environment but doesn't provide gradual batch-based percentage deployment."
+      },
+      "tags": ["topic:elastic-beanstalk", "subtopic:beanstalk-deployment", "domain:3", "service:elastic-beanstalk", "deployment-policies", "rolling"]
+    },
+    {
+      "id": "cw-log-001",
+      "concept_id": "cloudwatch-log-groups",
+      "variant_index": 0,
+      "topic": "cloudwatch",
+      "subtopic": "cloudwatch-logs",
+      "domain": "domain-4-troubleshooting-optimization",
+      "difficulty_inferred": "easy",
+      "question_type": "single",
+      "stem": "A Lambda function outputs log messages using print statements in Python. Where are these logs automatically sent?",
+      "options": [
+        {"label": "A", "text": "S3 bucket"},
+        {"label": "B", "text": "CloudWatch Logs"},
+        {"label": "C", "text": "CloudTrail"},
+        {"label": "D", "text": "DynamoDB table"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "Lambda automatically sends stdout/stderr to CloudWatch Logs in a log group /aws/lambda/function-name. Print statements, logging library output, and runtime errors appear in CloudWatch Logs. S3 storage requires explicit configuration. CloudTrail logs API calls, not application output. DynamoDB isn't a logging destination.",
+      "why_this_matters": "CloudWatch Logs is the standard destination for Lambda logs and many AWS service logs. Understanding automatic log routing enables troubleshooting without additional configuration. This knowledge is fundamental to debugging serverless applications and using CloudWatch Logs Insights for log analysis.",
+      "key_takeaway": "Lambda automatically sends application output (print statements, logging library) to CloudWatch Logs—no configuration needed for basic logging.",
+      "option_explanations": {
+        "A": "S3 log storage requires explicit configuration; Lambda doesn't automatically log to S3.",
+        "B": "CloudWatch Logs automatically receives Lambda stdout/stderr output in log group /aws/lambda/function-name.",
+        "C": "CloudTrail logs AWS API calls, not application log output from Lambda functions.",
+        "D": "DynamoDB is a database service, not a logging destination for Lambda output."
+      },
+      "tags": ["topic:cloudwatch", "subtopic:cloudwatch-logs", "domain:4", "service:cloudwatch", "service:lambda", "logging"]
+    },
+    {
+      "id": "cw-metric-001",
+      "concept_id": "custom-metrics",
+      "variant_index": 0,
+      "topic": "cloudwatch",
+      "subtopic": "cloudwatch-metrics",
+      "domain": "domain-4-troubleshooting-optimization",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "An application needs to track business metrics like completed orders per minute. CloudWatch doesn't provide this metric by default. How should the developer implement this?",
+      "options": [
+        {"label": "A", "text": "Custom metrics cannot be created in CloudWatch"},
+        {"label": "B", "text": "Use PutMetricData API or CloudWatch Embedded Metric Format to publish custom metrics"},
+        {"label": "C", "text": "CloudWatch automatically detects and tracks all application metrics"},
+        {"label": "D", "text": "Store metrics in DynamoDB and query for dashboards"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "Custom metrics are published via PutMetricData API or CloudWatch Embedded Metric Format (EMF). Application code calls PutMetricData with metric name, value, dimensions. EMF outputs structured JSON logs that CloudWatch parses into metrics. Both approaches create custom metrics visible in CloudWatch dashboards and alarms. CloudWatch supports custom metrics. It doesn't auto-detect business metrics. DynamoDB could store metrics but doesn't integrate with CloudWatch dashboards/alarms.",
+      "why_this_matters": "Custom metrics enable monitoring business KPIs and application-specific behavior beyond infrastructure metrics. Understanding how to publish custom metrics is essential for comprehensive observability. EMF is particularly powerful for Lambda, allowing metric publishing via structured logs without API calls. This capability is fundamental to monitoring application health beyond just infrastructure.",
+      "key_takeaway": "Publish custom business and application metrics using PutMetricData API or CloudWatch Embedded Metric Format—this integrates application metrics with CloudWatch dashboards and alarms.",
+      "option_explanations": {
+        "A": "CloudWatch fully supports custom metrics via PutMetricData API and Embedded Metric Format.",
+        "B": "PutMetricData API and EMF are the standard methods for publishing custom metrics to CloudWatch.",
+        "C": "CloudWatch tracks infrastructure metrics but requires explicit custom metric publishing for application business metrics.",
+        "D": "DynamoDB can store data but doesn't integrate with CloudWatch for dashboards, alarms, or metric visualization."
+      },
+      "tags": ["topic:cloudwatch", "subtopic:cloudwatch-metrics", "domain:4", "service:cloudwatch", "custom-metrics", "monitoring"]
+    },
+    {
+      "id": "xray-trace-001",
+      "concept_id": "xray-instrumentation",
+      "variant_index": 0,
+      "topic": "xray",
+      "subtopic": "xray-tracing",
+      "domain": "domain-4-troubleshooting-optimization",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "A microservices application uses Lambda, API Gateway, and DynamoDB. The developer wants to trace requests across these services to identify bottlenecks. What must be configured?",
+      "options": [
+        {"label": "A", "text": "Enable X-Ray tracing on API Gateway and Lambda; instrument DynamoDB SDK calls"},
+        {"label": "B", "text": "X-Ray automatically traces all AWS services without configuration"},
+        {"label": "C", "text": "Install X-Ray agent on Lambda functions"},
+        {"label": "D", "text": "X-Ray only works with EC2, not serverless"}
+      ],
+      "correct_options": ["A"],
+      "answer_explanation": "X-Ray tracing requires enabling tracing on API Gateway and Lambda, then instrumenting SDK calls with X-Ray SDK to trace downstream calls to DynamoDB. API Gateway passes trace header to Lambda; X-Ray SDK captures DynamoDB calls. X-Ray doesn't auto-trace without enabling. Lambda has built-in X-Ray daemon, no agent installation needed. X-Ray fully supports serverless architectures.",
+      "why_this_matters": "Distributed tracing is essential for debugging microservices where requests traverse multiple services. X-Ray provides end-to-end request tracking, latency breakdowns, and error analysis. Understanding configuration requirements (enabling tracing, instrumenting SDK calls) is fundamental to implementing observability in distributed systems.",
+      "key_takeaway": "Enable X-Ray tracing on services (API Gateway, Lambda) and instrument SDK calls—this creates distributed traces showing request flow and performance across services.",
+      "option_explanations": {
+        "A": "Enable X-Ray on API Gateway/Lambda and instrument SDK calls to create complete distributed traces.",
+        "B": "X-Ray requires explicit enabling on services and SDK instrumentation; it doesn't auto-trace.",
+        "C": "Lambda has built-in X-Ray daemon; SDK instrumentation is needed, not agent installation.",
+        "D": "X-Ray fully supports serverless (Lambda, API Gateway) in addition to EC2 and containers."
+      },
+      "tags": ["topic:xray", "subtopic:xray-tracing", "domain:4", "service:xray", "service:api-gateway", "service:lambda", "tracing", "distributed-tracing"]
+    },
+    {
+      "id": "xray-trace-002",
+      "concept_id": "xray-service-map",
+      "variant_index": 0,
+      "topic": "xray",
+      "subtopic": "xray-tracing",
+      "domain": "domain-4-troubleshooting-optimization",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "After enabling X-Ray tracing, a developer views the service map showing API Gateway, Lambda, and DynamoDB with latency information. One Lambda function shows high error rates. What should the developer examine?",
+      "options": [
+        {"label": "A", "text": "X-Ray service map doesn't show error information"},
+        {"label": "B", "text": "Examine X-Ray traces and segments for that Lambda function to see detailed error information and stack traces"},
+        {"label": "C", "text": "Check CloudWatch Logs only; X-Ray doesn't capture errors"},
+        {"label": "D", "text": "Restart the Lambda function to clear errors"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "X-Ray service map visualizes service relationships and highlights errors. Drilling into traces shows detailed request information including error messages, stack traces, and timing for each segment (service call). This provides context for debugging. Service map does show error rates visually. X-Ray captures errors with full context. CloudWatch Logs complement X-Ray but traces provide request-level debugging. Restarting doesn't address root causes.",
+      "why_this_matters": "X-Ray's value is combining high-level service visualization with detailed trace analysis. Service maps identify problem services; individual traces provide debugging context including errors, latencies, and causality. Understanding this workflow—map to identify issues, traces to debug details—is essential for effective X-Ray usage in troubleshooting distributed applications.",
+      "key_takeaway": "Use X-Ray service map to identify problematic services, then examine individual traces for detailed error information, stack traces, and timing breakdowns to debug root causes.",
+      "option_explanations": {
+        "A": "X-Ray service map visualizes error rates and highlights problematic services for investigation.",
+        "B": "X-Ray traces provide detailed error messages, stack traces, and timing information for debugging.",
+        "C": "X-Ray captures errors with full request context; it complements CloudWatch Logs for debugging.",
+        "D": "Restarting doesn't debug root causes; X-Ray traces provide information needed to fix underlying issues."
+      },
+      "tags": ["topic:xray", "subtopic:xray-tracing", "domain:4", "service:xray", "service-map", "troubleshooting", "debugging"]
+    },
+    {
+      "id": "cw-alarm-001",
+      "concept_id": "cloudwatch-alarms",
+      "variant_index": 0,
+      "topic": "cloudwatch",
+      "subtopic": "cloudwatch-alarms",
+      "domain": "domain-4-troubleshooting-optimization",
+      "difficulty_inferred": "medium",
+      "question_type": "single",
+      "stem": "An application should trigger an SNS notification when Lambda function errors exceed 5 in a 5-minute period. What CloudWatch feature enables this?",
+      "options": [
+        {"label": "A", "text": "CloudWatch Logs Insights query"},
+        {"label": "B", "text": "CloudWatch alarm based on Lambda Errors metric"},
+        {"label": "C", "text": "CloudWatch Events rule"},
+        {"label": "D", "text": "X-Ray alarm"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "CloudWatch alarms monitor metrics and trigger actions (SNS notifications, Auto Scaling, Lambda) when thresholds are breached. Create an alarm on Lambda Errors metric with threshold 5 in 5-minute period, action sends to SNS topic. Logs Insights queries logs but doesn't trigger actions. CloudWatch Events (EventBridge) responds to events, not metric thresholds. X-Ray doesn't have alarms.",
+      "why_this_matters": "CloudWatch alarms enable proactive monitoring and automated responses to metric thresholds. This is fundamental to operational excellence—detecting issues automatically and alerting teams or triggering auto-remediation. Understanding alarms versus logs, events, and tracing tools clarifies when each monitoring tool is appropriate.",
+      "key_takeaway": "Use CloudWatch alarms to monitor metrics and trigger actions (SNS notifications, Auto Scaling) when thresholds are breached—this enables proactive monitoring and automated incident response.",
+      "option_explanations": {
+        "A": "Logs Insights queries logs for analysis but doesn't monitor metrics or trigger actions based on thresholds.",
+        "B": "CloudWatch alarms monitor metrics and trigger SNS notifications when thresholds (like error count) are breached.",
+        "C": "EventBridge (CloudWatch Events) responds to events, not metric threshold breaches like alarms do.",
+        "D": "X-Ray provides distributed tracing but doesn't have alarm functionality for metric thresholds."
+      },
+      "tags": ["topic:cloudwatch", "subtopic:cloudwatch-alarms", "domain:4", "service:cloudwatch", "service:sns", "alarms", "monitoring"]
+    },
+    {
+      "id": "perf-opt-001",
+      "concept_id": "lambda-memory-optimization",
+      "variant_index": 0,
+      "topic": "performance",
+      "subtopic": "performance-optimization",
+      "domain": "domain-4-troubleshooting-optimization",
+      "difficulty_inferred": "hard",
+      "question_type": "single",
+      "stem": "A CPU-bound Lambda function at 512 MB memory takes 10 seconds and costs $0.0001 per invocation. Increasing memory to 1024 MB reduces duration to 5 seconds. What is the cost impact?",
+      "options": [
+        {"label": "A", "text": "Cost doubles because memory doubles"},
+        {"label": "B", "text": "Cost stays the same because GB-seconds is equal"},
+        {"label": "C", "text": "Cost decreases because duration halves offsetting memory increase"},
+        {"label": "D", "text": "Cost increases by 50%"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "Lambda pricing is based on GB-seconds (memory x duration). At 512 MB for 10s: 0.512 GB x 10s = 5.12 GB-seconds. At 1024 MB for 5s: 1.024 GB x 5s = 5.12 GB-seconds. GB-seconds is equal, so cost is the same. This demonstrates how increasing memory for CPU-bound functions can improve performance without increasing cost. Memory and duration scale proportionally for CPU-bound workloads.",
+      "why_this_matters": "Understanding Lambda's GB-second pricing model reveals optimization opportunities. For CPU-bound functions, increasing memory allocates more CPU, potentially reducing duration enough to maintain or reduce costs while improving performance. This counterintuitive insight—higher memory can mean same/lower cost—is essential for Lambda optimization.",
+      "key_takeaway": "Lambda GB-second pricing means increasing memory for CPU-bound functions can improve performance without increasing cost if duration decreases proportionally—test different memory settings for optimal cost-performance.",
+      "option_explanations": {
+        "A": "Doubling memory doesn't double cost if duration halves because pricing is GB-seconds, not memory alone.",
+        "B": "GB-seconds (0.512x10 = 1.024x5 = 5.12) remains equal, so cost is the same despite memory increase.",
+        "C": "Cost stays the same, not decreases, because GB-seconds is equal (duration reduction offsets memory increase).",
+        "D": "Cost doesn't increase because reduced duration offsets higher memory in GB-second calculation."
+      },
+      "tags": ["topic:performance", "subtopic:performance-optimization", "domain:4", "service:lambda", "optimization", "cost-optimization", "performance"]
+    },
+    {
+      "id": "cost-opt-001",
+      "concept_id": "s3-cost-optimization",
+      "variant_index": 0,
+      "topic": "cost-optimization",
+      "subtopic": "storage-optimization",
+      "domain": "domain-4-troubleshooting-optimization",
+      "difficulty_inferred": "medium",
+      "question_type": "multi",
+      "stem": "An application stores millions of small log files in S3 Standard that are rarely accessed after 30 days. Which TWO optimizations reduce storage costs? (Select TWO)",
+      "options": [
+        {"label": "A", "text": "Use S3 Intelligent-Tiering storage class"},
+        {"label": "B", "text": "Configure lifecycle policy to transition to S3 Glacier after 30 days"},
+        {"label": "C", "text": "Enable S3 Transfer Acceleration"},
+        {"label": "D", "text": "Compress log files before upload"}
+      ],
+      "correct_options": ["B", "D"],
+      "answer_explanation": "Lifecycle policy to Glacier reduces storage costs dramatically for rarely accessed data. Compression reduces storage size, lowering costs proportionally. Intelligent-Tiering works but has monitoring fees and doesn't transition to Glacier automatically. Transfer Acceleration speeds uploads but doesn't reduce storage costs. Combining lifecycle policies with compression maximizes cost savings.",
+      "why_this_matters": "S3 storage costs accumulate over time, especially for high-volume data. Lifecycle policies automate cost optimization by transitioning data to cheaper storage classes based on access patterns. Compression reduces storage size across all classes. Understanding both techniques enables comprehensive cost optimization for storage-heavy applications.",
+      "key_takeaway": "Combine S3 lifecycle policies (transitioning to cheaper storage classes) with compression to maximize storage cost reduction for infrequently accessed data.",
+      "option_explanations": {
+        "A": "Intelligent-Tiering optimizes costs but has monitoring fees and doesn't transition to Glacier for rarely accessed data.",
+        "B": "Lifecycle transition to Glacier dramatically reduces storage costs for rarely accessed data after 30 days.",
+        "C": "Transfer Acceleration improves upload speed but doesn't reduce storage costs.",
+        "D": "Compression reduces storage size, proportionally lowering costs across all storage classes."
+      },
+      "tags": ["topic:cost-optimization", "subtopic:storage-optimization", "domain:4", "service:s3", "cost-optimization", "lifecycle-policies", "compression"]
+    },
+    {
+      "id": "debug-001",
+      "concept_id": "lambda-debugging",
+      "variant_index": 0,
+      "topic": "debugging",
+      "subtopic": "serverless-debugging",
+      "domain": "domain-4-troubleshooting-optimization",
+      "difficulty_inferred": "hard",
+      "question_type": "single",
+      "stem": "A Lambda function intermittently times out. CloudWatch Logs show the function starts but doesn't complete. The function makes calls to external APIs. What debugging approach helps identify the cause?",
+      "options": [
+        {"label": "A", "text": "Increase Lambda memory allocation"},
+        {"label": "B", "text": "Enable X-Ray tracing to see detailed timing of external API calls"},
+        {"label": "C", "text": "Increase Lambda timeout to 15 minutes"},
+        {"label": "D", "text": "Disable VPC configuration"}
+      ],
+      "correct_options": ["B"],
+      "answer_explanation": "X-Ray tracing shows detailed timing of external API calls, revealing which call is slow or timing out. This identifies whether the issue is a specific API, network latency, or function logic. Increasing memory may help CPU but doesn't debug the cause. Increasing timeout masks symptoms without identifying root cause. Disabling VPC changes network path but doesn't provide debugging information about which call is slow.",
+      "why_this_matters": "Intermittent timeouts are challenging to debug. X-Ray provides visibility into request flow and timing that CloudWatch Logs alone can't provide. Understanding how to use X-Ray for performance debugging enables identifying bottlenecks in distributed systems. This scenario demonstrates X-Ray's value for debugging integration issues beyond just errors.",
+      "key_takeaway": "Use X-Ray tracing to debug intermittent Lambda timeouts and performance issues—it provides detailed timing of downstream calls that CloudWatch Logs don't capture.",
+      "option_explanations": {
+        "A": "Memory affects CPU performance but doesn't debug which external API call is causing timeouts.",
+        "B": "X-Ray tracing reveals detailed timing of each external API call, identifying the slow/timing-out call.",
+        "C": "Increasing timeout masks symptoms without identifying or fixing the root cause of delays.",
+        "D": "Disabling VPC might help if VPC NAT is the issue but doesn't provide debugging information about what's slow."
+      },
+      "tags": ["topic:debugging", "subtopic:serverless-debugging", "domain:4", "service:lambda", "service:xray", "debugging", "troubleshooting", "timeouts"]
+    }
+  ]
+}

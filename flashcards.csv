@@ -1,0 +1,75 @@
+What algorithm does AWS API Gateway use to manage request throttling?,The token bucket algorithm.
+"In the token bucket algorithm, the number of tokens a bucket can hold is known as the _____.",burst limit
+"In the token bucket algorithm, the rate at which the bucket is refilled with tokens is called the _____.",rate limit
+What HTTP status code is returned when an AWS API Gateway throttling limit is exceeded?,429 Too Many Requests.
+"List the four levels of rate limiting in AWS API Gateway, from highest (broadest) to lowest (narrowest).","Regional, Account-level, Stage-level, and Usage plan-level."
+Which level of AWS API Gateway throttling takes precedence over all others?,Usage plan-level throttling.
+What is the default account-level rate limit for AWS API Gateway requests per second?,"10,000 requests per second."
+"By default, the stage-level throttling limit in AWS API Gateway is equal to what other limit?",The account-level limit.
+What AWS API Gateway feature allows you to set rate and burst limits for individual clients identified by their API key?,Usage plans.
+"Which AWS service automates the entire software release process, from source code to deployment?",AWS CodePipeline.
+"Which AWS service is a fully managed build service that compiles source code, runs tests, and produces deployable artifacts?",AWS CodeBuild.
+"Which AWS service automates application deployments to services like EC2, Lambda, and on-premises servers?",AWS CodeDeploy.
+What is the name of the configuration file used by AWS CodeBuild to define build commands?,buildspec.yml.
+What is the name of the configuration file used by AWS CodeDeploy to define deployment lifecycle hooks?,appspec.yml.
+What deployment strategy in AWS CodeDeploy updates instances one by one?,In-Place Deployment (Rolling Updates).
+"What deployment strategy in AWS CodeDeploy deploys to a new environment before switching traffic, reducing downtime?",Blue/Green Deployment.
+"What AWS service is used for user authentication, providing sign-up and sign-in functionality for your applications?",Amazon Cognito User Pools.
+"What AWS service is used for user authorization, granting temporary AWS credentials to access other AWS services?",Amazon Cognito Identity Pools (Federated Identities).
+A Cognito _____ handles interactions with identity providers like Google or Facebook for authentication.,User Pool
+A Cognito _____ exchanges a user's authentication token for temporary AWS credentials to authorize access to resources like S3 or DynamoDB.,Identity Pool
+"What AWS IAM entity is intended for internal usage within AWS resources, such as allowing an EC2 instance to access an S3 bucket?",IAM Role.
+What AWS CLI command with the `--dry-run` option can be used to test IAM permissions without actually executing the API call?,It simulates the API call to check permissions and returns a success or unauthorized operation message.
+What is the recommended best practice for storing AWS credentials within your application code?,Never store AWS credentials in your code; use IAM Roles for services hosted on AWS.
+What is the purpose of an EC2 User Data script?,"To run commands and automated boot tasks, like installing software, when an instance first starts."
+"What EC2 instance launch type is recommended for short-term, uninterrupted workloads with predictable pricing?",On-Demand Instances.
+What EC2 instance launch type offers up to a 90% discount but can be reclaimed with a 2-minute warning?,Spot Instances.
+What is the purpose of an AWS Security Group?,"It acts as a virtual firewall for EC2 instances, controlling inbound and outbound traffic."
+"If you experience a 'connection refused' error when trying to access your application on EC2, what is the likely cause?",The application is not running or there is an application-level error.
+Which type of Elastic Load Balancer operates at Layer 7 and can route traffic based on URL paths or hostnames?,Application Load Balancer (ALB).
+"Which type of Elastic Load Balancer operates at Layer 4, forwarding TCP traffic for extreme performance with low latency?",Network Load Balancer (NLB).
+The true IP address of a client is inserted into what header field when requests are passed through an Application Load Balancer?,X-Forwarded-For.
+What is the primary function of an Auto Scaling Group (ASG)?,To automatically adjust the number of EC2 instances (scaling out or in) to match the load.
+What is an EBS (Elastic Block Store) Volume?,A network drive that can be attached to an EC2 instance to persist data.
+An EBS Volume is locked to a specific _____.,Availability Zone (AZ)
+What is the difference between an EBS volume and an EC2 Instance Store?,"EBS is a persistent network drive, whereas an Instance Store is temporary storage physically attached to the host machine and is lost on termination."
+What Elastic Beanstalk deployment strategy is fastest but incurs downtime as all instances are updated simultaneously?,All at once.
+"What Elastic Beanstalk deployment strategy spins up new instances in a new ASG and swaps them when healthy, resulting in zero downtime?",Immutable.
+"Configuration files with a `.config` extension, used to customize an Elastic Beanstalk environment, must be placed in what directory?",The `.ebextensions/` directory in the root of the source code.
+What is the benefit of using Amazon RDS Read Replicas?,They improve read performance by offloading read queries from the primary database instance.
+What is the primary purpose of an Amazon RDS Multi-AZ deployment?,To provide high availability and disaster recovery through synchronous replication to a standby instance in a different AZ.
+"Which AWS database service is a proprietary, cloud-optimized relational database claiming significant performance improvements over standard MySQL and PostgreSQL?",Amazon Aurora.
+What is the main function of Amazon Route 53?,It is a managed Domain Name System (DNS) web service.
+"In Route 53, why is it generally preferred to use an ALIAS record over a CNAME record for AWS resources?","ALIAS records are more performant, can be used at the zone apex (root domain), and do not incur additional query charges."
+What is the purpose of Amazon ElastiCache?,It provides a managed in-memory cache service (Redis or Memcached) to reduce load on databases and improve application performance.
+"Which ElastiCache engine supports persistence, allowing the cache to survive reboots?",Redis.
+"In S3, what must you use when uploading an object larger than 5 GB?",Multi-part upload.
+What is the main benefit of enabling versioning on an S3 bucket?,It protects against unintended deletes and allows for easy rollback to previous versions of an object.
+Which S3 server-side encryption option gives the user control over encryption keys and an audit trail via KMS?,SSE-KMS (Server-Side Encryption with AWS Key Management Service).
+Which S3 server-side encryption option requires the customer to manage their own encryption keys and provide them in every HTTP request header?,SSE-C (Server-Side Encryption with Customer-Provided Keys).
+What mechanism allows a web application in one domain to request resources from an S3 bucket in another domain?,Cross-Origin Resource Sharing (CORS).
+S3 provides read-after-write consistency for _____ of new objects.,PUTS
+S3 provides eventual consistency for _____ and _____ of existing objects.,DELETES and PUTS (overwrites)
+What is the term for the API retry mechanism that involves waiting for progressively longer intervals between retries to handle rate-limiting errors?,Exponential backoff.
+Which AWS database service provides a NoSQL key-value and document database with single-digit millisecond latency?,Amazon DynamoDB.
+What is the difference between a DynamoDB Query and a Scan operation?,"A Query finds items using the primary key and is highly efficient, while a Scan examines every item in the table and is less efficient."
+What is the default consistency model for reads in DynamoDB?,Eventually consistent reads.
+"Amazon SQS (Simple Queue Service) is a _____-based messaging service, where consumers retrieve messages from a queue.",pull
+What is the purpose of the Visibility Timeout in Amazon SQS?,It's a period during which SQS prevents other consumers from receiving and processing a message that has already been received by one consumer.
+What is the key difference between SQS short polling and long polling?,"Short polling returns a response immediately (even if the queue is empty), while long polling waits until a message arrives or the poll times out."
+Amazon SNS (Simple Notification Service) is a _____-based messaging service that sends messages to subscribers of a topic.,push
+Which section is the only one that is required in an AWS CloudFormation template?,The Resources section.
+What AWS service acts as a Content Delivery Network (CDN) by caching content in edge locations to reduce latency for end users?,Amazon CloudFront.
+"In AWS Lambda, what is the maximum execution timeout for a function?",300 seconds (5 minutes).
+How can you pass operational parameters to your AWS Lambda function without hardcoding them?,By using AWS Lambda Environment Variables.
+"Which AWS service is used for debugging and tracing distributed applications, such as those built with microservices?",AWS X-Ray.
+What AWS service provides a fully managed source control service that hosts secure Git-based repositories?,AWS CodeCommit.
+What is the purpose of an API Gateway in a serverless architecture?,"It acts as the 'front door' for applications to access backend data or functionality, typically by invoking a Lambda function."
+What is the key difference between stateless and stateful applications?,"Stateless applications do not save client data from one session to the next, while stateful applications remember past transactions or user context."
+"In the AWS Developer Associate exam scope, what is the primary role of AWS Step Functions?","To coordinate multiple AWS services into serverless workflows, orchestrating a series of steps."
+"When developing a Lambda function, what must you configure to allow it to access resources within a VPC, such as an RDS database?","You must configure the Lambda function with VPC-specific information, including subnet IDs and security group IDs."
+"To manage sensitive data such as database credentials in your application code securely, which AWS service should be used?",AWS Secrets Manager or AWS Systems Manager Parameter Store.
+What AWS service allows you to create and manage infrastructure as code using a declarative template format?,AWS CloudFormation.
+What is the difference between encryption at rest and encryption in transit?,"Encryption at rest protects data while it is stored (e.g., on S3 or EBS), while encryption in transit protects data as it moves over a network (e.g., via SSL/TLS)."
+Which AWS managed policy principle states that you should grant only the permissions required to perform a task?,The principle of least privilege.
+What is the function of the AWS SDK (Software Development Kit)?,It provides language-specific APIs to enable developers to interact with AWS services directly from their application code.

@@ -1,0 +1,423 @@
+{
+  "exam": "AWS Certified Developer – Associate (DVA-C02)",
+  "question_bank_version": "v1.0",
+  "generated_at": "2026-01-11T20:28:00Z",
+  "domains": [
+    {
+      "domain_id": "domain-1-development",
+      "name": "Development with AWS Services",
+      "topics": [
+        {
+          "topic_id": "application-development",
+          "name": "Application Development on AWS",
+          "subtopics": [
+            {
+              "subtopic_id": "architectural-patterns",
+              "name": "Architectural patterns: event-driven, microservices, monolithic, choreography, orchestration, fanout",
+              "num_questions_generated": 10,
+              "questions": [
+                {
+                  "id": "q1-d1-t1-st1-1",
+                  "concept_id": "arch-patterns-event-driven",
+                  "variant_index": 0,
+                  "topic": "application-development",
+                  "subtopic": "architectural-patterns",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "A company is redesigning a monolithic application to improve scalability. The application has components that process user requests asynchronously. Which architectural pattern should the developer use to decouple the components?",
+                  "options": [
+                    { "label": "A", "text": "Monolithic architecture with synchronous calls" },
+                    { "label": "B", "text": "Microservices with event-driven architecture using Amazon EventBridge" },
+                    { "label": "C", "text": "Tightly coupled components with direct API calls" },
+                    { "label": "D", "text": "Orchestration using AWS Lambda for all processing" }
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Event-driven architecture allows components to communicate asynchronously through events, improving scalability and decoupling. Amazon EventBridge is suitable for this pattern. Option A keeps the monolithic structure. Option C maintains tight coupling. Option D is orchestration, which is more suitable for workflows but not necessarily for decoupling.",
+                  "why_this_matters": "In real-world AWS development, event-driven architectures enable applications to handle variable loads efficiently, reducing costs and improving resilience by avoiding direct dependencies between services.",
+                  "key_takeaway": "Use event-driven patterns with services like EventBridge to build scalable, loosely coupled applications.",
+                  "option_explanations": {
+                    "A": "Incorrect because it does not address scalability issues in monolithic apps.",
+                    "B": "Correct as it promotes decoupling and asynchronous processing.",
+                    "C": "Incorrect as tight coupling limits scalability.",
+                    "D": "Incorrect as orchestration typically involves central control, not decoupling."
+                  },
+                  "tags": [
+                    "topic:application-development",
+                    "subtopic:architectural-patterns",
+                    "domain:1",
+                    "service:eventbridge"
+                  ]
+                },
+                {
+                  "id": "q1-d1-t1-st1-2",
+                  "concept_id": "arch-patterns-microservices",
+                  "variant_index": 0,
+                  "topic": "application-development",
+                  "subtopic": "architectural-patterns",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "easy",
+                  "question_type": "single",
+                  "stem": "A developer is building an application composed of independent services that communicate via APIs. Which architectural pattern is this?",
+                  "options": [
+                    { "label": "A", "text": "Monolithic" },
+                    { "label": "B", "text": "Microservices" },
+                    { "label": "C", "text": "Event-driven" },
+                    { "label": "D", "text": "Orchestration" }
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Microservices architecture involves building an application as a collection of small, independent services that communicate over APIs. This allows for independent scaling and deployment. The other options do not match this description.",
+                  "why_this_matters": "Microservices allow teams to develop, deploy, and scale services independently, which is crucial for large-scale applications in AWS environments to achieve operational excellence.",
+                  "key_takeaway": "Adopt microservices for modularity and independent deployment in AWS.",
+                  "option_explanations": {
+                    "A": "Incorrect as monolithic is a single unit.",
+                    "B": "Correct for independent services.",
+                    "C": "Incorrect as event-driven focuses on events, not necessarily independent services.",
+                    "D": "Incorrect as orchestration is a coordination pattern."
+                  },
+                  "tags": [
+                    "topic:application-development",
+                    "subtopic:architectural-patterns",
+                    "domain:1",
+                    "service:api-gateway"
+                  ]
+                },
+                {
+                  "id": "q1-d1-t1-st1-3",
+                  "concept_id": "arch-patterns-choreography",
+                  "variant_index": 0,
+                  "topic": "application-development",
+                  "subtopic": "architectural-patterns",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "hard",
+                  "question_type": "multi",
+                  "stem": "A developer is designing a system where services react to events without a central coordinator. Which patterns are suitable? (Select TWO.)",
+                  "options": [
+                    { "label": "A", "text": "Choreography" },
+                    { "label": "B", "text": "Orchestration" },
+                    { "label": "C", "text": "Fanout" },
+                    { "label": "D", "text": "Monolithic" }
+                  ],
+                  "correct_options": ["A", "C"],
+                  "answer_explanation": "Choreography allows services to subscribe to events and react independently without central control. Fanout is a pattern where an event is broadcast to multiple subscribers, fitting choreography. Orchestration involves a central coordinator, and monolithic is not distributed.",
+                  "why_this_matters": "Choreography reduces single points of failure in distributed systems, which is important for resilient AWS architectures handling high volumes of events.",
+                  "key_takeaway": "Use choreography and fanout for decentralized event handling in microservices.",
+                  "option_explanations": {
+                    "A": "Correct for decentralized event reaction.",
+                    "B": "Incorrect as it uses central control.",
+                    "C": "Correct for broadcasting to multiple services.",
+                    "D": "Incorrect as it's not distributed."
+                  },
+                  "tags": [
+                    "topic:application-development",
+                    "subtopic:architectural-patterns",
+                    "domain:1",
+                    "service:sns"
+                  ]
+                },
+                {
+                  "id": "q1-d1-t1-st1-4",
+                  "concept_id": "arch-patterns-orchestration",
+                  "variant_index": 0,
+                  "topic": "application-development",
+                  "subtopic": "architectural-patterns",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "A company needs to coordinate a workflow involving multiple AWS services in a specific sequence. Which pattern should be used?",
+                  "options": [
+                    { "label": "A", "text": "Choreography using Amazon EventBridge" },
+                    { "label": "B", "text": "Orchestration using AWS Step Functions" },
+                    { "label": "C", "text": "Fanout using Amazon SNS" },
+                    { "label": "D", "text": "Monolithic with internal calls" }
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Orchestration uses a central coordinator to manage the sequence of tasks, and AWS Step Functions is designed for this purpose. Choreography is decentralized, fanout is for broadcasting, and monolithic is not suitable for distributed workflows.",
+                  "why_this_matters": "Orchestration is essential for complex workflows in AWS, ensuring reliability and error handling in business-critical processes like order processing.",
+                  "key_takeaway": "Leverage AWS Step Functions for orchestrated workflows to manage sequence and retries.",
+                  "option_explanations": {
+                    "A": "Incorrect for sequenced workflows.",
+                    "B": "Correct for central coordination.",
+                    "C": "Incorrect as fanout is for parallel broadcasting.",
+                    "D": "Incorrect for distributed systems."
+                  },
+                  "tags": [
+                    "topic:application-development",
+                    "subtopic:architectural-patterns",
+                    "domain:1",
+                    "service:step-functions"
+                  ]
+                },
+                {
+                  "id": "q1-d1-t1-st1-5",
+                  "concept_id": "arch-patterns-fanout",
+                  "variant_index": 0,
+                  "topic": "application-development",
+                  "subtopic": "architectural-patterns",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "easy",
+                  "question_type": "single",
+                  "stem": "A developer wants to notify multiple services simultaneously when an event occurs. Which pattern is most appropriate?",
+                  "options": [
+                    { "label": "A", "text": "Orchestration" },
+                    { "label": "B", "text": "Choreography" },
+                    { "label": "C", "text": "Fanout" },
+                    { "label": "D", "text": "Monolithic" }
+                  ],
+                  "correct_options": ["C"],
+                  "answer_explanation": "Fanout pattern distributes an event to multiple recipients simultaneously, often using services like Amazon SNS. The other patterns do not specifically address simultaneous notification.",
+                  "why_this_matters": "Fanout is key for scalable notification systems in AWS, such as alerting or parallel processing, reducing latency in real-time applications.",
+                  "key_takeaway": "Use fanout with SNS for broadcasting events to multiple subscribers.",
+                  "option_explanations": {
+                    "A": "Incorrect as it involves sequencing.",
+                    "B": "Incorrect as it's broader decentralized.",
+                    "C": "Correct for simultaneous distribution.",
+                    "D": "Incorrect for single unit."
+                  },
+                  "tags": [
+                    "topic:application-development",
+                    "subtopic:architectural-patterns",
+                    "domain:1",
+                    "service:sns"
+                  ]
+                },
+                {
+                  "id": "q1-d1-t1-st1-6",
+                  "concept_id": "arch-patterns-monolithic",
+                  "variant_index": 0,
+                  "topic": "application-development",
+                  "subtopic": "architectural-patterns",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "easy",
+                  "question_type": "single",
+                  "stem": "A startup is building a simple application with all components in a single codebase. Which architecture is this?",
+                  "options": [
+                    { "label": "A", "text": "Microservices" },
+                    { "label": "B", "text": "Monolithic" },
+                    { "label": "C", "text": "Event-driven" },
+                    { "label": "D", "text": "Fanout" }
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Monolithic architecture has all components in one unit, suitable for small apps. Microservices are independent, event-driven focuses on events, fanout is a distribution pattern.",
+                  "why_this_matters": "Monolithic is quick for prototypes, but in AWS, migrating to microservices later supports growth and cost optimization.",
+                  "key_takeaway": "Start with monolithic for simplicity, but plan for microservices as complexity grows.",
+                  "option_explanations": {
+                    "A": "Incorrect for single codebase.",
+                    "B": "Correct for unified structure.",
+                    "C": "Incorrect as it's a communication style.",
+                    "D": "Incorrect as it's a pattern for events."
+                  },
+                  "tags": [
+                    "topic:application-development",
+                    "subtopic:architectural-patterns",
+                    "domain:1",
+                    "service:ec2"
+                  ]
+                },
+                {
+                  "id": "q1-d1-t1-st1-7",
+                  "concept_id": "arch-patterns-event-driven-vs-microservices",
+                  "variant_index": 0,
+                  "topic": "application-development",
+                  "subtopic": "architectural-patterns",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "hard",
+                  "question_type": "multi",
+                  "stem": "Which patterns are commonly used in serverless applications on AWS? (Select TWO.)",
+                  "options": [
+                    { "label": "A", "text": "Event-driven" },
+                    { "label": "B", "text": "Monolithic" },
+                    { "label": "C", "text": "Microservices" },
+                    { "label": "D", "text": "Tightly coupled" }
+                  ],
+                  "correct_options": ["A", "C"],
+                  "answer_explanation": "Serverless applications often use event-driven patterns for triggers and microservices for independent functions. Monolithic is less common in serverless, and tightly coupled defeats decoupling benefits.",
+                  "why_this_matters": "Serverless on AWS like Lambda benefits from event-driven and microservices for cost-effective, auto-scaling solutions in production environments.",
+                  "key_takeaway": "Combine event-driven and microservices for optimal serverless architectures.",
+                  "option_explanations": {
+                    "A": "Correct for trigger-based execution.",
+                    "B": "Incorrect for serverless scalability.",
+                    "C": "Correct for independent components.",
+                    "D": "Incorrect as loose coupling is preferred."
+                  },
+                  "tags": [
+                    "topic:application-development",
+                    "subtopic:architectural-patterns",
+                    "domain:1",
+                    "service:lambda"
+                  ]
+                },
+                {
+                  "id": "q1-d1-t1-st1-8",
+                  "concept_id": "arch-patterns-choreography-vs-orchestration",
+                  "variant_index": 0,
+                  "topic": "application-development",
+                  "subtopic": "architectural-patterns",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "A system requires complex error handling and compensation in a distributed workflow. Which pattern is best?",
+                  "options": [
+                    { "label": "A", "text": "Choreography" },
+                    { "label": "B", "text": "Orchestration" },
+                    { "label": "C", "text": "Fanout" },
+                    { "label": "D", "text": "Monolithic" }
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Orchestration provides central control for error handling and compensation, easier in complex workflows. Choreography makes it harder to manage errors decentrally.",
+                  "why_this_matters": "For transaction-like workflows in AWS, orchestration ensures reliability, crucial for e-commerce or financial applications.",
+                  "key_takeaway": "Choose orchestration for workflows needing robust error management.",
+                  "option_explanations": {
+                    "A": "Incorrect for complex errors.",
+                    "B": "Correct for central control.",
+                    "C": "Incorrect as it's for distribution.",
+                    "D": "Incorrect for distributed systems."
+                  },
+                  "tags": [
+                    "topic:application-development",
+                    "subtopic:architectural-patterns",
+                    "domain:1",
+                    "service:step-functions"
+                  ]
+                },
+                {
+                  "id": "q1-d1-t1-st1-9",
+                  "concept_id": "arch-patterns-fanout-in-messaging",
+                  "variant_index": 0,
+                  "topic": "application-development",
+                  "subtopic": "architectural-patterns",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "A developer needs to distribute messages to multiple queues for parallel processing. Which service and pattern should be used?",
+                  "options": [
+                    { "label": "A", "text": "Amazon SQS with orchestration" },
+                    { "label": "B", "text": "Amazon SNS with fanout" },
+                    { "label": "C", "text": "Amazon EventBridge with choreography" },
+                    { "label": "D", "text": "AWS Lambda with monolithic" }
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Amazon SNS supports fanout to multiple subscribers, including SQS queues, for parallel processing. The other options do not directly support fanout distribution.",
+                  "why_this_matters": "Fanout with SNS enables efficient parallel processing, optimizing cost and performance in data-intensive AWS applications.",
+                  "key_takeaway": "Implement fanout using SNS for message distribution to multiple endpoints.",
+                  "option_explanations": {
+                    "A": "Incorrect as SQS is point-to-point.",
+                    "B": "Correct for fanout distribution.",
+                    "C": "Incorrect as EventBridge is for events, not direct fanout to queues.",
+                    "D": "Incorrect for pattern."
+                  },
+                  "tags": [
+                    "topic:application-development",
+                    "subtopic:architectural-patterns",
+                    "domain:1",
+                    "service:sns"
+                  ]
+                },
+                {
+                  "id": "q1-d1-t1-st1-10",
+                  "concept_id": "arch-patterns-hybrid",
+                  "variant_index": 0,
+                  "topic": "application-development",
+                  "subtopic": "architectural-patterns",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "hard",
+                  "question_type": "multi",
+                  "stem": "A company is migrating from monolithic to distributed architecture. Which patterns should be considered for the transition? (Select TWO.)",
+                  "options": [
+                    { "label": "A", "text": "Microservices" },
+                    { "label": "B", "text": "Event-driven" },
+                    { "label": "C", "text": "Tightly coupled" },
+                    { "label": "D", "text": "Orchestration only" }
+                  ],
+                  "correct_options": ["A", "B"],
+                  "answer_explanation": "Microservices allow breaking down the monolith into independent services, and event-driven helps in decoupling communication. Tightly coupled would not aid transition, and orchestration alone is not sufficient.",
+                  "why_this_matters": "Migration to distributed systems in AWS improves scalability and resilience, but requires careful pattern selection to avoid downtime in production.",
+                  "key_takeaway": "Use microservices and event-driven patterns for effective monolith decomposition.",
+                  "option_explanations": {
+                    "A": "Correct for independent services.",
+                    "B": "Correct for decoupling.",
+                    "C": "Incorrect as loose coupling is needed.",
+                    "D": "Incorrect as a mix may be better."
+                  },
+                  "tags": [
+                    "topic:application-development",
+                    "subtopic:architectural-patterns",
+                    "domain:1",
+                    "service:lambda"
+                  ]
+                }
+              ]
+            },
+            {
+              "subtopic_id": "stateful-vs-stateless",
+              "name": "Stateful vs stateless applications",
+              "num_questions_generated": 10,
+              "questions": []
+            }
+          ]
+        },
+        {
+          "topic_id": "lambda",
+          "name": "AWS Lambda",
+          "subtopics": [
+            {
+              "subtopic_id": "lambda-concurrency",
+              "name": "Lambda concurrency and scaling",
+              "num_questions_generated": 10,
+              "questions": [
+                {
+                  "id": "q1-d1-t2-st1-1",
+                  "concept_id": "lambda-concurrency-reserved",
+                  "variant_index": 0,
+                  "topic": "lambda",
+                  "subtopic": "lambda-concurrency",
+                  "domain": "domain-1-development",
+                  "difficulty_inferred": "medium",
+                  "question_type": "single",
+                  "stem": "A developer has multiple Lambda functions in an account. One function is critical and must have guaranteed concurrency during peaks. What should the developer configure to ensure this function has priority over others?",
+                  "options": [
+                    { "label": "A", "text": "Increase the memory size of the critical function" },
+                    { "label": "B", "text": "Set reserved concurrency for the critical function" },
+                    { "label": "C", "text": "Use provisioned concurrency for all functions" },
+                    { "label": "D", "text": "Enable throttling on non-critical functions" }
+                  ],
+                  "correct_options": ["B"],
+                  "answer_explanation": "Reserved concurrency allocates a portion of the account's concurrency limit to the function, ensuring it has guaranteed access and limiting others. Provisioned is for cold starts, not priority. Throttling is not directly enabled that way.",
+                  "why_this_matters": "In production AWS environments, managing concurrency prevents one function from starving others, ensuring reliable performance for critical workloads.",
+                  "key_takeaway": "Use reserved concurrency to guarantee availability for important Lambda functions.",
+                  "option_explanations": {
+                    "A": "Incorrect as memory affects performance, not concurrency allocation.",
+                    "B": "Correct for guaranteed concurrency.",
+                    "C": "Incorrect as it addresses cold starts, not priority.",
+                    "D": "Incorrect as throttling is a result, not configuration for priority."
+                  },
+                  "tags": [
+                    "topic:lambda",
+                    "subtopic:lambda-concurrency",
+                    "domain:1",
+                    "service:lambda"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "domain_id": "domain-2-security",
+      "name": "Security",
+      "topics": []
+    },
+    {
+      "domain_id": "domain-3-deployment",
+      "name": "Deployment",
+      "topics": []
+    },
+    {
+      "domain_id": "domain-4-troubleshooting-optimization",
+      "name": "Troubleshooting and Optimization",
+      "topics": []
+    }
+  ]
+}

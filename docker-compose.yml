@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  nimbus:
+    build: .
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=nimbus
+      - DB_USER=nimbus
+      - DB_PASSWORD=nimbus_password
+      - DB_SSL=false
+    volumes:
+      # Persist question bank data
+      - ./public/question_bank.json:/app/public/question_bank.json
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=nimbus
+      - POSTGRES_USER=nimbus
+      - POSTGRES_PASSWORD=nimbus_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nimbus -d nimbus"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
